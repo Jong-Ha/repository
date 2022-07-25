@@ -52,5 +52,7 @@ public class  Client{
 	public void setInfo(String[] info){
 		System.out.println("Client setInfo 호출됨");
 		 this.info = info;
+		 
 	}
 }
+//이이이잉이이이이이이잉이잉
