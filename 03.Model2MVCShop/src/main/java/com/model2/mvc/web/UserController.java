@@ -122,39 +122,17 @@ public class UserController {
 
 		
 		System.out.println(search);
-//		Search search = new Search();
-//
-//		int currentPage = 1;
-//		int minPrice = 0;
-//		int maxPrice = 0;
-//		if(request.getParameter("currentPage")!=null) {
-//			currentPage = Integer.parseInt(request.getParameter("currentPage"));
-//		}
-//		if(!CommonUtil.null2str(request.getParameter("minPrice")).equals("")) {
-//			minPrice = Integer.parseInt(request.getParameter("minPrice"));
-//		}
-//		if(!CommonUtil.null2str(request.getParameter("maxPrice")).equals("")) {
-//			maxPrice = Integer.parseInt(request.getParameter("maxPrice"));
-//		}
-//
-//		int pageSize = Integer.parseInt(getServletContext().getInitParameter("pageSize"));
-//		int pageUnit = Integer.parseInt(getServletContext().getInitParameter("pageUnit"));
-//
-//		search.setCurrentPage(currentPage);
-//		search.setSearchCondition(CommonUtil.null2str(request.getParameter("searchCondition")));
-//		search.setSearchKeyword(CommonUtil.null2str(request.getParameter("searchKeyword")));
-//		search.setTranCondition(CommonUtil.null2str(request.getParameter("tranCondition")));
-//		search.setProdListCondition(CommonUtil.null2str(request.getParameter("prodListCondition")));
-//		search.setCheckSoldOut(CommonUtil.null2str(request.getParameter("checkSoldOut")));
-//		search.setMaxPrice(maxPrice);
-//		search.setMinPrice(minPrice);
-//		search.setPageSize(pageSize);
-//		search.setPageUnit(pageUnit);
-//		
-		Map<String,Object> map=service.getUserList(search);
-
+		
+		if(search.getCurrentPage()==0) {
+			search.setCurrentPage(1);
+		}
 		search.setPageSize(pageSize);
 		search.setPageUnit(pageUnit);
+
+		System.out.println(search.getPageSize());
+		System.out.println(search.getPageUnit());
+		System.out.println(search.getCurrentPage());
+		Map<String,Object> map=service.getUserList(search);
 		
 		Page resultPage = new Page(search, ((Integer)map.get("totalCount")).intValue());
 
