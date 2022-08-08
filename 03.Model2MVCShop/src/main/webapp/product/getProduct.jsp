@@ -42,7 +42,7 @@ function fncCheck(){
 <body bgcolor="#ffffff" text="#000000">
 
 <form name="detailForm" method="post">
-<input type="hidden" id="prod_no" name="prod_no" value="${ product.prodNo }">
+<input type="hidden" id="prodNo" name="prodNo" value="${ product.prodNo }">
 <input type="hidden" id="productAmount" name="productAmount" value="${ product.amount }">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">

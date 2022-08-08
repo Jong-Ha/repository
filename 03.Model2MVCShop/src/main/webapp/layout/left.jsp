@@ -51,7 +51,7 @@ function history(){
 		<c:if test="${ user.role=='admin' }">
 			<tr>
 				<td class="Depth03">
-					<a href="../product/addProductView.jsp;" target="rightFrame">판매상품등록</a>
+					<a href="/addProductView.do;" target="rightFrame">판매상품등록</a>
 				</td>
 			</tr>
 		</c:if>

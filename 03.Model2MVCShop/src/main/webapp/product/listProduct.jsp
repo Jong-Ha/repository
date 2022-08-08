@@ -12,7 +12,20 @@
 <script type="text/javascript">
 function fncCheckSoldOut(checkSoldOut){
 	document.detailForm.checkSoldOut.value = checkSoldOut;
+	fncCheckPrice();
 	document.detailForm.submit();
+}
+function fncCheck(){
+	if(document.detailForm.minPriceInput.value==''){
+		document.detailForm.minPrice.value=0;
+	}else{
+		document.detailForm.minPrice.value=document.detailForm.minPriceInput.value;
+	}
+	if(document.detailForm.maxPriceInput.value==''){
+		document.detailForm.maxPrice.value=0;
+	}else{
+		document.detailForm.maxPrice.value=document.detailForm.maxPriceInput.value;
+	}
 }
 </script>
 <style type="text/css">
@@ -29,6 +42,8 @@ function fncCheckSoldOut(checkSoldOut){
 
 <form name="detailForm" action="/listProduct.do?" method="post">
 <input type="hidden" id="prodNo" name="prodNo" value="">
+<input type="hidden" id="minPrice" name="minPrice" value="">
+<input type="hidden" id="maxPrice" name="maxPrice" value="">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -115,7 +130,7 @@ function fncCheckSoldOut(checkSoldOut){
 			<td class="tdleft">&nbsp;</td>
 			<td align="right" class="tdleft">
 				가격 검색 
-				<input id="minPrice" name="minPrice" value="${ search.minPrice==0 ?'':search.minPrice }" size="4">~<input id="maxPrice" name="maxPrice" value="${ search.maxPrice==0 ?'':search.maxPrice }" size="4">
+				<input id="minPriceInput" name="minPriceInput" value="${ search.minPrice==0 ?'':search.minPrice }" size="4">~<input id="maxPriceInput" name="maxPriceInput" value="${ search.maxPrice==0 ?'':search.maxPrice }" size="4">
 			</td>
 		</tr>
 	</c:if>
@@ -126,7 +141,7 @@ function fncCheckSoldOut(checkSoldOut){
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
 	<tr>
-		<td colspan="8" >전체 ${ resultPage.totalCount } 건수, 현재 ${ search.page } 페이지</td>
+		<td colspan="8" >전체 ${ resultPage.totalCount } 건수, 현재 ${ search.currentPage } 페이지</td>
 		<td colspan="1" align="right" >
 			<input type="hidden" id="checkSoldOut" name="checkSoldOut" value="${ search.checkSoldOut }"/>
 			<c:if test="${ user.role != 'admin' }">

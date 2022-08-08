@@ -15,7 +15,6 @@ import com.model2.mvc.service.cart.CartService;
 import com.model2.mvc.service.domain.Cart;
 import com.model2.mvc.service.domain.Product;
 
-@Controller("buyCartViewAction")
 public class BuyCartViewAction extends Action {
 	
 	@Autowired

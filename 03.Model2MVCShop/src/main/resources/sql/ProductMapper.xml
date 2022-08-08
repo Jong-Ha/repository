@@ -72,7 +72,7 @@
   		image_file, manufacture_day, price, prod_detail, prod_name, prod_no, reg_date, amount
   		FROM product
   		<where>
-  			<if test="searchKeyword!=''">
+  			<if test="searchKeyword!=null and searchKeyword!=''">
   				<choose>
   					<when test="searchCondition==0">
   						prod_name LIKE ('%'||#{searchKeyword}||'%')

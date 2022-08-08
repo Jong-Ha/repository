@@ -14,7 +14,6 @@ import com.model2.mvc.service.domain.User;
 import com.model2.mvc.service.product.ProductService;
 import com.model2.mvc.service.purchase.PurchaseService;
 
-@Controller("addPurchaseAction")
 public class AddPurchaseAction extends Action {
 
 	@Autowired

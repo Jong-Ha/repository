@@ -17,7 +17,6 @@ import com.model2.mvc.service.domain.Product;
 import com.model2.mvc.service.product.ProductService;
 import com.model2.mvc.service.product.impl.ProductServiceImpl;
 
-@Controller("listProductAction")
 public class ListProductAction extends ListAction {
 
 	@Autowired

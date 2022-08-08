@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import com.model2.mvc.framework.Action;
 import com.model2.mvc.service.product.ProductService;
 
-@Controller("updateProductViewAction")
 public class UpdateProductViewAction extends Action {
 
 	@Autowired

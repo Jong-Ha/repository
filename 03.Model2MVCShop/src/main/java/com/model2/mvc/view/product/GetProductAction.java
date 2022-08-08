@@ -18,7 +18,6 @@ import com.model2.mvc.service.domain.User;
 import com.model2.mvc.service.product.ProductService;
 import com.model2.mvc.service.product.impl.ProductServiceImpl;
 
-@Controller("getProductAction")
 public class GetProductAction extends Action {
 
 	@Autowired

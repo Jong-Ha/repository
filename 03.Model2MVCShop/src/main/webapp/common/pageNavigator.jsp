@@ -24,6 +24,7 @@
 	<script type="text/javascript"> 
 	function fncPageNavigator(currentPage) {
 		document.getElementById("currentPage").value = currentPage;
+		fncCheck();
 	   	document.detailForm.submit();		
 	}
 	</script>

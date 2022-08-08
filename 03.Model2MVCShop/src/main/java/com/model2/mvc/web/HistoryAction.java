@@ -1,4 +1,4 @@
-package com.model2.mvc.view;
+package com.model2.mvc.web;
 
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -6,21 +6,19 @@ import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.model2.mvc.framework.Action;
-
-@Controller("historyAction")
-public class HistoryAction extends Action {
+@Controller
+public class HistoryAction {
 
 	public HistoryAction() {
 	}
 
-	@Override
-	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		System.out.println("historyAction start");
+	@RequestMapping("/history.do")
+	public String history(HttpServletRequest request, Model model) throws Exception {
 		
 		Cookie[] cookies = request.getCookies();
 		String history="";
@@ -38,10 +36,9 @@ public class HistoryAction extends Action {
 				list.add(0,str);
 			}
 			
-			request.setAttribute("list", list);
+			model.addAttribute("list", list);
 		}
 		
-		System.out.println("historyAction end");
 		return "forward:/history.jsp";
 	}
 

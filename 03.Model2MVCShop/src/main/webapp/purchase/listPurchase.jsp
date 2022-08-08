@@ -15,11 +15,7 @@ function fncDelivery(tranNo,currentPage){
 	document.detailForm.action='/updateTranCode.do?tranCode=3';
 	document.detailForm.submit();
 }
-function fncList(currentPage){
-	document.getElementById("currentPage").value = currentPage;
-	document.detailForm.action='/listPurchase.do';
-	document.detailForm.submit();
-}
+function fncCheck(){}
 </script>
 </head>
 
@@ -45,7 +41,7 @@ function fncList(currentPage){
 	</tr>
 	<tr>
 		<td colspan="3" align="right">
-			<select name="tranCondition" class="ct_input_g" onchange="fncList('1')">
+			<select name="tranCondition" class="ct_input_g" onchange="fncPageNavigator('1')">
 				<option value="" ${ search.tranCondition=='0'?'selected':'' } align="center">배송상태조회</option>
 				<option value="4" ${ search.tranCondition=='4'?'selected':'' } align="center">구매취소</option>
 				<option value="1" ${ search.tranCondition=='1'?'selected':'' } align="center">배송준비</option>

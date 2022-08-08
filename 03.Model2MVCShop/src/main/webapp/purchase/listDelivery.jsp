@@ -16,6 +16,7 @@ function fncDelivery(tranNo,currentPage){
 	document.detailForm.action='/updateTranCode.do?tranCode=2';
 	document.detailForm.submit();
 }
+function fncCheck(){}
 </script>
 <style type="text/css">
 .tdleft{
@@ -29,7 +30,7 @@ function fncDelivery(tranNo,currentPage){
 
 <div style="width:98%; margin-left:10px;">
 
-<form name="detailForm" action="/listDelivery.do?" method="post">
+<form name="detailForm" action="/listDelivery.do" method="post">
 <input type="hidden" id="tranNo" name="tranNo" value="">
 <input type="hidden" id="updateBy" name="updateBy" value="admin">
 
@@ -126,7 +127,7 @@ function fncDelivery(tranNo,currentPage){
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
 	<tr>
-		<td colspan="13" >전체 ${ resultPage.totalCount } 건수, 현재 ${ search.page } 페이지</td>
+		<td colspan="13" >전체 ${ resultPage.totalCount } 건수, 현재 ${ search.currentPage } 페이지</td>
 	</tr>
 	<tr>
 		<td class="ct_list_b" width="100">No</td>
@@ -169,7 +170,7 @@ function fncDelivery(tranNo,currentPage){
 				</c:when>
 				<c:when test="${ i.tranCode==1 }">
 					배송 준비 - 
-					<a href="javascript:fncDelivery(${ i.tranNo }, ${ search.page });">배송하기</a>
+					<a href="javascript:fncDelivery(${ i.tranNo }, ${ search.currentPage });">배송하기</a>
 				</c:when>
 				<c:when test="${ i.tranCode==2 }">
 					배송중

@@ -13,7 +13,6 @@ import com.model2.mvc.service.domain.Product;
 import com.model2.mvc.service.product.ProductService;
 import com.model2.mvc.service.product.impl.ProductServiceImpl;
 
-@Controller("addProductAction")
 public class AddProductAction extends Action {
 
 	@Autowired

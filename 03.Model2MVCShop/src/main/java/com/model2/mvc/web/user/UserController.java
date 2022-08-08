@@ -1,4 +1,4 @@
-package com.model2.mvc.web;
+package com.model2.mvc.web.user;
 
 import java.util.List;
 import java.util.Map;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.model2.mvc.common.Page;
 import com.model2.mvc.common.Search;
-import com.model2.mvc.common.util.CommonUtil;
 import com.model2.mvc.service.domain.User;
 import com.model2.mvc.service.user.UserService;
 

@@ -11,7 +11,6 @@ import com.model2.mvc.framework.Action;
 import com.model2.mvc.service.domain.Purchase;
 import com.model2.mvc.service.purchase.PurchaseService;
 
-@Controller("getPurchaseAction")
 public class GetPurchaseAction extends Action {
 
 	@Autowired

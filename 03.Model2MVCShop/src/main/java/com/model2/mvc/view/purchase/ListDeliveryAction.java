@@ -17,7 +17,6 @@ import com.model2.mvc.common.abs.ListAction;
 import com.model2.mvc.service.domain.Purchase;
 import com.model2.mvc.service.purchase.PurchaseService;
 
-@Controller("listDeliveryAction")
 public class ListDeliveryAction extends ListAction {
 
 	@Autowired

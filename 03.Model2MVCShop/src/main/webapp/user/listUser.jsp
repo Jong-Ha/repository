@@ -6,7 +6,9 @@
 <title>회원 목록조회</title>
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
-
+<script type="text/javascript">
+	function fncCheck(){}
+</script>
 </head>
 
 <body bgcolor="#ffffff" text="#000000">

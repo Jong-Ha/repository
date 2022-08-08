@@ -15,7 +15,6 @@ import com.model2.mvc.service.cart.CartService;
 import com.model2.mvc.service.domain.Cart;
 import com.model2.mvc.service.domain.User;
 
-@Controller("listCartAction")
 public class ListCartAction extends ListAction {
 	
 	@Autowired

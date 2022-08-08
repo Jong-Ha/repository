@@ -78,7 +78,7 @@
   			receiver_phone = #{receiverPhone:VARCHAR},
   			dlvy_addr = #{divyAddr:VARCHAR},
   			dlvy_request = #{divyRequest:VARCHAR},
-  			<if test="divyDate!=''">
+  			<if test="divyDate!=null and divyDate!=''">
   				dlvy_date = TO_DATE(#{divyDate:VARCHAR}),
   			</if>
   		</set>
@@ -106,10 +106,10 @@
   			<if test="userId != null and userId!=''">
   				buyer_id = #{userId}
   			</if>
-  			<if test="search.tranCondition!=''">
+  			<if test="search.tranCondition!=null and search.tranCondition!=''">
   				AND tran_status_code = RPAD(#{search.tranCondition},3,' ')
   			</if>
-  			<if test="search.searchKeyword!=''">
+  			<if test="search.searchKeyword!=null and search.searchKeyword!=''">
   				AND 
   				<choose>
   					<when test="search.searchCondition==0">

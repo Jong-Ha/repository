@@ -12,7 +12,6 @@ import com.model2.mvc.service.domain.Purchase;
 import com.model2.mvc.service.domain.User;
 import com.model2.mvc.service.purchase.PurchaseService;
 
-@Controller("canclePurchaseAction")
 public class CanclePurchaseAction extends Action {
 
 	@Autowired
