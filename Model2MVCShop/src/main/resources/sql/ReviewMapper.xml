@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+				
+<mapper namespace="ReviewMapper">
+
+  	<resultMap type="com.model2.mvc.service.domain.Review" id="ReviewSelectMap">
+ 		<result property="tranNo"		column="tran_no"		jdbcType="INTEGER"/>
+  		<result property="prodNo"		column="prod_no"		jdbcType="INTEGER"/>
+  		<result property="userId"		column="user_id"		jdbcType="VARCHAR"/>
+  		<result property="fileName"		column="image_file"		jdbcType="VARCHAR"/>
+  		<result property="grade"		column="grade"			jdbcType="NUMERIC"/>
+  		<result property="detail"		column="detail"			jdbcType="VARCHAR"/>
+  		<result property="reviewDate"	column="review_date"	jdbcType="DATE"/>
+  		<result property="rowNum"		column="row_num"		jdbcType="VARCHAR"/>
+  	</resultMap>
+  	
+  	<insert id="addReview" parameterType="review">
+  		INSERT
+  		INTO review(tran_no,prod_no,user_id,image_file,grade,detail,review_date)
+  		VALUES(	#{tranNo}, 
+  				#{prodNo}, 
+  				#{userId}, 
+  				#{fileName}, 
+  				#{grade}, 
+  				#{detail}, 
+  				SYSDATE	)
+  	</insert>
+  	
+  	<update id="updateReview" parameterType="review">
+  		UPDATE review
+  		<set>
+  			image_file = #{fileName},
+  			grade = #{grade},
+  			detail = #{detail}
+  		</set>
+  		<where>
+  			tran_no = #{tranNo}
+  		</where>
+  	</update>
+  	
+  	<delete id="deleteReview" parameterType="int">
+  		DELETE review
+  		<where>
+  			tran_no = #{tranNo}
+		</where>
+  	</delete>
+  	
+  	<sql id="getReviewListSql">
+  		SELECT tran_no, prod_no, user_id, image_file, grade, detail, review_date
+  		FROM review
+  		<where>
+  			<if test="prodNo!=0">
+  				prod_no = #{prodNo}
+  			</if>
+  			<if test="prodNo==0">
+  				user_id = #{userId}
+  			</if>
+  		</where>
+  		ORDER BY review_date DESC
+  	</sql>
+  	
+  	<select id="getTotalCount" parameterType="map" resultType="int">
+  		SELECT COUNT(*) FROM (
+  		<include refid="getReviewListSql"/>
+  		)
+  	</select>
+  	
+  	<select id="getReviewList" parameterType="map" resultMap="ReviewSelectMap">
+  		SELECT * FROM (
+  			SELECT ROWNUM row_num, vt.* FROM (
+  				<include refid="getReviewListSql"/>
+  			) vt
+  			WHERE ROWNUM &lt;= #{search.currentPage}*#{search.pageSize}
+  		)
+  		<where>
+  			row_num >= ((#{search.currentPage}-1)*#{search.pageSize}+1)
+  		</where>
+  	</select>
+  	
+</mapper>

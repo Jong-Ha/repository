@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+				
+<mapper namespace="ProductMapper">
+
+  	<resultMap type="com.model2.mvc.service.domain.Product" id="productSelectMap">
+  		<result property="fileName"		column="image_file"			jdbcType="VARCHAR"/>
+  		<result property="manuDate"		column="manufacture_day"	jdbcType="VARCHAR"/>
+  		<result property="price"		column="price"				jdbcType="NUMERIC"/>
+  		<result property="prodDetail"	column="prod_detail"		jdbcType="VARCHAR"/>
+  		<result property="prodName"		column="prod_name"			jdbcType="VARCHAR"/>
+  		<result property="prodNo"		column="prod_no"			jdbcType="NUMERIC"/>
+  		<result property="regDate"		column="reg_date"			jdbcType="DATE"/>
+  		<result property="rowNum"		column="row_num"			jdbcType="VARCHAR"/>
+  		<result property="amount"		column="amount"				jdbcType="NUMERIC"/>
+  		<result property="proTranCode"	column="tran_code"			jdbcType="VARCHAR"/>
+  	</resultMap>
+  	
+  	<select id="getProduct" parameterType="int" resultMap="productSelectMap">
+  		SELECT
+  		image_file, manufacture_day, price, prod_detail, prod_name, prod_no, reg_date, amount
+  		FROM product
+  		<where>
+  			prod_no = #{prodNo}
+  		</where>
+  	</select>
+  	
+  	<insert id="addProduct" parameterType="product">
+  		INSERT
+  		INTO product(image_file, manufacture_day, price, prod_detail, prod_name, prod_no, reg_date, amount)
+  		VALUES(	#{fileName:VARCHAR},
+  				#{manuDate:VARCHAR},
+  				#{price:INTEGER},
+  				#{prodDetail:VARCHAR},
+  				#{prodName:VARCHAR},
+  				seq_product_prod_no.NEXTVAL,
+  				SYSDATE,
+  				#{amount:INTEGER}
+  				)
+  	</insert>
+  	
+  	<update id="updateProduct" parameterType="product">
+  		UPDATE product
+  		<set>
+  			prod_name = #{prodName:VARCHAR},
+  			prod_detail = #{prodDetail:VARCHAR},
+  			manufacture_day = #{manuDate:VARCHAR},
+  			price = #{price:INTEGER},
+  			image_file = #{fileName:VARCHAR},
+  			amount = #{amount:INTEGER},
+  		</set>
+  		<where>
+  			prod_no = #{prodNo}
+  		</where>
+  	</update>
+  	
+  	<update id="updateProductAmount" parameterType="purchase">
+  		UPDATE product
+  		<set>
+  			amount = amount - #{amount:INTEGER}
+  		</set>
+  		<where>
+  			prod_no = #{purchaseProd.prodNo}
+  		</where>
+  	</update>
+  	
+  	<sql id="getProductListSql">
+  		SELECT
+  		image_file, manufacture_day, price, prod_detail, prod_name, prod_no, reg_date, amount
+  		FROM product
+  		<where>
+  			<if test="searchKeyword!=null and searchKeyword!=''">
+  				<choose>
+  					<when test="searchCondition==0">
+  						prod_name LIKE ('%'||#{searchKeyword}||'%')
+  					</when>
+  					<when test="searchCondition==1">
+  						prod_no = #{searchKeyword}
+  					</when>
+  					<otherwise>
+  						prod_name LIKE ('%'||#{searchKeyword}||'%')
+  					</otherwise>
+  				</choose>
+  			</if>
+			<if test="checkSoldOut=='soldOut'">
+				AND amount > 0
+			</if>
+			<if test="maxPrice!=0">
+				AND price &lt;= #{maxPrice}
+			</if>
+			<if test="minPrice!=0">
+				AND price >= #{minPrice}
+			</if>
+  		</where>
+  		ORDER BY 	<choose>
+  						<when test="prodListCondition==0">
+  							reg_date DESC
+  						</when>
+  						<when test="prodListCondition==1">
+  							price DESC
+  						</when>
+  						<when test="prodListCondition==2">
+  							price ASC
+  						</when>
+  						<otherwise>
+  							reg_date DESC
+  						</otherwise>
+  					</choose>
+  	</sql>
+  	
+  	<select id="getTotalCount" parameterType="com.model2.mvc.common.Search" resultType="int">
+  		SELECT COUNT(*) FROM (
+  		<include refid="getProductListSql"/>
+  		)
+  	</select>
+  	
+  	<select id="getProductList" parameterType="com.model2.mvc.common.Search" resultMap="productSelectMap">
+  		SELECT * FROM (
+  			SELECT ROWNUM row_num, vt.* FROM (
+  				<include refid="getProductListSql"/>
+  			) vt
+  			WHERE ROWNUM &lt;= #{currentPage}*#{pageSize}
+  		)
+  		<where>
+  			row_num >= ((#{currentPage}-1)*#{pageSize}+1)
+  		</where>
+  	</select>
+  	
+</mapper>

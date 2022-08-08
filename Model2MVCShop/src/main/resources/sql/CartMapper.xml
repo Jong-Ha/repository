@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+				
+<mapper namespace="CartMapper">
+
+  	<resultMap type="com.model2.mvc.service.domain.Cart" id="cartSelectMap">
+  		<result property="cartNo"			column="cart_no"		jdbcType="NUMERIC"/>
+  		<result property="userId"			column="user_id"		jdbcType="VARCHAR"/>
+  		<result property="amount"			column="amount"			jdbcType="NUMERIC"/>
+  		<association property="prod" resultMap="productSelectMap"/>
+  	</resultMap>
+  	
+  	<resultMap type="com.model2.mvc.service.domain.Product" id="productSelectMap">
+  		<result property="fileName"		column="image_file"			jdbcType="VARCHAR"/>
+  		<result property="manuDate"		column="manufacture_day"	jdbcType="VARCHAR"/>
+  		<result property="price"		column="price"				jdbcType="NUMERIC"/>
+  		<result property="prodDetail"	column="prod_detail"		jdbcType="VARCHAR"/>
+  		<result property="prodName"		column="prod_name"			jdbcType="VARCHAR"/>
+  		<result property="prodNo"		column="prod_no"			jdbcType="NUMERIC"/>
+  		<result property="regDate"		column="reg_date"			jdbcType="DATE"/>
+  		<result property="rowNum"		column="row_num"			jdbcType="VARCHAR"/>
+  		<result property="amount"		column="product_amount"		jdbcType="NUMERIC"/>
+  		<result property="proTranCode"	column="tran_code"			jdbcType="VARCHAR"/>
+  	</resultMap>
+  	
+  	<select id="checkCart" parameterType="cart" resultType="int">
+  		SELECT cart_no FROM cart
+  		<where>
+  			user_id = #{userId}
+  			AND prod_no = #{prod.prodNo}
+  		</where>
+  	</select>
+  	
+  	<select id="checkProduct" parameterType="int" resultType="int">
+  		SELECT amount FROM product
+  		<where>
+  			prod_no = #{prodNo}
+  		</where>
+  	</select>
+  	
+  	<update id="updateCart" parameterType="cart">
+  		UPDATE cart
+  		<set>
+  			<if test="prod.prodName != null">amount = amount+#{amount}</if>
+  			<if test="prod.prodName == null">amount = #{amount}</if>
+  		</set>
+  		<where>
+  			cart_no = #{cartNo}
+  		</where>
+  	</update>
+  	
+  	<insert id="addCart" parameterType="cart">
+  		INSERT
+  		INTO cart(cart_no,user_id,prod_no,amount)
+  		VALUES(	seq_cart_cart_no.NEXTVAL,
+  				#{userId:VARCHAR},
+  				#{prod.prodNo:INTEGER},
+  				#{amount:INTEGER}	)
+  	</insert>
+  	
+  	<select id="getCartList" parameterType="string" resultMap="cartSelectMap">
+  		SELECT
+  		c.cart_no,c.user_id,c.prod_no,c.amount,p.prod_name,p.prod_detail,p.price,p.image_file,p.amount AS product_amount
+  		FROM cart c, product p
+  		<where>
+  			c.prod_no = p.prod_no
+  			AND user_id = #{userId}
+  		</where>
+  		ORDER BY c.cart_no
+  	</select>
+  	
+  	<delete id="deleteCart" parameterType="int">
+  		DELETE FROM cart
+  		<where>
+  			cart_no = #{cartNo}
+  		</where>
+  	</delete>
+  	
+  	<delete id="deleteCartList" parameterType="list">
+  		DELETE FROM cart
+  		<where>
+  			cart_no IN
+  			<foreach collection="list" item="cartNo" open="(" separator="," close=")">#{cartNo}</foreach>
+  		</where>
+  	</delete>
+  	
+</mapper>
