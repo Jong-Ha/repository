@@ -46,4 +46,9 @@ public class ReviewDaoImpl implements ReviewDao {
 		return sqlSession.selectOne("ReviewMapper.getTotalCount", map);
 	}
 
+	@Override
+	public Review getReview(int tranNo) throws Exception {
+		return sqlSession.selectOne("ReviewMapper.getReview", tranNo);
+	}
+
 }

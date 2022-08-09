@@ -7,27 +7,38 @@
 <mapper namespace="ReviewMapper">
 
   	<resultMap type="com.model2.mvc.service.domain.Review" id="ReviewSelectMap">
- 		<result property="tranNo"		column="tran_no"		jdbcType="INTEGER"/>
-  		<result property="prodNo"		column="prod_no"		jdbcType="INTEGER"/>
-  		<result property="userId"		column="user_id"		jdbcType="VARCHAR"/>
-  		<result property="fileName"		column="image_file"		jdbcType="VARCHAR"/>
-  		<result property="grade"		column="grade"			jdbcType="NUMERIC"/>
-  		<result property="detail"		column="detail"			jdbcType="VARCHAR"/>
-  		<result property="reviewDate"	column="review_date"	jdbcType="DATE"/>
-  		<result property="rowNum"		column="row_num"		jdbcType="VARCHAR"/>
+ 		<result property="tranNo"			column="tran_no"		jdbcType="INTEGER"/>
+  		<result property="prod.prodNo"		column="prod_no"		jdbcType="INTEGER"/>
+  		<result property="prod.prodName"	column="prod_name"		jdbcType="INTEGER"/>
+  		<result property="prod.prodDetail"	column="prod_detail"	jdbcType="INTEGER"/>
+  		<result property="userId"			column="user_id"		jdbcType="VARCHAR"/>
+  		<result property="fileName"			column="image_file"		jdbcType="VARCHAR"/>
+  		<result property="grade"			column="grade"			jdbcType="NUMERIC"/>
+  		<result property="detail"			column="detail"			jdbcType="VARCHAR"/>
+  		<result property="reviewDate"		column="review_date"	jdbcType="DATE"/>
+  		<result property="rowNum"			column="row_num"		jdbcType="VARCHAR"/>
   	</resultMap>
   	
   	<insert id="addReview" parameterType="review">
   		INSERT
   		INTO review(tran_no,prod_no,user_id,image_file,grade,detail,review_date)
   		VALUES(	#{tranNo}, 
-  				#{prodNo}, 
+  				#{prod.prodNo}, 
   				#{userId}, 
   				#{fileName}, 
   				#{grade}, 
   				#{detail}, 
   				SYSDATE	)
   	</insert>
+  	
+  	<select id="getReview" parameterType="int" resultMap="ReviewSelectMap">
+  		SELECT r.tran_no, r.prod_no, r.user_id, r.image_file, r.grade, r.detail, r.review_date, p.prod_name, p.prod_detail
+  		FROM review r, product p
+  		<where>
+  			tran_no = #{tranNo}
+  			AND r.prod_no = p.prod_no
+  		</where>
+  	</select>
   	
   	<update id="updateReview" parameterType="review">
   		UPDATE review
@@ -49,17 +60,27 @@
   	</delete>
   	
   	<sql id="getReviewListSql">
-  		SELECT tran_no, prod_no, user_id, image_file, grade, detail, review_date
-  		FROM review
+  		SELECT r.tran_no, r.prod_no, r.user_id, r.image_file, r.grade, r.detail, r.review_date, p.prod_name, p.prod_detail
+  		FROM review r, product p
   		<where>
-  			<if test="prodNo!=0">
-  				prod_no = #{prodNo}
+  			<if test="prodNo!=null">
+  				AND r.prod_no = #{prodNo}
   			</if>
-  			<if test="prodNo==0">
-  				user_id = #{userId}
+  			<if test="userId!=null">
+  				AND user_id = #{userId}
   			</if>
+  			AND r.prod_no = p.prod_no
   		</where>
-  		ORDER BY review_date DESC
+  		ORDER BY 
+  		<if test="search.prodListCondition!=null">
+  			<choose>
+  				<when test="search.prodListCondition==0">review_date DESC</when>
+  				<when test="search.prodListCondition==1">grade DESC, review_date DESC</when>
+  				<when test="search.prodListCondition==2">grade ASC, review_date DESC</when>
+  				<otherwise>review_date DESC</otherwise>
+  			</choose>
+  		</if>
+  		<if test="search.prodListCondition==null">review_date DESC</if>
   	</sql>
   	
   	<select id="getTotalCount" parameterType="map" resultType="int">

@@ -5,7 +5,7 @@ import java.sql.Date;
 public class Review {
 	
 	private int tranNo;
-	private int prodNo;
+	private Product prod;
 	private String userId;
 	private String fileName;
 	private double grade;
@@ -21,11 +21,11 @@ public class Review {
 	public void setTranNo(int tranNo) {
 		this.tranNo = tranNo;
 	}
-	public int getProdNo() {
-		return prodNo;
+	public Product getProd() {
+		return prod;
 	}
-	public void setProdNo(int prodNo) {
-		this.prodNo = prodNo;
+	public void setProd(Product prod) {
+		this.prod = prod;
 	}
 	public String getUserId() {
 		return userId;
@@ -68,8 +68,8 @@ public class Review {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Review [tranNo=");
 		builder.append(tranNo);
-		builder.append(", prodNo=");
-		builder.append(prodNo);
+		builder.append(", prod=");
+		builder.append(prod);
 		builder.append(", userId=");
 		builder.append(userId);
 		builder.append(", fileName=");

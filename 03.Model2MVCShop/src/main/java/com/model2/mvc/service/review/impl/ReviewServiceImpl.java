@@ -42,4 +42,9 @@ public class ReviewServiceImpl implements ReviewService {
 		reviewDao.updateReview(review);
 	}
 
+	@Override
+	public Review getReview(int tranNo) throws Exception {
+		return reviewDao.getReview(tranNo);
+	}
+
 }

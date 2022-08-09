@@ -63,7 +63,7 @@ public class PurchaseController {
 	}
 	
 	@RequestMapping("/addPurchaseView.do")
-	public ModelAndView addPurchaseView(@RequestParam("prod_no") int prodNo, @RequestParam("amount") int amount) throws Exception {
+	public ModelAndView addPurchaseView(@RequestParam("prodNo") int prodNo, @RequestParam("amount") int amount) throws Exception {
 		
 		ModelAndView mv = new ModelAndView();
 		

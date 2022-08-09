@@ -16,5 +16,7 @@ public interface ReviewDao {
 	public List<Review> getReviewList(Map<String, Object> map) throws Exception ;
 	
 	public int getTotalCount(Map<String, Object> map) throws Exception ;
+	
+	public Review getReview(int tranNo) throws Exception ;
 
 }

@@ -18,6 +18,7 @@ public class Purchase {
 	private int amount;
 	private int tranNo;
 	private int rowNum;
+	private float reviewGrade;
 	
 	public Purchase(){
 	}
@@ -94,31 +95,59 @@ public class Purchase {
 	public void setTranNo(int tranNo) {
 		this.tranNo = tranNo;
 	}
-	
 	public int getRowNum() {
 		return rowNum;
 	}
-
 	public void setRowNum(int rowNum) {
 		this.rowNum = rowNum;
+	}
+	public int getAmount() {
+		return amount;
+	}
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+
+	public float getReviewGrade() {
+		return reviewGrade;
+	}
+
+	public void setReviewGrade(float reviewGrade) {
+		this.reviewGrade = reviewGrade;
 	}
 
 	@Override
 	public String toString() {
-		return "PurchaseVO [buyer=" + buyer + ", divyAddr=" + divyAddr
-				+ ", divyDate=" + divyDate + ", divyRequest=" + divyRequest
-				+ ", orderDate=" + orderDate + ", paymentOption="
-				+ paymentOption + ", purchaseProd=" + purchaseProd
-				+ ", receiverName=" + receiverName + ", receiverPhone="
-				+ receiverPhone + ", tranCode=" + tranCode + ", tranNo="
-				+ tranNo + "]";
-	}
-
-	public int getAmount() {
-		return amount;
-	}
-
-	public void setAmount(int amount) {
-		this.amount = amount;
+		StringBuilder builder = new StringBuilder();
+		builder.append("Purchase [buyer=");
+		builder.append(buyer);
+		builder.append(", divyAddr=");
+		builder.append(divyAddr);
+		builder.append(", divyDate=");
+		builder.append(divyDate);
+		builder.append(", divyRequest=");
+		builder.append(divyRequest);
+		builder.append(", orderDate=");
+		builder.append(orderDate);
+		builder.append(", paymentOption=");
+		builder.append(paymentOption);
+		builder.append(", purchaseProd=");
+		builder.append(purchaseProd);
+		builder.append(", receiverName=");
+		builder.append(receiverName);
+		builder.append(", receiverPhone=");
+		builder.append(receiverPhone);
+		builder.append(", tranCode=");
+		builder.append(tranCode);
+		builder.append(", amount=");
+		builder.append(amount);
+		builder.append(", tranNo=");
+		builder.append(tranNo);
+		builder.append(", rowNum=");
+		builder.append(rowNum);
+		builder.append(", reviewGrade=");
+		builder.append(reviewGrade);
+		builder.append("]");
+		return builder.toString();
 	}
 }

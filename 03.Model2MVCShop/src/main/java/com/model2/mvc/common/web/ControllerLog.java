@@ -35,6 +35,6 @@ public class ControllerLog implements HandlerInterceptor {
 		uri = uri.substring(uri.indexOf("/")+1);
 		System.out.println(uri+" end");
 		
-	}
+	}//end of postHandle
 
 }

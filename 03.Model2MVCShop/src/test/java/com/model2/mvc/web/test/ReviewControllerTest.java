@@ -11,6 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.model2.mvc.common.Search;
+import com.model2.mvc.service.domain.Product;
 import com.model2.mvc.service.domain.Review;
 import com.model2.mvc.service.review.ReviewService;
 
@@ -28,8 +29,10 @@ public class ReviewControllerTest {
 //	@Test
 	public void addReview() throws Exception {
 		Review review = new Review();
-		review.setTranNo(10000);
-		review.setProdNo(10011);
+		Product product = new Product();
+		product.setProdNo(10011);
+		review.setTranNo(10001);
+		review.setProd(product);
 		review.setUserId("user09");
 		review.setFileName("asdf.jpg");
 		review.setGrade(5);

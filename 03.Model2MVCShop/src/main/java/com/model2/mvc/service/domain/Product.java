@@ -15,6 +15,7 @@ public class Product {
 	private String proTranCode;
 	private int rowNum;
 	private int amount;
+	private float prodGrade;
 	
 	public Product(){
 	}
@@ -75,19 +76,48 @@ public class Product {
 	public void setRowNum(int rowNum) {
 		this.rowNum = rowNum;
 	}
-
-	// Override
-	public String toString() {
-		return "ProductVO : [fileName]" + fileName
-				+ "[manuDate]" + manuDate+ "[price]" + price + "[prodDetail]" + prodDetail
-				+ "[prodName]" + prodName + "[prodNo]" + prodNo;
-	}
-
 	public int getAmount() {
 		return amount;
 	}
 
 	public void setAmount(int amount) {
 		this.amount = amount;
+	}
+
+	public float getProdGrade() {
+		return prodGrade;
+	}
+
+	public void setProdGrade(float prodGrade) {
+		this.prodGrade = prodGrade;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Product [fileName=");
+		builder.append(fileName);
+		builder.append(", manuDate=");
+		builder.append(manuDate);
+		builder.append(", price=");
+		builder.append(price);
+		builder.append(", prodDetail=");
+		builder.append(prodDetail);
+		builder.append(", prodName=");
+		builder.append(prodName);
+		builder.append(", prodNo=");
+		builder.append(prodNo);
+		builder.append(", regDate=");
+		builder.append(regDate);
+		builder.append(", proTranCode=");
+		builder.append(proTranCode);
+		builder.append(", rowNum=");
+		builder.append(rowNum);
+		builder.append(", amount=");
+		builder.append(amount);
+		builder.append(", prodGrade=");
+		builder.append(prodGrade);
+		builder.append("]");
+		return builder.toString();
 	}	
 }

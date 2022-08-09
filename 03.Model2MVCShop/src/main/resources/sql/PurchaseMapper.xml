@@ -21,6 +21,7 @@
   		<result property="amount"					column="amount"				jdbcType="INTEGER"/>
   		<result property="tranNo"					column="tran_no"			jdbcType="INTEGER"/>
   		<result property="rowNum"					column="row_num"			jdbcType="VARCHAR"/>
+  		<result property="reviewGrade"				column="grade"				jdbcType="NUMERIC"/>
   		<association property="purchaseProd" resultMap="productSelectMap"/>
   		<association property="buyer" javaType="user">
   			<result property="userId" column="buyer_id"/>
@@ -100,8 +101,8 @@
   	<sql id="getPurchaseListSql">
   		SELECT
   		t.buyer_id,t.dlvy_addr,t.dlvy_date,t.dlvy_request,t.order_date,t.payment_option,t.prod_no,t.receiver_name,
-  		t.receiver_phone,t.tran_status_code,t.amount,t.tran_no,p.prod_name
-  		FROM transaction t, product p
+  		t.receiver_phone,t.tran_status_code,t.amount,t.tran_no,p.prod_name,r.grade
+  		FROM transaction t, product p, review r
   		<where>
   			<if test="userId != null and userId!=''">
   				buyer_id = #{userId}
@@ -122,6 +123,7 @@
   				#{search.searchKeyword}
   			</if>
   			AND t.prod_no = p.prod_no
+  			AND t.tran_no = r.tran_no(+)
   		</where>
   		ORDER BY order_date DESC
   	</sql>

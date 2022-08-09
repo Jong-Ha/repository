@@ -94,6 +94,31 @@ function fncCheck(){
 	</tr>
 	<tr>
 		<td width="104" class="ct_write">
+			평점 <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
+		</td>
+		<td bgcolor="D6D6D6" width="1"></td>
+		<td class="ct_write01">
+			<c:if test="${ product.prodGrade != 0 }">
+				<c:choose>
+					<c:when test="${ product.prodGrade >= 0.0 and product.prodGrade < 0.5 }">☆☆☆☆☆</c:when>
+					<c:when test="${ product.prodGrade >= 0.5 and product.prodGrade < 1.5 }">★☆☆☆☆</c:when>
+					<c:when test="${ product.prodGrade >= 1.5 and product.prodGrade < 2.5 }">★★☆☆☆</c:when>
+					<c:when test="${ product.prodGrade >= 2.5 and product.prodGrade < 3.5 }">★★★☆☆</c:when>
+					<c:when test="${ product.prodGrade >= 3.5 and product.prodGrade < 4.5 }">★★★★☆</c:when>
+					<c:when test="${ product.prodGrade >= 4.5 and product.prodGrade <= 5.0 }">★★★★★</c:when>
+				</c:choose>
+				${ product.prodGrade }
+			</c:if>
+			<c:if test="${ product.prodGrade == 0 }">
+				등록된 리뷰가 없습니다.	
+			</c:if>
+		</td>
+	</tr>
+	<tr>
+		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
+	</tr>
+	<tr>
+		<td width="104" class="ct_write">
 			상품이미지 <img 	src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
 		</td>
 		<td bgcolor="D6D6D6" width="1"></td>

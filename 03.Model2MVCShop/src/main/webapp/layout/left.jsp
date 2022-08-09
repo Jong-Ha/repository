@@ -88,6 +88,15 @@ function history(){
 				</td>
 			</tr>
 		</c:if>
+		
+		
+		<c:if test="${ user.role=='user' }">
+			<tr>
+				<td class="Depth03">
+					<a href="/myReview.do" target="rightFrame">³»°¡ ¾´ ¸®ºä</a>
+				</td>
+			</tr>
+		</c:if>
 			
 		<tr>
 			<td class="DepthEnd">&nbsp;</td>

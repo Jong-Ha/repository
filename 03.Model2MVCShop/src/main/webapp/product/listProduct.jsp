@@ -12,7 +12,7 @@
 <script type="text/javascript">
 function fncCheckSoldOut(checkSoldOut){
 	document.detailForm.checkSoldOut.value = checkSoldOut;
-	fncCheckPrice();
+	fncCheck();
 	document.detailForm.submit();
 }
 function fncCheck(){
@@ -141,7 +141,7 @@ function fncCheck(){
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
 	<tr>
-		<td colspan="8" >전체 ${ resultPage.totalCount } 건수, 현재 ${ search.currentPage } 페이지</td>
+		<td colspan="10" >전체 ${ resultPage.totalCount } 건수, 현재 ${ search.currentPage } 페이지</td>
 		<td colspan="1" align="right" >
 			<input type="hidden" id="checkSoldOut" name="checkSoldOut" value="${ search.checkSoldOut }"/>
 			<c:if test="${ user.role != 'admin' }">
@@ -159,16 +159,18 @@ function fncCheck(){
 	<tr>
 		<td class="ct_list_b" width="100">No</td>
 		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="150">상품명</td>
+		<td class="ct_list_b" width="300">상품명</td>
 		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="150">가격</td>
+		<td class="ct_list_b" width="200">가격</td>
 		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="330">등록일</td>	
+		<td class="ct_list_b" width="300">등록일</td>	
 		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="420">${ user.role=='admin'?'수량':'판매 유무' }</td>	
+		<td class="ct_list_b" width="200">${ user.role=='admin'?'수량':'판매 유무' }</td>	
+		<td class="ct_line02"></td>
+		<td class="ct_list_b">별점</td>	
 	</tr>
 	<tr>
-		<td colspan="9" bgcolor="808285" height="1"></td>
+		<td colspan="11" bgcolor="808285" height="1"></td>
 	</tr>
 	<c:forEach var="i" items="${ list }">
 	<tr class="ct_list_pop">
@@ -180,7 +182,7 @@ function fncCheck(){
 		<td></td>
 		<td align="left">${ i.price }</td>
 		<td></td>
-		<td align="left">${ i.regDate }</td>
+		<td align="center">${ i.regDate }</td>
 		<td></td>
 		<td align="left">
 			<c:choose>
@@ -192,9 +194,27 @@ function fncCheck(){
 				</c:otherwise>
 			</c:choose>
 		</td>	
+		<td></td>
+		<c:if test="${ i.prodGrade != 0 }">
+			<td>
+			<c:choose>
+				<c:when test="${ i.prodGrade >= 0.0 and i.prodGrade < 0.5 }">☆☆☆☆☆</c:when>
+				<c:when test="${ i.prodGrade >= 0.5 and i.prodGrade < 1.5 }">★☆☆☆☆</c:when>
+				<c:when test="${ i.prodGrade >= 1.5 and i.prodGrade < 2.5 }">★★☆☆☆</c:when>
+				<c:when test="${ i.prodGrade >= 2.5 and i.prodGrade < 3.5 }">★★★☆☆</c:when>
+				<c:when test="${ i.prodGrade >= 3.5 and i.prodGrade < 4.5 }">★★★★☆</c:when>
+				<c:when test="${ i.prodGrade >= 4.5 and i.prodGrade <= 5.0 }">★★★★★</c:when>
+			</c:choose>
+			${ i.prodGrade }
+			 - <a href="/listReview.do?prodNo=${ i.prodNo }">리뷰보기</a>
+			 </td>	
+		</c:if>
+		<c:if test="${ i.prodGrade == 0 }">
+			<td>등록된 리뷰가 없습니다.</td>	
+		</c:if>
 	</tr>
 	<tr>
-		<td colspan="9" bgcolor="D6D7D6" height="1"></td>
+		<td colspan="11" bgcolor="D6D7D6" height="1"></td>
 	</tr>
 		</c:forEach>
 </table>

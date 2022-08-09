@@ -16,6 +16,9 @@ function fncDelivery(tranNo,currentPage){
 	document.detailForm.submit();
 }
 function fncCheck(){}
+function fncAddReview(tranNo) {
+	popWin = window.open("/addReviewView.do?tranNo="+tranNo,"popWin", "left=300,top=200,width=800,height=500,marginwidth=0,marginheight=0,scrollbars=no,scrolling=no,menubar=no,resizable=no");
+}
 </script>
 </head>
 
@@ -63,11 +66,11 @@ function fncCheck(){}
 		<td class="ct_line02"></td>
 		<td class="ct_list_b" width="150">상품명</td>
 		<td class="ct_line02"></td>
-		<td class="ct_list_b">수량</td>
+		<td class="ct_list_b" width="200">수량</td>
 		<td class="ct_line02"></td>
-		<td class="ct_list_b">구매일자</td>
+		<td class="ct_list_b" width="500">구매일자</td>
 		<td class="ct_line02"></td>
-		<td class="ct_list_b">배송상태</td>
+		<td class="ct_list_b" width="500">배송상태</td>
 	</tr>
 	<tr>
 		<td colspan="11" bgcolor="808285" height="1"></td>
@@ -91,7 +94,12 @@ function fncCheck(){}
 					<c:when test="${ i.tranCode==2 }">
 						배송중 - <a href="javascript:fncDelivery(${ i.tranNo }, ${ resultPage.currentPage });">물건도착</a>
 					</c:when>
-					<c:when test="${ i.tranCode==3 }">배송완료</c:when>
+					<c:when test="${ i.tranCode==3 }">
+						배송완료
+						<c:if test="${ i.reviewGrade == 0 }">
+							- <a href="javascript:fncAddReview('${ i.tranNo }');">리뷰작성</a>
+						</c:if>
+					</c:when>
 				</c:choose>
 			</td>
 		</tr>

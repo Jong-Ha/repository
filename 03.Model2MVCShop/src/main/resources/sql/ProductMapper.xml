@@ -17,15 +17,18 @@
   		<result property="rowNum"		column="row_num"			jdbcType="VARCHAR"/>
   		<result property="amount"		column="amount"				jdbcType="NUMERIC"/>
   		<result property="proTranCode"	column="tran_code"			jdbcType="VARCHAR"/>
+  		<result property="prodGrade"	column="prod_grade"			jdbcType="NUMERIC"/>
   	</resultMap>
   	
   	<select id="getProduct" parameterType="int" resultMap="productSelectMap">
   		SELECT
-  		image_file, manufacture_day, price, prod_detail, prod_name, prod_no, reg_date, amount
-  		FROM product
+  		p.image_file, p.manufacture_day, p.price, p.prod_detail, p.prod_name, p.prod_no, p.reg_date, p.amount, ROUND(AVG(r.grade),1) AS prod_grade
+  		FROM product p, review r
   		<where>
-  			prod_no = #{prodNo}
+  			p.prod_no = #{prodNo}
+			AND p.prod_no = r.prod_no(+)
   		</where>
+  		GROUP BY p.image_file, p.manufacture_day, p.price, p.prod_detail, p.prod_name, p.prod_no, p.reg_date, p.amount
   	</select>
   	
   	<insert id="addProduct" parameterType="product">
@@ -69,44 +72,46 @@
   	
   	<sql id="getProductListSql">
   		SELECT
-  		image_file, manufacture_day, price, prod_detail, prod_name, prod_no, reg_date, amount
-  		FROM product
+  		p.image_file, p.manufacture_day, p.price, p.prod_detail, p.prod_name, p.prod_no, p.reg_date, p.amount, ROUND(AVG(r.grade),1) AS prod_grade
+  		FROM product p, review r
   		<where>
   			<if test="searchKeyword!=null and searchKeyword!=''">
   				<choose>
   					<when test="searchCondition==0">
-  						prod_name LIKE ('%'||#{searchKeyword}||'%')
+  						p.prod_name LIKE ('%'||#{searchKeyword}||'%')
   					</when>
   					<when test="searchCondition==1">
-  						prod_no = #{searchKeyword}
+  						p.prod_no = #{searchKeyword}
   					</when>
   					<otherwise>
-  						prod_name LIKE ('%'||#{searchKeyword}||'%')
+  						p.prod_name LIKE ('%'||#{searchKeyword}||'%')
   					</otherwise>
   				</choose>
   			</if>
 			<if test="checkSoldOut=='soldOut'">
-				AND amount > 0
+				AND p.amount > 0
 			</if>
 			<if test="maxPrice!=0">
-				AND price &lt;= #{maxPrice}
+				AND p.price &lt;= #{maxPrice}
 			</if>
 			<if test="minPrice!=0">
-				AND price >= #{minPrice}
+				AND p.price >= #{minPrice}
 			</if>
+			AND p.prod_no = r.prod_no(+)
   		</where>
+  		GROUP BY p.image_file, p.manufacture_day, p.price, p.prod_detail, p.prod_name, p.prod_no, p.reg_date, p.amount
   		ORDER BY 	<choose>
   						<when test="prodListCondition==0">
-  							reg_date DESC
+  							p.reg_date DESC
   						</when>
   						<when test="prodListCondition==1">
-  							price DESC
+  							p.price DESC
   						</when>
   						<when test="prodListCondition==2">
-  							price ASC
+  							p.price ASC
   						</when>
   						<otherwise>
-  							reg_date DESC
+  							p.reg_date DESC
   						</otherwise>
   					</choose>
   	</sql>

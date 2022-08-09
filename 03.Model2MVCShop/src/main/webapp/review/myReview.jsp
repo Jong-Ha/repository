@@ -10,22 +10,10 @@
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
 <script type="text/javascript">
-function fncCheckSoldOut(checkSoldOut){
-	document.detailForm.checkSoldOut.value = checkSoldOut;
-	fncCheckPrice();
-	document.detailForm.submit();
-}
 function fncCheck(){
-	if(document.detailForm.minPriceInput.value==''){
-		document.detailForm.minPrice.value=0;
-	}else{
-		document.detailForm.minPrice.value=document.detailForm.minPriceInput.value;
-	}
-	if(document.detailForm.maxPriceInput.value==''){
-		document.detailForm.maxPrice.value=0;
-	}else{
-		document.detailForm.maxPrice.value=document.detailForm.maxPriceInput.value;
-	}
+}
+function fncUpdateReview(tranNo){
+	popWin = window.open("/updateReviewView.do?tranNo="+tranNo,"popWin", "left=300,top=200,width=800,height=500,marginwidth=0,marginheight=0,scrollbars=no,scrolling=no,menubar=no,resizable=no");
 }
 </script>
 <style type="text/css">
@@ -40,10 +28,7 @@ function fncCheck(){
 
 <div style="width:98%; margin-left:10px;">
 
-<form name="detailForm" action="/listProduct.do?" method="post">
-<input type="hidden" id="prodNo" name="prodNo" value="">
-<input type="hidden" id="minPrice" name="minPrice" value="">
-<input type="hidden" id="maxPrice" name="maxPrice" value="">
+<form name="detailForm" action="/myReview.do" method="post">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -54,7 +39,7 @@ function fncCheck(){
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr>
 					<td width="93%" class="ct_ttl01">
-						상품 ${ user.role=='admin' ?'관리':'검색' }
+						내가 쓴 리뷰
 					</td>
 				</tr>
 			</table>
@@ -65,7 +50,7 @@ function fncCheck(){
 	</tr>
 </table>
 
-
+<%-- 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
 	<tr>
 		<td align="right">
@@ -137,66 +122,53 @@ function fncCheck(){
 	<!-- 정렬순서 변경 끝 -->
 	
 </table>
-
+ --%>
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
 	<tr>
-		<td colspan="8" >전체 ${ resultPage.totalCount } 건수, 현재 ${ search.currentPage } 페이지</td>
-		<td colspan="1" align="right" >
-			<input type="hidden" id="checkSoldOut" name="checkSoldOut" value="${ search.checkSoldOut }"/>
-			<c:if test="${ user.role != 'admin' }">
-				<c:choose>
-					<c:when test="${ search.checkSoldOut == 'soldOut' }">
-						<a href="javascript:fncCheckSoldOut('');">품절상품 보기</a>
-					</c:when>
-					<c:otherwise>
-						<a href="javascript:fncCheckSoldOut('soldOut');">품절상품 숨기기</a>
-					</c:otherwise>
-				</c:choose>
-			</c:if>
-		</td>
+		<td colspan="4" >전체 ${ resultPage.totalCount } 건수, 현재 ${ search.currentPage } 페이지</td>
+		<td colspan="1" align="right" ></td>
 	</tr>
 	<tr>
-		<td class="ct_list_b" width="100">No</td>
-		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="150">상품명</td>
-		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="150">가격</td>
-		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="330">등록일</td>	
-		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="420">${ user.role=='admin'?'수량':'판매 유무' }</td>	
-	</tr>
-	<tr>
-		<td colspan="9" bgcolor="808285" height="1"></td>
+		<td colspan="1" bgcolor="D6D7D6" height="2" width="300"></td>
+		<td colspan="1" bgcolor="D6D7D6" height="2"></td>
+		<td colspan="1" bgcolor="D6D7D6" height="2" width="200"></td>
+		<td colspan="1" bgcolor="D6D7D6" height="2"></td>
+		<td colspan="1" bgcolor="D6D7D6" height="2"></td>
 	</tr>
 	<c:forEach var="i" items="${ list }">
-	<tr class="ct_list_pop">
-		<td align="center">${ i.rowNum }</td>
-		<td></td>
-		<td align="left">
-			<a href="/getProduct.do?prodNo=${ i.prodNo }">${ i.prodName }</a>
-		</td>
-		<td></td>
-		<td align="left">${ i.price }</td>
-		<td></td>
-		<td align="left">${ i.regDate }</td>
-		<td></td>
-		<td align="left">
-			<c:choose>
-				<c:when test="${ user.role == 'admin' }">
-					${ i.amount }
-				</c:when>
-				<c:otherwise>
-					${ i.amount==0?'품절':'판매중' }
-				</c:otherwise>
-			</c:choose>
-		</td>	
-	</tr>
-	<tr>
-		<td colspan="9" bgcolor="D6D7D6" height="1"></td>
-	</tr>
-		</c:forEach>
+		<tr class="ct_list_pop">
+			<td align="center" rowspan="3">${ i.prod.fileName }</td>
+			<td></td>
+			<td align="left" colspan="3">
+				<c:if test="${ i.grade == 1 }">★☆☆☆☆</c:if>
+				<c:if test="${ i.grade == 2 }">★★☆☆☆</c:if>
+				<c:if test="${ i.grade == 3 }">★★★☆☆</c:if>
+				<c:if test="${ i.grade == 4 }">★★★★☆</c:if>
+				<c:if test="${ i.grade == 5 }">★★★★★</c:if>
+				(작성일 : ${ i.reviewDate })&nbsp;
+				<a href="javascript:fncUpdateReview('${ i.tranNo }');">리뷰수정</a>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="4" bgcolor="D6D7D6" height="1"></td>
+		</tr>
+		<tr class="ct_list_pop">
+			<td></td>
+			<td align="left">${ i.fileName }</td>
+			<td></td>
+			<td align="left" colspan="1">${ i.detail }</td>
+		</tr>
+		<tr>
+			<td colspan="5" bgcolor="D6D7D6" height="1"></td>
+		</tr>
+		<tr class="ct_list_pop">
+			<td colspan="5">${ i.prod.prodName } - ${ i.prod.prodDetail }</td>
+		</tr>
+		<tr>
+			<td colspan="5" bgcolor="D6D7D6" height="2"></td>
+		</tr>
+	</c:forEach>
 </table>
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
