@@ -13,16 +13,20 @@
 <script type="text/javascript">
 <!--
 function fncUpdateReview(){
-	document.detailForm.action='/updateReview.do?flag=수정';
+	document.detailForm.action='/review/updateReview?flag=수정';
 	document.detailForm.submit();
 }
 function fncDeleteReview(){
-	document.detailForm.action='/deleteReview.do?flag=삭제';
+	document.detailForm.action='/review/deleteReview?flag=삭제';
 	document.detailForm.submit();
 }
 
 function closeWindow(){
 	window.close();
+}
+function deleteImg(){
+	document.detailForm.existFileName.value = '';
+	document.getElementById('existFileName').src = '/images/empty.GIF';
 }
 -->
 </script>
@@ -30,7 +34,7 @@ function closeWindow(){
 
 <body bgcolor="#ffffff" text="#000000">
 
-<form name="detailForm" method="post" <%--enctype="multipart/form-data"--%> >
+<form name="detailForm" method="post" enctype="multipart/form-data" >
 <input type="hidden" id="tranNo" name="tranNo" value="${ review.tranNo }">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
@@ -78,8 +82,11 @@ function closeWindow(){
 		<td width="104" class="ct_write">상품이미지</td>
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">
-			<input		type="text" name="fileName" class="ct_input_g" value="${ review.fileName }"
+			<img id="existFileName" src = "/images/reviewImg/${ review.fileName }" height="20"/>
+			<input type="hidden" name="existFileName" value="${ review.fileName }">
+			<input		type="file" name="file" class="ct_input_g" 
 							style="width: 200px; height: 19px" maxLength="13"/>
+			<a href="javascript:deleteImg();"><input type="button" value="삭제"></a>
 		</td>
 	</tr>
 	<tr>

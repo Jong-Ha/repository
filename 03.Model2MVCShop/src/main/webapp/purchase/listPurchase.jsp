@@ -12,12 +12,12 @@
 function fncDelivery(tranNo,currentPage){
 	document.getElementById('tranNo').value=tranNo;
 	document.getElementById("currentPage").value = currentPage;
-	document.detailForm.action='/updateTranCode.do?tranCode=3';
+	document.detailForm.action='/purchase/updateTranCode?tranCode=3';
 	document.detailForm.submit();
 }
 function fncCheck(){}
 function fncAddReview(tranNo) {
-	popWin = window.open("/addReviewView.do?tranNo="+tranNo,"popWin", "left=300,top=200,width=800,height=500,marginwidth=0,marginheight=0,scrollbars=no,scrolling=no,menubar=no,resizable=no");
+	popWin = window.open("/review/addReview?tranNo="+tranNo,"popWin", "left=300,top=200,width=800,height=500,marginwidth=0,marginheight=0,scrollbars=no,scrolling=no,menubar=no,resizable=no");
 }
 </script>
 </head>
@@ -26,7 +26,7 @@ function fncAddReview(tranNo) {
 
 <div style="width: 98%; margin-left: 10px;">
 
-<form name="detailForm" action="/listPurchase.do" method="post">
+<form name="detailForm" action="/purchase/listPurchase" method="post">
 <input type="hidden" id="tranNo" name="tranNo" value="">
 <input type="hidden" id="updateBy" name="updateBy" value="user">
 
@@ -42,8 +42,12 @@ function fncAddReview(tranNo) {
 		</td>
 		<td width="12" height="37"><img src="/images/ct_ttl_img03.gif"	width="12" height="37"></td>
 	</tr>
+</table>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0"	style="margin-top: 10px;">
 	<tr>
-		<td colspan="3" align="right">
+		<td colspan="10">전체 ${ resultPage.totalCount } 건수, 현재 ${ resultPage.currentPage } 페이지</td>
+		<td colspan="1" align="right">
 			<select name="tranCondition" class="ct_input_g" onchange="fncPageNavigator('1')">
 				<option value="" ${ search.tranCondition=='0'?'selected':'' } align="center">배송상태조회</option>
 				<option value="4" ${ search.tranCondition=='4'?'selected':'' } align="center">구매취소</option>
@@ -52,12 +56,6 @@ function fncAddReview(tranNo) {
 				<option value="3" ${ search.tranCondition=='3'?'selected':'' } align="center">배송완료</option>
 			</select>
 		</td>
-	</tr>
-</table>
-
-<table width="100%" border="0" cellspacing="0" cellpadding="0"	style="margin-top: 10px;">
-	<tr>
-		<td colspan="11">전체 ${ resultPage.totalCount } 건수, 현재 ${ resultPage.currentPage } 페이지</td>
 	</tr>
 	<tr>
 		<td class="ct_list_b" width="100">No</td>
@@ -81,7 +79,7 @@ function fncAddReview(tranNo) {
 			<td></td>
 			<td align="left">${ i.receiverName }</td>
 			<td></td>
-			<td align="left"><a href="/getPurchase.do?tranNo=${ i.tranNo }">${ i.purchaseProd.prodName }</a></td>
+			<td align="left"><a href="/purchase/getPurchase?tranNo=${ i.tranNo }">${ i.purchaseProd.prodName }</a></td>
 			<td></td>
 			<td align="left">${ i.amount }</td>
 			<td></td>

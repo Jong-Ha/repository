@@ -23,7 +23,7 @@ function fncAddPurchase() {
 
 <body>
 
-<form name="cartPurchase" method="post" action="/buyCart.do">
+<form name="cartPurchase" method="post" action="/cart/buyCart">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>

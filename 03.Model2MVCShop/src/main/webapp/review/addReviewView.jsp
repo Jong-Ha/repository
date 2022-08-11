@@ -13,7 +13,7 @@
 <script type="text/javascript">
 <!--
 function fncAddReview(){
-	document.detailForm.action='/addReview.do?flag=등록';
+	document.detailForm.action='/review/addReview?flag=등록';
 	document.detailForm.submit();
 }
 
@@ -26,7 +26,7 @@ function closeWindow(){
 
 <body bgcolor="#ffffff" text="#000000">
 
-<form name="detailForm" method="post" <%--enctype="multipart/form-data"--%> >
+<form name="detailForm" method="post" enctype="multipart/form-data" >
 <input type="hidden" id="prodNo" name="prodNo" value="${ purchase.purchaseProd.prodNo }">
 <input type="hidden" id="userId" name="userId" value="${ purchase.buyer.userId }">
 <input type="hidden" id="tranNo" name="tranNo" value="${ purchase.tranNo }">
@@ -73,10 +73,10 @@ function closeWindow(){
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
 	</tr>
 	<tr>
-		<td width="104" class="ct_write">상품이미지</td>
+		<td width="104" class="ct_write">리뷰이미지</td>
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">
-			<input		type="text" name="fileName" class="ct_input_g" 
+			<input		type="file" name="file" class="ct_input_g" 
 							style="width: 200px; height: 19px" maxLength="13"/>
 		</td>
 	</tr>

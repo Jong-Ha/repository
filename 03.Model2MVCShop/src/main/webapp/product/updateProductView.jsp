@@ -38,16 +38,20 @@ function fncAddProduct(){
 		return;
 	}
 		
-	document.detailForm.action='/updateProduct.do?';
+	document.detailForm.action='/product/updateProduct?';
 	document.detailForm.submit();
 }
 -->
+function deleteImg(){
+	document.detailForm.existFileName.value = '';
+	document.getElementById('existFileName').src = '/images/empty.GIF';
+}
 </script>
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
 
-<form name="detailForm" method="post" <%-- enctype="multipart/form-data" --%> >
+<form name="detailForm" method="post" enctype="multipart/form-data" >
 
 <input type="hidden" name="prodNo" value="${ product.prodNo }"/>
 
@@ -167,8 +171,12 @@ function fncAddProduct(){
 		<td width="104" class="ct_write">상품이미지</td>
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">
-			<input	type="text" name="fileName" class="ct_input_g" 
-						style="width: 200px; height: 19px" maxLength="13" value="<%-- ../../images/empty.GIF/ --%>${ product.fileName }">
+			<img id="existFileName" src = "/images/uploadFiles/${ product.fileName }"/>
+			<input type="hidden" name="existFileName" value="${ product.fileName }">
+			<input	type="file" name="file" class="ct_input_g" 
+						style="width: 200px; height: 19px" maxLength="13">
+						<%-- style="width: 200px; height: 19px" maxLength="13" value="../../images/empty.GIF/">${ product.fileName } --%>
+			<a href="javascript:deleteImg();"><input type="button" value="삭제"></a>
 		</td>
 	</tr>
 	<tr>

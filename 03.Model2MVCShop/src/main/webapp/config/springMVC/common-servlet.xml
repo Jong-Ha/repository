@@ -3,10 +3,16 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:mvc="http://www.springframework.org/schema/mvc"
+		xmlns:aop="http://www.springframework.org/schema/aop"
 		xsi:schemaLocation="http://www.springframework.org/schema/beans 
 								 http://www.springframework.org/schema/beans/spring-beans.xsd
 								 http://www.springframework.org/schema/context
-								 http://www.springframework.org/schema/context/spring-context.xsd">
+								 http://www.springframework.org/schema/context/spring-context.xsd
+								 http://www.springframework.org/schema/mvc
+								 http://www.springframework.org/schema/mvc/spring-mvc.xsd
+								http://www.springframework.org/schema/aop
+								http://www.springframework.org/schema/aop/spring-aop.xsd">
 
 
 	<context:component-scan base-package="com.model2.mvc.web">
@@ -15,14 +21,30 @@
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
 	</context:component-scan>
 	
-	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
-		<property name="order" value="0"/>
-		<property name="interceptors" ref="controllerLog"/>
-	</bean>
+	<mvc:annotation-driven/>
 	
-	<bean id="controllerLog" class="com.model2.mvc.common.web.ControllerLog"/>
+	<!-- <mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/user/**"/>
+			<mvc:mapping path="/product/**"/>
+			<mvc:mapping path="/purchase/**"/>
+			<mvc:mapping path="/cart/**"/>
+			<mvc:mapping path="/review/**"/>
+			<bean class="com.model2.mvc.common.web.ControllerLog"/>
+		</mvc:interceptor>
+	</mvc:interceptors> -->
+	
+	<mvc:resources location="/css/" mapping="/css/**"/>
+	<mvc:resources location="/images/" mapping="/images/**"/>
+	<mvc:resources location="/javascript/" mapping="/javascript/**"/>
 	
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"/>
+	
+	<aop:config>
+		<aop:aspect ref="LogAspect">
+			<aop:around method="controllerLog" pointcut="execution(* com.model2.mvc.web..*Controller*.*(..))"/>
+		</aop:aspect>
+	</aop:config>
 	
 	<!-- <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
 		<property name="exceptionMappings">
@@ -33,5 +55,8 @@
 		</property>
 		<property name="defaultErrorView" value="/common/error.jsp"/>
 	</bean> -->
+	
+	<!-- 파일업로드용 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/>
 	
 </beans>

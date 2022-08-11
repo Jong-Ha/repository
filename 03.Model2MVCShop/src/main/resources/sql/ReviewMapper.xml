@@ -11,6 +11,7 @@
   		<result property="prod.prodNo"		column="prod_no"		jdbcType="INTEGER"/>
   		<result property="prod.prodName"	column="prod_name"		jdbcType="INTEGER"/>
   		<result property="prod.prodDetail"	column="prod_detail"	jdbcType="INTEGER"/>
+  		<result property="prod.fileName"	column="prod_image"		jdbcType="INTEGER"/>
   		<result property="userId"			column="user_id"		jdbcType="VARCHAR"/>
   		<result property="fileName"			column="image_file"		jdbcType="VARCHAR"/>
   		<result property="grade"			column="grade"			jdbcType="NUMERIC"/>
@@ -25,14 +26,14 @@
   		VALUES(	#{tranNo}, 
   				#{prod.prodNo}, 
   				#{userId}, 
-  				#{fileName}, 
+  				#{fileName:VARCHAR}, 
   				#{grade}, 
   				#{detail}, 
   				SYSDATE	)
   	</insert>
   	
   	<select id="getReview" parameterType="int" resultMap="ReviewSelectMap">
-  		SELECT r.tran_no, r.prod_no, r.user_id, r.image_file, r.grade, r.detail, r.review_date, p.prod_name, p.prod_detail
+  		SELECT r.tran_no, r.prod_no, r.user_id, r.image_file, r.grade, r.detail, r.review_date, p.prod_name, p.prod_detail, p.image_file AS prod_image
   		FROM review r, product p
   		<where>
   			tran_no = #{tranNo}
@@ -60,7 +61,7 @@
   	</delete>
   	
   	<sql id="getReviewListSql">
-  		SELECT r.tran_no, r.prod_no, r.user_id, r.image_file, r.grade, r.detail, r.review_date, p.prod_name, p.prod_detail
+  		SELECT r.tran_no, r.prod_no, r.user_id, r.image_file, r.grade, r.detail, r.review_date, p.prod_name, p.prod_detail, p.image_file AS prod_image
   		FROM review r, product p
   		<where>
   			<if test="prodNo!=null">

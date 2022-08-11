@@ -1,7 +1,11 @@
 package com.model2.mvc.common.aspect;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Aspect
 public class LogAspectJ {
@@ -30,6 +34,24 @@ public class LogAspectJ {
 		System.out.println("[Around after] "+className+"."+joinPoint.getSignature().getName()+" end");
 		System.out.println("");
 		
+		return obj;
+	}
+	
+	public Object controllerLog(ProceedingJoinPoint joinPoint) throws Throwable{
+		System.out.print("\n[Controller Log] ");
+		
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+		
+		String mappingName = joinPoint.getSignature().getName();
+		String method = request.getMethod();
+		System.out.println(mappingName+" : "+method+" start\n");
+		
+		Object obj = joinPoint.proceed();
+		
+		System.out.print("\n[Controller Log] ");
+		
+		System.out.println(mappingName+" : "+method+" end\n");
+
 		return obj;
 	}
 

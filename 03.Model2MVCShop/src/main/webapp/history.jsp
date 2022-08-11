@@ -13,7 +13,7 @@
 <br>
 <br>
 <c:forEach var="i" items="${ list }">
-	<a href="/getProduct.do?prodNo=${ i }&menu=search"	target="rightFrame" onclick="window.close()">${ i }</a>
+	<a href="/product/getProduct?prodNo=${ i }&menu=search"	target="rightFrame" onclick="window.close()">${ i }</a>
 	<br>
 </c:forEach>
 </body>

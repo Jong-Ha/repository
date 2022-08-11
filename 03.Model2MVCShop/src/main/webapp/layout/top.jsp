@@ -23,10 +23,10 @@
 		<tr> 
 			<td align="center"> 	
 				<c:if test="${ empty user }">
-				<a href="/loginView.do" target="rightFrame">login</a>
+				<a href="/user/login" target="rightFrame">login</a>
 				</c:if>
 				<c:if test="${ !empty user }">
-				<a href="/logout.do" target="_parent">logout</a>  
+				<a href="/user/logout" target="_parent">logout</a>  
 				</c:if>  
 			</td>
 		</tr>
@@ -34,7 +34,7 @@
     </td>
   </tr>
 </table>
-<a href="/user/loginView.jsp" target="rightFrame">
+<a href="/user/login" target="rightFrame">
  <img  src="//pics.gmarket.co.kr/pc/single/kr/common/image__header-cart.svg" 
  		style="width: 25px; height: 25px; float: right; margin-right: 200px; cursor: pointer;">	
  		</a>

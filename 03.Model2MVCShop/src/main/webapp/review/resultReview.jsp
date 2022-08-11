@@ -15,7 +15,7 @@
 <!--
 function fncMyReview(){
 	if(opener) {
-		opener.document.detailForm.action='/myReview.do';
+		opener.document.detailForm.action='/review/myReview';
 		opener.document.detailForm.submit();
 	}
 }

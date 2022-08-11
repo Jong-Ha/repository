@@ -1,6 +1,5 @@
 package com.model2.mvc.web.user;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.model2.mvc.common.Page;
@@ -20,6 +20,7 @@ import com.model2.mvc.service.domain.User;
 import com.model2.mvc.service.user.UserService;
 
 @Controller
+@RequestMapping("/user/*")
 public class UserController {
 	
 	@Autowired
@@ -35,24 +36,37 @@ public class UserController {
 	public UserController() {
 		System.out.println(this.getClass());
 	}
-	
-	@RequestMapping("/loginView.do")
-	public String loginView() {
+
+	@RequestMapping(value = "login", method = RequestMethod.GET)
+	public String login() {
 		return "redirect:/user/loginView.jsp";
 	}
 	
-	@RequestMapping("/addUserView.do")
-	public String addUserView() {
+	@RequestMapping(value = "login", method = RequestMethod.POST)
+	public String login(@ModelAttribute("user") User user, HttpSession session) {
+		try {
+			User dbVO=service.loginUser(user);
+			
+			session.setAttribute("user", dbVO);
+		}catch (Exception e) {
+			System.out.println("로그인 실패");
+		}
+		
+		return "redirect:/index.jsp";
+	}
+
+	@RequestMapping(value = "addUser", method = RequestMethod.GET)
+	public String addUser() {
 		return "redirect:/user/addUserView.jsp";
 	}
-	
-	@RequestMapping("/addUser.do")
+
+	@RequestMapping(value = "addUser", method = RequestMethod.POST)
 	public String addUser(@ModelAttribute("user") User user) throws Exception {
 		service.addUser(user);
 		return "redirect:/user/loginView.jsp";
 	}
 	
-	@RequestMapping("/checkDuplication.do")
+	@RequestMapping(value = "checkDuplication", method = RequestMethod.POST)
 	public String checkDuplication(@RequestParam("userId") String userId, Model model) throws Exception {
 		boolean result=service.checkDuplication(userId);
 		
@@ -62,7 +76,7 @@ public class UserController {
 		return "forward:/user/checkDuplication.jsp";
 	}
 	
-	@RequestMapping("/getUser.do")
+	@RequestMapping(value = "getUser", method = RequestMethod.GET)
 	public String getUser(@RequestParam("userId") String userId, HttpSession session, Model model) throws Exception {
 		
 		User user = (User)session.getAttribute("user");
@@ -77,37 +91,16 @@ public class UserController {
 		return "forward:/user/getUser.jsp";
 	}
 	
-	@RequestMapping("/login.do")
-	public String login(@ModelAttribute("user") User user, HttpSession session) {
-		try {
-			User dbVO=service.loginUser(user);
-			
-			session.setAttribute("user", dbVO);
-		}catch (Exception e) {
-			System.out.println("로그인 실패");
-		}
-		
-		return "redirect:/index.jsp";
-	}
-	
-	@RequestMapping("/logout.do")
+	@RequestMapping(value = "logout", method = RequestMethod.GET)
 	public String logout(HttpSession session) {
 		
 		session.removeAttribute("user");
 		
 		return "redirect:/index.jsp";
 	}
-	
-	@RequestMapping("/updateUser.do")
-	public String updateUser(@ModelAttribute("user") User user) throws Exception {
-		
-		service.updateUser(user);
-		
-		return "redirect:/getUser.do?userId="+user.getUserId();
-	}
-	
-	@RequestMapping("/updateUserView.do")
-	public String updateUserView(@RequestParam("userId") String userId, Model model) throws Exception {
+
+	@RequestMapping(value = "updateUser", method = RequestMethod.GET)
+	public String updateUser(@RequestParam("userId") String userId, Model model) throws Exception {
 		
 		User user=service.getUser(userId);
 		
@@ -115,8 +108,16 @@ public class UserController {
 		
 		return "forward:/user/updateUser.jsp";
 	}
+
+	@RequestMapping(value = "updateUser", method = RequestMethod.POST)
+	public String updateUser(@ModelAttribute("user") User user) throws Exception {
+		
+		service.updateUser(user);
+		
+		return "redirect:/user/getUser?userId="+user.getUserId();
+	}
 	
-	@RequestMapping("/listUser.do")
+	@RequestMapping(value = "listUser")
 	public String listUser(@ModelAttribute("search") Search search, Model model) throws Exception {
 
 		
@@ -135,7 +136,7 @@ public class UserController {
 		
 		Page resultPage = new Page(search, ((Integer)map.get("totalCount")).intValue());
 
-		model.addAttribute("list", (List<User>)map.get("list"));
+		model.addAllAttributes(map);
 		model.addAttribute("search", search);
 		model.addAttribute("resultPage", resultPage);
 		

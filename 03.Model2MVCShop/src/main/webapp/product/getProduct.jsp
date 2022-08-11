@@ -16,7 +16,7 @@ function fncAddPurchase(){
 		alert('수량을 확인해주세요');
 		return;
 	}
-	document.detailForm.action = '/addPurchaseView.do';
+	document.detailForm.action = '/purchase/addPurchaseView';
 	document.detailForm.submit();
 }
 function fncAddCart(){
@@ -24,7 +24,7 @@ function fncAddCart(){
 		alert('수량을 확인해주세요');
 		return;
 	}
-	document.detailForm.action = '/addCart.do';
+	document.detailForm.action = '/cart/addCart';
 	document.detailForm.submit();
 }
 function fncCheck(){
@@ -107,7 +107,7 @@ function fncCheck(){
 					<c:when test="${ product.prodGrade >= 3.5 and product.prodGrade < 4.5 }">★★★★☆</c:when>
 					<c:when test="${ product.prodGrade >= 4.5 and product.prodGrade <= 5.0 }">★★★★★</c:when>
 				</c:choose>
-				${ product.prodGrade }
+				${ product.prodGrade } - <a href="/review/listReview?prodNo=${ product.prodNo }">리뷰보기</a>
 			</c:if>
 			<c:if test="${ product.prodGrade == 0 }">
 				등록된 리뷰가 없습니다.	
@@ -122,8 +122,8 @@ function fncCheck(){
 			상품이미지 <img 	src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
 		</td>
 		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">${ product.fileName }
-			<%-- <img src = "/images/uploadFiles/AHlbAAAAtBqyWAAA.jpg"/> --%>
+		<td class="ct_write01">
+			<img src = "/images/uploadFiles/${ product.fileName }"/>
 		</td>
 	</tr>
 	<tr>
@@ -198,7 +198,7 @@ function fncCheck(){
 					<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 				</td>
 				<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-					<a href="/listProduct.do?">확인</a>
+					<a href="/product/listProduct?">확인</a>
 				</td>
 				<td width="14" height="23">
 					<img src="/images/ct_btnbg03.gif" width="14" height="23">

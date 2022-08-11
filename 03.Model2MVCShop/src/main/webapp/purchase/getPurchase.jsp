@@ -150,7 +150,7 @@
 						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01"	style="padding-top: 3px;">
-						<a href="/getProduct.do?prodNo=${ purchase.purchaseProd.prodNo }">상품 보러가기</a>
+						<a href="/product/getProduct?prodNo=${ purchase.purchaseProd.prodNo }">상품 보러가기</a>
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
@@ -163,7 +163,7 @@
 							<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 						</td>
 						<td background="/images/ct_btnbg02.gif" class="ct_btn01"	style="padding-top: 3px;">
-							<a href="/updatePurchaseView.do?tranNo=${ purchase.tranNo }">수정</a>
+							<a href="/purchase/updatePurchase?tranNo=${ purchase.tranNo }">수정</a>
 						</td>
 						<td width="14" height="23">
 							<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
@@ -173,7 +173,7 @@
 							<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 						</td>
 						<td background="/images/ct_btnbg02.gif" class="ct_btn01"	style="padding-top: 3px;">
-							<a href="/canclePurchase.do?tranNo=${ purchase.tranNo }">구매취소</a>
+							<a href="/purchase/canclePurchase?tranNo=${ purchase.tranNo }">구매취소</a>
 						</td>
 						<td width="14" height="23">
 							<img src="/images/ct_btnbg03.gif" width="14" height="23"/>

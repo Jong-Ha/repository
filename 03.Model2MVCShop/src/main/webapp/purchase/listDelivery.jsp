@@ -13,7 +13,7 @@
 function fncDelivery(tranNo,currentPage){
 	document.detailForm.tranNo.value=tranNo;
 	document.getElementById("currentPage").value = currentPage;
-	document.detailForm.action='/updateTranCode.do?tranCode=2';
+	document.detailForm.action='/purchase/updateTranCode?tranCode=2';
 	document.detailForm.submit();
 }
 function fncCheck(){}
@@ -30,7 +30,7 @@ function fncCheck(){}
 
 <div style="width:98%; margin-left:10px;">
 
-<form name="detailForm" action="/listDelivery.do" method="post">
+<form name="detailForm" action="/purchase/listDelivery" method="post">
 <input type="hidden" id="tranNo" name="tranNo" value="">
 <input type="hidden" id="updateBy" name="updateBy" value="admin">
 
@@ -152,7 +152,7 @@ function fncCheck(){}
 		<td align="center">${ i.rowNum }</td>
 		<td></td>
 		<td align="left">
-			<a href="/getPurchase.do?tranNo=${ i.tranNo }">${ i.purchaseProd.prodName }</a>
+			<a href="/purchase/getPurchase?tranNo=${ i.tranNo }">${ i.purchaseProd.prodName }</a>
 		</td>
 		<td></td>
 		<td align="left">${ i.buyer.userId }</td>

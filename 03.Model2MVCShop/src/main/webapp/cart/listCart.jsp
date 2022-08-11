@@ -20,7 +20,7 @@ function fncAction(action){
 	}
 	if(check){
 		if(action=="delete"){
-			document.detailForm.action="/deleteCart.do";
+			document.detailForm.action="/cart/deleteCart";
 		}else if(document.getElementById("userId").value==""){
 			alert("로그인이 필요합니다.");
 			document.detailForm.action="/user/loginView.jsp";
@@ -89,7 +89,7 @@ function fncDeleteSoldOut(){
 		boxList[i].checked=true;
 	}
 	document.getElementById("flag").value = "check";
-	document.detailForm.action="/deleteCart.do";
+	document.detailForm.action="/cart/deleteCart";
 	document.detailForm.submit();
 }
 </script>
@@ -99,7 +99,7 @@ function fncDeleteSoldOut(){
 
 <div style="width: 98%; margin-left: 10px;">
 
-<form name="detailForm" action="/buyCartView.do" method="post">
+<form name="detailForm" action="/cart/buyCartView" method="post">
 <input type="hidden" id="userId" name="userId" value="${ user.userId }"/>
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
@@ -130,7 +130,7 @@ function fncDeleteSoldOut(){
 			<td align="center" height="50">장바구니에 담긴 상품이 없습니다.</td>
 		</tr>
 		<tr>
-			<td align="center"><a href="/listProduct.do"><input type="button" value="상품보러가기"/></a></td>
+			<td align="center"><a href="/product/listProduct"><input type="button" value="상품보러가기"/></a></td>
 		</tr>
 	</table>
 </c:if>
@@ -159,12 +159,12 @@ function fncDeleteSoldOut(){
 				<input type="hidden" id="${ i.cartNo }price" name="${ i.cartNo }price" value="${ i.prod.price }"/>
 				<input type="hidden" id="${ i.cartNo }productAmount" name="${ i.cartNo }productAmount" value="${ i.prod.amount }"/>
 				<input type="hidden" id="${ i.cartNo }cartPrice" name="cartPrice" value="${ i.prod.price*i.amount }"/>
-				<tr class="ct_list_pop">
+				<tr class="ct_list_pop" height="300">
 					<td align="center"><input type="checkbox" id="${ i.cartNo }cartBox" name="cartBox" onclick="fncToggleBox()" checked value="${ i.cartNo }"/></td>
 					<td></td>
-					<td align="center">${ i.prod.fileName }</td>
+					<td align="center"><img src = "/images/uploadFiles/${ i.prod.fileName }" width="200"/></td>
 					<td></td>
-					<td align="center"><a href="/getProduct.do?prodNo=${ i.prod.prodNo }">${ i.prod.prodName }</a></td>
+					<td align="center"><a href="/product/getProduct?prodNo=${ i.prod.prodNo }">${ i.prod.prodName }</a></td>
 					<td></td>
 					<td align="center">${ i.prod.prodDetail }</td>
 					<td></td>

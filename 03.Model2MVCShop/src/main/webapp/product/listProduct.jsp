@@ -40,7 +40,7 @@ function fncCheck(){
 
 <div style="width:98%; margin-left:10px;">
 
-<form name="detailForm" action="/listProduct.do?" method="post">
+<form name="detailForm" action="/product/listProduct?" method="post">
 <input type="hidden" id="prodNo" name="prodNo" value="">
 <input type="hidden" id="minPrice" name="minPrice" value="">
 <input type="hidden" id="maxPrice" name="maxPrice" value="">
@@ -115,25 +115,23 @@ function fncCheck(){
 	<!-- 배송상태 조회 끝 --> --%>
 	
 	<!-- 정렬순서 변경 -->
-	<c:if test="${ user.role != 'admin' }">
-		<tr>
-			<td colspan="11" height="5" style="margin-right: 15px; float: left;"></td>
-		</tr>
-		<tr>
-			<td class="tdleft" >
-				<select name="prodListCondition" class="ct_input_g" onchange="fncPageNavigator('1')">
-					<option value="0" ${ search.prodListCondition=='0'?'selected':'' } align="center">신규 상품 순</option>
-					<option value="1" ${ search.prodListCondition=='1'?'selected':'' } align="center">높은 가격 순</option>
-					<option value="2" ${ search.prodListCondition=='2'?'selected':'' } align="center">낮은 가격 순</option>
-				</select>
-			</td>
-			<td class="tdleft">&nbsp;</td>
-			<td align="right" class="tdleft">
-				가격 검색 
-				<input id="minPriceInput" name="minPriceInput" value="${ search.minPrice==0 ?'':search.minPrice }" size="4">~<input id="maxPriceInput" name="maxPriceInput" value="${ search.maxPrice==0 ?'':search.maxPrice }" size="4">
-			</td>
-		</tr>
-	</c:if>
+	<tr>
+		<td colspan="11" height="5" style="margin-right: 15px; float: left;"></td>
+	</tr>
+	<tr>
+		<td class="tdleft" >
+			<select name="prodListCondition" class="ct_input_g" onchange="fncPageNavigator('1')">
+				<option value="0" ${ search.prodListCondition=='0'?'selected':'' } align="center">신규 상품 순</option>
+				<option value="1" ${ search.prodListCondition=='1'?'selected':'' } align="center">높은 가격 순</option>
+				<option value="2" ${ search.prodListCondition=='2'?'selected':'' } align="center">낮은 가격 순</option>
+			</select>
+		</td>
+		<td class="tdleft">&nbsp;</td>
+		<td align="right" class="tdleft">
+			가격 검색 
+			<input id="minPriceInput" name="minPriceInput" value="${ search.minPrice==0 ?'':search.minPrice }" size="4">~<input id="maxPriceInput" name="maxPriceInput" value="${ search.maxPrice==0 ?'':search.maxPrice }" size="4">
+		</td>
+	</tr>
 	<!-- 정렬순서 변경 끝 -->
 	
 </table>
@@ -159,6 +157,8 @@ function fncCheck(){
 	<tr>
 		<td class="ct_list_b" width="100">No</td>
 		<td class="ct_line02"></td>
+		<td class="ct_list_b" width="300">이미지</td>
+		<td class="ct_line02"></td>
 		<td class="ct_list_b" width="300">상품명</td>
 		<td class="ct_line02"></td>
 		<td class="ct_list_b" width="200">가격</td>
@@ -170,21 +170,24 @@ function fncCheck(){
 		<td class="ct_list_b">별점</td>	
 	</tr>
 	<tr>
-		<td colspan="11" bgcolor="808285" height="1"></td>
+		<td colspan="13" bgcolor="808285" height="1"></td>
 	</tr>
 	<c:forEach var="i" items="${ list }">
-	<tr class="ct_list_pop">
+	<tr class="ct_list_pop" height="300">
 		<td align="center">${ i.rowNum }</td>
 		<td></td>
+		<td align="center"><img src = "/images/uploadFiles/${ i.fileName }" width="200"/></td>
+		</td>
+		<td></td>
 		<td align="left">
-			<a href="/getProduct.do?prodNo=${ i.prodNo }">${ i.prodName }</a>
+			<a href="/product/getProduct?prodNo=${ i.prodNo }">${ i.prodName }</a>
 		</td>
 		<td></td>
 		<td align="left">${ i.price }</td>
 		<td></td>
 		<td align="center">${ i.regDate }</td>
 		<td></td>
-		<td align="left">
+		<td align="center">
 			<c:choose>
 				<c:when test="${ user.role == 'admin' }">
 					${ i.amount }
@@ -206,7 +209,7 @@ function fncCheck(){
 				<c:when test="${ i.prodGrade >= 4.5 and i.prodGrade <= 5.0 }">★★★★★</c:when>
 			</c:choose>
 			${ i.prodGrade }
-			 - <a href="/listReview.do?prodNo=${ i.prodNo }">리뷰보기</a>
+			 - <a href="/review/listReview?prodNo=${ i.prodNo }">리뷰보기</a>
 			 </td>	
 		</c:if>
 		<c:if test="${ i.prodGrade == 0 }">
@@ -214,7 +217,7 @@ function fncCheck(){
 		</c:if>
 	</tr>
 	<tr>
-		<td colspan="11" bgcolor="D6D7D6" height="1"></td>
+		<td colspan="13" bgcolor="D6D7D6" height="1"></td>
 	</tr>
 		</c:forEach>
 </table>

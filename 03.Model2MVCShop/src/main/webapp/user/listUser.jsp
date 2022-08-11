@@ -15,7 +15,7 @@
 
 <div style="width:98%; margin-left:10px;">
 
-<form name="detailForm" action="/listUser.do" method="post">
+<form name="detailForm" action="/user/listUser" method="post">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -87,7 +87,7 @@
 			<td align="center">${ i.rowNum }</td>
 			<td></td>
 			<td align="left">
-				<a href="/getUser.do?userId=${ i.userId }">${ i.userId }</a>
+				<a href="/user/getUser?userId=${ i.userId }">${ i.userId }</a>
 			</td>
 			<td></td>
 			<td align="left">${ i.userName }</td>

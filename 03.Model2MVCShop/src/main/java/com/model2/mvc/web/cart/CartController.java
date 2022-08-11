@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.model2.mvc.service.cart.CartService;
@@ -23,6 +24,7 @@ import com.model2.mvc.service.domain.User;
 import com.model2.mvc.service.product.ProductService;
 
 @Controller
+@RequestMapping("/cart/*")
 public class CartController {
 	
 	@Autowired
@@ -43,7 +45,7 @@ public class CartController {
 		System.out.println(this.getClass());
 	}
 	
-	@RequestMapping("/addCart.do")
+	@RequestMapping(value = "addCart", method = RequestMethod.POST)
 	public String addCart(HttpSession session, @ModelAttribute("cart") Cart cart, @ModelAttribute("product") Product product, Model model) throws Exception {
 		
 		cart.setProd(product);
@@ -67,8 +69,33 @@ public class CartController {
 		
 		return "forward:/cart/addCart.jsp";
 	}
+
+	@RequestMapping(value = "buyCartView", method = RequestMethod.POST)
+	public String buyCart(HttpServletRequest request, @RequestParam("cartBox") String[] cartBoxArr, Model model) throws Exception {
+		
+		int arrLength = cartBoxArr.length;
+		
+		List<Cart> list = new ArrayList<Cart>();
+		
+		for(int i=0;i<arrLength;i++) {
+			Cart cart = new Cart();
+			Product prod = new Product();
+			prod.setProdNo(Integer.parseInt(request.getParameter(cartBoxArr[i]+"prodNo")));
+			cart.setCartNo(Integer.parseInt(request.getParameter(cartBoxArr[i]+"cartNo")));
+			cart.setAmount(Integer.parseInt(request.getParameter(cartBoxArr[i]+"amount")));
+			cart.setProd(prod);
+			service.updateCart(cart);
+			list.add(cart);
+		}
+		
+		model.addAttribute("list", list);
+		
+		System.out.println(list);
+		
+		return "forward:/cart/buyCartView.jsp";
+	}
 	
-	@RequestMapping("/buyCart.do")
+	@RequestMapping(value = "buyCart", method = RequestMethod.POST)
 	public String buyCart(HttpServletRequest request, @ModelAttribute("purchase") Purchase purchase, @ModelAttribute("user") User user
 			, @RequestParam("cartNo") int[] cartNoArr, @RequestParam("amount") int[] amountArr, @RequestParam("prodNo") int[] prodNoArr, Model model) throws Exception {
 
@@ -104,32 +131,7 @@ public class CartController {
 		return "forward:/cart/buyCart.jsp";
 	}
 	
-	@RequestMapping("/buyCartView.do")
-	public String buyCartView(HttpServletRequest request, @RequestParam("cartBox") String[] cartBoxArr, Model model) throws Exception {
-		
-		int arrLength = cartBoxArr.length;
-		
-		List<Cart> list = new ArrayList<Cart>();
-		
-		for(int i=0;i<arrLength;i++) {
-			Cart cart = new Cart();
-			Product prod = new Product();
-			prod.setProdNo(Integer.parseInt(request.getParameter(cartBoxArr[i]+"prodNo")));
-			cart.setCartNo(Integer.parseInt(request.getParameter(cartBoxArr[i]+"cartNo")));
-			cart.setAmount(Integer.parseInt(request.getParameter(cartBoxArr[i]+"amount")));
-			cart.setProd(prod);
-			service.updateCart(cart);
-			list.add(cart);
-		}
-		
-		model.addAttribute("list", list);
-		
-		System.out.println(list);
-		
-		return "forward:/cart/buyCartView.jsp";
-	}
-	
-	@RequestMapping("/deleteCart.do")
+	@RequestMapping(value = "deleteCart", method = RequestMethod.POST)
 	public String deleteCart(HttpSession session, HttpServletRequest request, @RequestParam("cartBox") String[] cartBoxArr,@RequestParam("flag") String flag , Model model) throws Exception {
 
 		int arrLength = cartBoxArr.length;
@@ -165,10 +167,10 @@ public class CartController {
 			}
 		}
 		
-		return "forward:/listCart.do";
+		return "forward:/cart/listCart";
 	}
 	
-	@RequestMapping("/listCart.do")
+	@RequestMapping("listCart")
 	public String listCart(HttpSession session, @RequestParam(value = "cartBox", required = false) String[] cartBoxArr, Model model) throws Exception {
 		
 		User user = (User)session.getAttribute("user");

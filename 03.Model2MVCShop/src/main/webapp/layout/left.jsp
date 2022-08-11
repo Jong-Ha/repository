@@ -9,7 +9,7 @@
 
 <script type="text/javascript">
 function history(){
-	popWin = window.open("/history.do","popWin","left=300, top=200, width=300, height=200, marginwidth=0, marginheight=0, scrollbars=no, scrolling=no, menubar=no, resizable=no");
+	popWin = window.open("/product/history","popWin","left=300, top=200, width=300, height=200, marginwidth=0, marginheight=0, scrollbars=no, scrolling=no, menubar=no, resizable=no");
 }
 </script>
 </head>
@@ -26,14 +26,14 @@ function history(){
 		<c:if test="${ !empty user }">
 			<tr>
 				<td class="Depth03">
-					<a href="/getUser.do?userId=${ user.userId }" target="rightFrame">개인정보조회</a>
+					<a href="/user/getUser?userId=${ user.userId }" target="rightFrame">개인정보조회</a>
 				</td>
 			</tr>
 		</c:if>
 		<c:if test="${ user.role=='admin' }">
 			<tr>
 				<td class="Depth03" >
-					<a href="/listUser.do" target="rightFrame">회원정보조회</a>
+					<a href="/user/listUser" target="rightFrame">회원정보조회</a>
 				</td>
 			</tr>
 		</c:if>
@@ -51,14 +51,14 @@ function history(){
 		<c:if test="${ user.role=='admin' }">
 			<tr>
 				<td class="Depth03">
-					<a href="/addProductView.do;" target="rightFrame">판매상품등록</a>
+					<a href="/product/addProduct" target="rightFrame">판매상품등록</a>
 				</td>
 			</tr>
 		</c:if>
 		
 		<tr>
 			<td class="Depth03">
-				<a href="/listProduct.do" target="rightFrame">
+				<a href="/product/listProduct" target="rightFrame">
 					${ user.role=='admin'?'판매상품관리':'상 품 검 색' }
 				</a>
 			</td>
@@ -67,7 +67,7 @@ function history(){
 		<c:if test="${ user.role=='admin' }">
 			<tr>
 				<td class="Depth03">
-					<a href="/listDelivery.do" target="rightFrame">배 송 관 리</a>
+					<a href="/purchase/listDelivery" target="rightFrame">배 송 관 리</a>
 				</td>
 			</tr>
 		</c:if>
@@ -75,7 +75,7 @@ function history(){
 		<c:if test="${ user.role=='user' }">
 			<tr>
 				<td class="Depth03">
-					<a href="/listPurchase.do" target="rightFrame">구매이력조회</a>
+					<a href="/purchase/listPurchase" target="rightFrame">구매이력조회</a>
 				</td>
 			</tr>
 		</c:if>
@@ -84,7 +84,7 @@ function history(){
 		<c:if test="${ user.role!='admin' }">
 			<tr>
 				<td class="Depth03">
-					<a href="/listCart.do" target="rightFrame">장 바 구 니</a>
+					<a href="/cart/listCart" target="rightFrame">장 바 구 니</a>
 				</td>
 			</tr>
 		</c:if>
@@ -93,7 +93,7 @@ function history(){
 		<c:if test="${ user.role=='user' }">
 			<tr>
 				<td class="Depth03">
-					<a href="/myReview.do" target="rightFrame">내가 쓴 리뷰</a>
+					<a href="/review/myReview" target="rightFrame">내가 쓴 리뷰</a>
 				</td>
 			</tr>
 		</c:if>

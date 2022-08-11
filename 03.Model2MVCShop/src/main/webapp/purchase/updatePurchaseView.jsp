@@ -22,7 +22,7 @@ function fncSubmit() {
 
 <body bgcolor="#ffffff" text="#000000">
 
-<form name="updatePurchase" method="post"	action="/updatePurchase.do?tranNo=${ purchase.tranNo }">
+<form name="updatePurchase" method="post"	action="/purchase/updatePurchase?tranNo=${ purchase.tranNo }">
 
 <table width="100%" height="37" border="0" cellpadding="0" cellspacing="0">
 	<tr>

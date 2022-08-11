@@ -13,7 +13,7 @@
 function fncCheck(){
 }
 function fncUpdateReview(tranNo){
-	popWin = window.open("/updateReviewView.do?tranNo="+tranNo,"popWin", "left=300,top=200,width=800,height=500,marginwidth=0,marginheight=0,scrollbars=no,scrolling=no,menubar=no,resizable=no");
+	popWin = window.open("/review/updateReview?tranNo="+tranNo,"popWin", "left=300,top=200,width=800,height=500,marginwidth=0,marginheight=0,scrollbars=no,scrolling=no,menubar=no,resizable=no");
 }
 </script>
 <style type="text/css">
@@ -28,7 +28,7 @@ function fncUpdateReview(tranNo){
 
 <div style="width:98%; margin-left:10px;">
 
-<form name="detailForm" action="/myReview.do" method="post">
+<form name="detailForm" action="/review/myReview" method="post">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -137,8 +137,8 @@ function fncUpdateReview(tranNo){
 		<td colspan="1" bgcolor="D6D7D6" height="2"></td>
 	</tr>
 	<c:forEach var="i" items="${ list }">
-		<tr class="ct_list_pop">
-			<td align="center" rowspan="3">${ i.prod.fileName }</td>
+		<tr class="ct_list_pop" height="300">
+			<td align="center" rowspan="3"><img src = "/images/uploadFiles/${ i.prod.fileName }" width="150"/></td>
 			<td></td>
 			<td align="left" colspan="3">
 				<c:if test="${ i.grade == 1 }">【』』』』</c:if>
@@ -153,9 +153,9 @@ function fncUpdateReview(tranNo){
 		<tr>
 			<td colspan="4" bgcolor="D6D7D6" height="1"></td>
 		</tr>
-		<tr class="ct_list_pop">
+		<tr class="ct_list_pop" height="100">
 			<td></td>
-			<td align="left">${ i.fileName }</td>
+			<td align="center"><img src = "/images/reviewImg/${ i.fileName }" width="150"/></td>
 			<td></td>
 			<td align="left" colspan="1">${ i.detail }</td>
 		</tr>
@@ -163,7 +163,11 @@ function fncUpdateReview(tranNo){
 			<td colspan="5" bgcolor="D6D7D6" height="1"></td>
 		</tr>
 		<tr class="ct_list_pop">
-			<td colspan="5">${ i.prod.prodName } - ${ i.prod.prodDetail }</td>
+			<td colspan="5">
+			<a href="/product/getProduct?prodNo=${ i.prod.prodNo }">${ i.prod.prodName }</a>
+			-
+			${ i.prod.prodDetail }
+			</td>
 		</tr>
 		<tr>
 			<td colspan="5" bgcolor="D6D7D6" height="2"></td>

@@ -20,7 +20,7 @@ function fncCheck(){
 
 <div style="width:98%; margin-left:10px;">
 
-<form name="detailForm" action="/listReview.do?prodNo=${ product.prodNo }" method="post">
+<form name="detailForm" action="/review/listReview?prodNo=${ product.prodNo }" method="post">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -31,7 +31,7 @@ function fncCheck(){
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr>
 					<td width="93%" class="ct_ttl01">
-						<a href="/getProduct.do?prodNo=${ product.prodNo }">${ product.prodName }</a> ¸®ºä
+						<a href="/product/getProduct?prodNo=${ product.prodNo }">${ product.prodName }</a> ¸®ºä
 					</td>
 				</tr>
 			</table>
@@ -73,7 +73,7 @@ function fncCheck(){
 	</tr>
 	<c:forEach var="i" items="${ list }">
 	<tr class="ct_list_pop">
-		<td align="center" rowspan="5">${ i.fileName }</td>
+		<td align="center" rowspan="5"><img src = "/images/reviewImg/${ i.fileName }" width="200"/></td>
 		<td></td>
 		<td align="left">
 			<c:if test="${ i.grade == 1 }">¡Ú¡Ù¡Ù¡Ù¡Ù</c:if>
@@ -89,7 +89,7 @@ function fncCheck(){
 	</tr>
 	<tr class="ct_list_pop">
 		<td></td>
-		<td align="left">${ i.userId }</td>
+		<td align="left">ÀÛ¼ºÀÚ : ${ i.userId }</td>
 	</tr>
 	<tr>
 		<td colspan="2" bgcolor="D6D7D6" height="1"></td>
