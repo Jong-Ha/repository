@@ -124,6 +124,8 @@ function fncCheck(){
 				<option value="0" ${ search.prodListCondition=='0'?'selected':'' } align="center">신규 상품 순</option>
 				<option value="1" ${ search.prodListCondition=='1'?'selected':'' } align="center">높은 가격 순</option>
 				<option value="2" ${ search.prodListCondition=='2'?'selected':'' } align="center">낮은 가격 순</option>
+				<option value="3" ${ search.prodListCondition=='3'?'selected':'' } align="center">별점 높은 순</option>
+				<option value="4" ${ search.prodListCondition=='4'?'selected':'' } align="center">별점 낮은 순</option>
 			</select>
 		</td>
 		<td class="tdleft">&nbsp;</td>

@@ -72,36 +72,36 @@ function fncCheck(){
 		<td bgcolor="D6D7D6" height="2"></td>
 	</tr>
 	<c:forEach var="i" items="${ list }">
-	<tr class="ct_list_pop">
-		<td align="center" rowspan="5"><img src = "/images/reviewImg/${ i.fileName }" width="200"/></td>
-		<td></td>
-		<td align="left">
-			<c:if test="${ i.grade == 1 }">≮≠≠≠≠</c:if>
-			<c:if test="${ i.grade == 2 }">≮≮≠≠≠</c:if>
-			<c:if test="${ i.grade == 3 }">≮≮≮≠≠</c:if>
-			<c:if test="${ i.grade == 4 }">≮≮≮≮≠</c:if>
-			<c:if test="${ i.grade == 5 }">≮≮≮≮≮</c:if>
-			(累己老 : ${ i.reviewDate })
-		</td>
-	</tr>
-	<tr>
-		<td colspan="2" bgcolor="D6D7D6" height="1"></td>
-	</tr>
-	<tr class="ct_list_pop">
-		<td></td>
-		<td align="left">累己磊 : ${ i.userId }</td>
-	</tr>
-	<tr>
-		<td colspan="2" bgcolor="D6D7D6" height="1"></td>
-	</tr>
-	<tr class="ct_list_pop">
-		<td></td>
-		<td align="left">${ i.detail }</td>
-	</tr>
-	<tr>
-		<td colspan="3" bgcolor="D6D7D6" height="2"></td>
-	</tr>
-		</c:forEach>
+		<tr class="ct_list_pop">
+			<td align="center" rowspan="5"><img src = "/images/reviewImg/${ i.fileName }" style="width: 70%; max-height: 100px;"/></td>
+			<td></td>
+			<td align="left" height="30">
+				<c:if test="${ i.grade == 1 }">≮≠≠≠≠</c:if>
+				<c:if test="${ i.grade == 2 }">≮≮≠≠≠</c:if>
+				<c:if test="${ i.grade == 3 }">≮≮≮≠≠</c:if>
+				<c:if test="${ i.grade == 4 }">≮≮≮≮≠</c:if>
+				<c:if test="${ i.grade == 5 }">≮≮≮≮≮</c:if>
+				(累己老 : ${ i.reviewDate })
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" bgcolor="D6D7D6" height="1"></td>
+		</tr>
+		<tr class="ct_list_pop">
+			<td></td>
+			<td align="left" height="30">累己磊 : ${ i.userId }</td>
+		</tr>
+		<tr>
+			<td colspan="2" bgcolor="D6D7D6" height="1"></td>
+		</tr>
+		<tr class="ct_list_pop">
+			<td></td>
+			<td align="left">${ i.detail }</td>
+		</tr>
+		<tr>
+			<td colspan="3" bgcolor="D6D7D6" height="2"></td>
+		</tr>
+	</c:forEach>
 </table>
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">

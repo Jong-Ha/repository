@@ -73,15 +73,15 @@
   			AND r.prod_no = p.prod_no
   		</where>
   		ORDER BY 
-  		<if test="search.prodListCondition!=null">
+  		<if test="search.searchCondition!=null">
   			<choose>
-  				<when test="search.prodListCondition==0">review_date DESC</when>
-  				<when test="search.prodListCondition==1">grade DESC, review_date DESC</when>
-  				<when test="search.prodListCondition==2">grade ASC, review_date DESC</when>
+  				<when test="search.searchCondition==0">review_date DESC</when>
+  				<when test="search.searchCondition==1">grade DESC, review_date DESC</when>
+  				<when test="search.searchCondition==2">grade ASC, review_date DESC</when>
   				<otherwise>review_date DESC</otherwise>
   			</choose>
   		</if>
-  		<if test="search.prodListCondition==null">review_date DESC</if>
+  		<if test="search.searchCondition==null">review_date DESC</if>
   	</sql>
   	
   	<select id="getTotalCount" parameterType="map" resultType="int">

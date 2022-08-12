@@ -110,6 +110,12 @@
   						<when test="prodListCondition==2">
   							p.price ASC
   						</when>
+  						<when test="prodListCondition==3">
+  							prod_grade DESC NULLS LAST
+  						</when>
+  						<when test="prodListCondition==4">
+  							prod_grade ASC NULLS LAST
+  						</when>
   						<otherwise>
   							p.reg_date DESC
   						</otherwise>

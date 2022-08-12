@@ -49,6 +49,9 @@ public class ReviewController {
 
 	@Value("#{commonProperties['pageUnit']}")
 	int pageUnit;
+	
+	@Value("#{commonProperties['reviewFilePath']}")
+	String reviewFilePath;
 
 	public ReviewController() {
 		System.out.println(this.getClass());
@@ -66,93 +69,12 @@ public class ReviewController {
 		return mv;
 	}
 
-//	@RequestMapping(value = "addReview", method = RequestMethod.POST)
-//	public ModelAndView addReview(HttpServletRequest request) throws Exception {
-//		ModelAndView mv = new ModelAndView();
-//		
-//		if(FileUpload.isMultipartContent(request)) {
-//			String temDir = "C:\\Users\\bitcamp\\git\\repository\\03.Model2MVCShop\\src\\main\\webapp\\images\\reviewImg\\";
-//			
-//			DiskFileUpload fileUpload = new DiskFileUpload();
-//			fileUpload.setRepositoryPath(temDir);
-//			fileUpload.setSizeMax(1024*1024*10);
-//			fileUpload.setSizeThreshold(1024*100);
-//			
-//			if(request.getContentLength() < fileUpload.getSizeMax()) {
-//				Product product = new Product();
-//				Review review = new Review();
-//				
-//				List<FileItem> fileItemList = fileUpload.parseRequest(request);
-//				int size = fileItemList.size();
-//				for(FileItem fileItem : fileItemList) {
-//					if(fileItem.isFormField()) {
-//						if(fileItem.getFieldName().equals("prodNo")) {
-//							product.setProdNo(Integer.parseInt(fileItem.getString("euc-kr")));
-//						}
-//						if(fileItem.getFieldName().equals("userId")) {
-//							review.setUserId(fileItem.getString("euc-kr"));
-//						}
-//						if(fileItem.getFieldName().equals("tranNo")) {
-//							review.setTranNo(Integer.parseInt(fileItem.getString("euc-kr")));
-//						}
-//						if(fileItem.getFieldName().equals("grade")) {
-//							review.setGrade(Float.parseFloat(fileItem.getString("euc-kr")));
-//						}
-//						if(fileItem.getFieldName().equals("detail")) {
-//							review.setDetail(fileItem.getString("euc-kr"));
-//						}
-//					}else {
-//						if(fileItem.getSize()>0) {
-//							int idx = fileItem.getName().lastIndexOf("\\");
-//							if(idx==-1) {
-//								idx = fileItem.getName().lastIndexOf("/");
-//							}
-//							String fileName = fileItem.getName().substring(idx+1);
-//							review.setFileName(fileName);
-//							try {
-//								File uploadedFile = new File(temDir, fileName);
-//								fileItem.write(uploadedFile);
-//							}catch (Exception e) {
-//								e.printStackTrace();
-//							}
-//						}else {
-//							product.setFileName("../empty.GIF");
-//						}
-//					}
-//				}//for
-//				review.setProd(product);
-//				service.addReview(review);
-//				request.setAttribute("review", review);
-//			}else {
-//				int overSize = (request.getContentLength()/1000000);
-//				System.out.println("<script>alert('파일의 크기는 1MB까지 입니다. 올리신 파일 용량은 "+overSize+"MB입니다');");
-//			}
-//		}else {
-//			System.out.println("인코딩 타입이 multipart/form-data가 아닙니다.");
-//		}
-//		
-//		
-//		mv.setViewName("forward:/review/resultReview.jsp");
-//		return mv;
-//	}
-
-//	@RequestMapping(value = "addReview", method = RequestMethod.POST)
-//	public ModelAndView addReview(@ModelAttribute("review") Review review, @ModelAttribute("product") Product product) throws Exception {
-//		ModelAndView mv = new ModelAndView();
-//		
-//		review.setProd(product);
-//		service.addReview(review);
-//		
-//		mv.setViewName("forward:/review/resultReview.jsp");
-//		return mv;
-//	}
-
 	@RequestMapping(value = "addReview", method = RequestMethod.POST)
 	public ModelAndView addReview(@ModelAttribute("review") Review review, @ModelAttribute("product") Product product, @RequestParam("file") MultipartFile file) throws Exception {
 		ModelAndView mv = new ModelAndView();
 		String fileName = file.getOriginalFilename();
 		if(!fileName.equals("")) {
-			File uploadFile = new File("reviewImg",fileName);
+			File uploadFile = new File(reviewFilePath,fileName);
 			file.transferTo(uploadFile);
 			review.setFileName(fileName);
 		}else {
@@ -175,94 +97,13 @@ public class ReviewController {
 		return mv;
 	}
 
-//	@RequestMapping(value = "updateReview", method = RequestMethod.POST)
-//	public ModelAndView updateReview(@ModelAttribute("review") Review review) throws Exception {
-//		ModelAndView mv = new ModelAndView();
-//		
-//		service.updateReview(review);
-//		
-//		mv.setViewName("forward:/review/resultReview.jsp");
-//		return mv;
-//	}
-
-//	@RequestMapping(value = "updateReview", method = RequestMethod.POST)
-//	public ModelAndView updateReview(HttpServletRequest request) throws Exception {
-//		ModelAndView mv = new ModelAndView();
-//
-//		if(FileUpload.isMultipartContent(request)) {
-//			String temDir = "C:\\Users\\bitcamp\\git\\repository\\03.Model2MVCShop\\src\\main\\webapp\\images\\reviewImg\\";
-//			
-//			DiskFileUpload fileUpload = new DiskFileUpload();
-//			fileUpload.setRepositoryPath(temDir);
-//			fileUpload.setSizeMax(1024*1024*10);
-//			fileUpload.setSizeThreshold(1024*100);
-//			
-//			if(request.getContentLength() < fileUpload.getSizeMax()) {
-//				Product product = new Product();
-//				Review review = new Review();
-//				
-//				List<FileItem> fileItemList = fileUpload.parseRequest(request);
-//				int size = fileItemList.size();
-//				String existFileName = null;
-//				for(FileItem fileItem : fileItemList) {
-//					if(fileItem.isFormField()) {
-//						if(fileItem.getFieldName().equals("tranNo")) {
-//							review.setTranNo(Integer.parseInt(fileItem.getString("euc-kr")));
-//						}
-//						if(fileItem.getFieldName().equals("grade")) {
-//							review.setGrade(Float.parseFloat(fileItem.getString("euc-kr")));
-//						}
-//						if(fileItem.getFieldName().equals("detail")) {
-//							review.setDetail(fileItem.getString("euc-kr"));
-//						}
-//						if(fileItem.getFieldName().equals("existFileName")) {
-//							existFileName = fileItem.getString("euc-kr");
-//						}
-//					}else {
-//						if(fileItem.getSize()>0) {
-//							int idx = fileItem.getName().lastIndexOf("\\");
-//							if(idx==-1) {
-//								idx = fileItem.getName().lastIndexOf("/");
-//							}
-//							String fileName = fileItem.getName().substring(idx+1);
-//							review.setFileName(fileName);
-//							try {
-//								File uploadedFile = new File(temDir, fileName);
-//								fileItem.write(uploadedFile);
-//							}catch (Exception e) {
-//								e.printStackTrace();
-//							}
-//						}else {
-//							if(existFileName.equals("")) {
-//								review.setFileName("../empty.GIF");
-//							}else {
-//								review.setFileName(existFileName);
-//							}
-//						}
-//					}
-//				}//for
-//				review.setProd(product);
-//				service.updateReview(review);
-//				request.setAttribute("review", review);
-//			}else {
-//				int overSize = (request.getContentLength()/1000000);
-//				System.out.println("<script>alert('파일의 크기는 1MB까지 입니다. 올리신 파일 용량은 "+overSize+"MB입니다');");
-//			}
-//		}else {
-//			System.out.println("인코딩 타입이 multipart/form-data가 아닙니다.");
-//		}
-//	
-//		mv.setViewName("forward:/review/resultReview.jsp");
-//		return mv;
-//	}
-
 	@RequestMapping(value = "updateReview", method = RequestMethod.POST)
 	public ModelAndView updateReview(@ModelAttribute("review") Review review, @RequestParam("file") MultipartFile file, @RequestParam("existFileName") String existFileName) throws Exception {
 		ModelAndView mv = new ModelAndView();
 		
 		String fileName = file.getOriginalFilename();
 		if(!fileName.equals("")) {
-			File uploadFile = new File("reviewImg",fileName);
+			File uploadFile = new File(reviewFilePath,fileName);
 			file.transferTo(uploadFile);
 			review.setFileName(fileName);
 		}else if(!existFileName.equals("")){

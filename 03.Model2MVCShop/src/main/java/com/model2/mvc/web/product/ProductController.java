@@ -41,6 +41,9 @@ public class ProductController {
 	
 	@Value("#{commonProperties['pageUnit']}")
 	int pageUnit;
+	
+	@Value("#{commonProperties['productFilePath']}")
+	String productFilePath;
 
 	public ProductController() {
 		System.out.println(this.getClass());
@@ -51,82 +54,11 @@ public class ProductController {
 		return "forward:/product/addProductView.jsp";
 	}
 	
-//	@RequestMapping(value = "addProduct", method = RequestMethod.POST)
-//	public String addProduct(HttpServletRequest request) throws Exception {
-//		if(FileUpload.isMultipartContent(request)) {
-//			String temDir = "C:\\Users\\bitcamp\\git\\repository\\03.Model2MVCShop\\src\\main\\webapp\\images\\uploadFiles\\";
-//			
-//			DiskFileUpload fileUpload = new DiskFileUpload();
-//			fileUpload.setRepositoryPath(temDir);
-//			fileUpload.setSizeMax(1024*1024*10);
-//			fileUpload.setSizeThreshold(1024*100);
-//			
-//			if(request.getContentLength() < fileUpload.getSizeMax()) {
-//				Product product = new Product();
-//				
-//				List<FileItem> fileItemList = fileUpload.parseRequest(request);
-//				int size = fileItemList.size();
-//				for(FileItem fileItem : fileItemList) {
-//					if(fileItem.isFormField()) {
-//						if(fileItem.getFieldName().equals("manuDate")) {
-//							product.setManuDate(fileItem.getString("euc-kr").replaceAll("-", ""));
-//						}
-//						if(fileItem.getFieldName().equals("prodName")) {
-//							product.setProdName(fileItem.getString("euc-kr"));
-//						}
-//						if(fileItem.getFieldName().equals("prodDetail")) {
-//							product.setProdDetail(fileItem.getString("euc-kr"));
-//						}
-//						if(fileItem.getFieldName().equals("price")) {
-//							product.setPrice(Integer.parseInt(fileItem.getString("euc-kr")));
-//						}
-//						if(fileItem.getFieldName().equals("amount")) {
-//							product.setAmount(Integer.parseInt(fileItem.getString("euc-kr")));
-//						}
-//					}else {
-//						if(fileItem.getSize()>0) {
-//							int idx = fileItem.getName().lastIndexOf("\\");
-//							if(idx==-1) {
-//								idx = fileItem.getName().lastIndexOf("/");
-//							}
-//							String fileName = fileItem.getName().substring(idx+1);
-//							product.setFileName(fileName);
-//							try {
-//								File uploadedFile = new File(temDir, fileName);
-//								fileItem.write(uploadedFile);
-//							}catch (Exception e) {
-//								e.printStackTrace();
-//							}
-//						}else {
-//							product.setFileName("../empty.GIF");
-//						}
-//					}
-//				}//for
-//				service.addProduct(product);
-//				request.setAttribute("product", product);
-//			}else {
-//				int overSize = (request.getContentLength()/1000000);
-//				System.out.println("<script>alert('파일의 크기는 1MB까지 입니다. 올리신 파일 용량은 "+overSize+"MB입니다');");
-//			}
-//		}else {
-//			System.out.println("인코딩 타입이 multipart/form-data가 아닙니다.");
-//		}
-//		
-//		return "forward:/product/addProduct.jsp";
-//	}
-
-//	@RequestMapping(value = "addProduct", method = RequestMethod.POST)
-//	public String addProduct(@ModelAttribute("product") Product product) throws Exception {
-//		product.setManuDate(product.getManuDate().replaceAll("-", ""));
-//		service.addProduct(product);
-//		return "forward:/product/addProduct.jsp";
-//	}
-	
 	@RequestMapping(value = "addProduct", method = RequestMethod.POST)
 	public String addProduct(@ModelAttribute("product") Product product, @RequestParam("file") MultipartFile file) throws Exception {
 		String fileName = file.getOriginalFilename();
 		if(!fileName.equals("")) {
-			File uploadFile = new File("uploadFiles",fileName);
+			File uploadFile = new File(productFilePath,fileName);
 			file.transferTo(uploadFile);
 			product.setFileName(fileName);
 		}else {
@@ -145,97 +77,11 @@ public class ProductController {
 		return "forward:/product/updateProductView.jsp";
 	}
 
-//	@RequestMapping(value = "updateProduct", method = RequestMethod.POST)
-//	public String updateProduct(HttpServletRequest request) throws Exception{
-//		int prodNo = 0;
-//		if(FileUpload.isMultipartContent(request)) {
-//			String temDir = "C:\\Users\\bitcamp\\git\\repository\\03.Model2MVCShop\\src\\main\\webapp\\images\\uploadFiles\\";
-////			String temDir = "/uploadFiles/";
-//			
-//			DiskFileUpload fileUpload = new DiskFileUpload();
-//			fileUpload.setRepositoryPath(temDir);
-//			fileUpload.setSizeMax(1024*1024*10);
-//			fileUpload.setSizeThreshold(1024*100);
-//			
-//			if(request.getContentLength() < fileUpload.getSizeMax()) {
-//				Product product = new Product();
-//				
-//				List<FileItem> fileItemList = fileUpload.parseRequest(request);
-//				int size = fileItemList.size();
-//				String existFileName = null;
-//				for(FileItem fileItem : fileItemList) {
-//					if(fileItem.isFormField()) {
-//						if(fileItem.getFieldName().equals("manuDate")) {
-//							product.setManuDate(fileItem.getString("euc-kr").replaceAll("-", ""));
-//						}
-//						if(fileItem.getFieldName().equals("prodName")) {
-//							product.setProdName(fileItem.getString("euc-kr"));
-//						}
-//						if(fileItem.getFieldName().equals("prodDetail")) {
-//							product.setProdDetail(fileItem.getString("euc-kr"));
-//						}
-//						if(fileItem.getFieldName().equals("price")) {
-//							product.setPrice(Integer.parseInt(fileItem.getString("euc-kr")));
-//						}
-//						if(fileItem.getFieldName().equals("amount")) {
-//							product.setAmount(Integer.parseInt(fileItem.getString("euc-kr")));
-//						}
-//						if(fileItem.getFieldName().equals("prodNo")) {
-//							prodNo = Integer.parseInt(fileItem.getString("euc-kr"));
-//							product.setProdNo(prodNo);
-//						}
-//						if(fileItem.getFieldName().equals("existFileName")) {
-//							existFileName = fileItem.getString("euc-kr");
-//						}
-//					}else {
-//						if(fileItem.getSize()>0) {
-//							int idx = fileItem.getName().lastIndexOf("\\");
-//							if(idx==-1) {
-//								idx = fileItem.getName().lastIndexOf("/");
-//							}
-//							String fileName = fileItem.getName().substring(idx+1);
-//							product.setFileName(fileName);
-//							try {
-//								File uploadedFile = new File(temDir, fileName);
-//								fileItem.write(uploadedFile);
-//							}catch (Exception e) {
-//								e.printStackTrace();
-//							}
-//						}else {
-//							if(existFileName.equals("")) {
-//								product.setFileName("../empty.GIF");
-//							}else {
-//								product.setFileName(existFileName);
-//							}
-//						}
-//					}
-//				}//for
-//				service.updateProduct(product);
-//				request.setAttribute("product", product);
-//			}else {
-//				int overSize = (request.getContentLength()/1000000);
-//				System.out.println("<script>alert('파일의 크기는 1MB까지 입니다. 올리신 파일 용량은 "+overSize+"MB입니다');");
-//			}
-//		}else {
-//			System.out.println("인코딩 타입이 multipart/form-data가 아닙니다.");
-//		}
-//		return "redirect:/product/getProduct?prodNo="+prodNo+"&flag=";
-//	}
-
-//	@RequestMapping(value = "updateProduct", method = RequestMethod.POST)
-//	public String updateProduct(@ModelAttribute("product") Product product) throws Exception{
-//		product.setManuDate(product.getManuDate().replaceAll("-", ""));
-//		
-//		service.updateProduct(product);
-//		
-//		return "redirect:/product/getProduct?prodNo="+product.getProdNo()+"&flag=";
-//	}
-
 	@RequestMapping(value = "updateProduct", method = RequestMethod.POST)
 	public String updateProduct(@ModelAttribute("product") Product product, @RequestParam("file") MultipartFile file, @RequestParam("existFileName") String existFileName) throws Exception{
 		String fileName = file.getOriginalFilename();
 		if(!fileName.equals("")) {
-			File uploadFile = new File("uploadFiles",fileName);
+			File uploadFile = new File(productFilePath,fileName);
 			file.transferTo(uploadFile);
 			product.setFileName(fileName);
 		}else if(!existFileName.equals("")){
