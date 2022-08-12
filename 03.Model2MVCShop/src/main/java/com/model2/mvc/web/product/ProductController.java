@@ -53,7 +53,25 @@ public class ProductController {
 	public String addProduct(){
 		return "forward:/product/addProductView.jsp";
 	}
-	
+
+//	@RequestMapping(value = "addProduct", method = RequestMethod.POST)
+//	public String addProduct(@ModelAttribute("product") Product product, @RequestParam("file") MultipartFile file) throws Exception {
+//		String fileName = file.getOriginalFilename();
+//		if(!fileName.equals("")) {
+//			File uploadFile = new File(productFilePath,fileName);
+//			file.transferTo(uploadFile);
+//			product.setFileName(fileName);
+//		}else {
+//			product.setFileName("../empty.GIF");
+//		}
+//		
+//		product.setManuDate(product.getManuDate().replaceAll("-", ""));
+//		
+//		service.addProduct(product);
+//		
+//		return "forward:/product/addProduct.jsp";
+//	}
+
 	@RequestMapping(value = "addProduct", method = RequestMethod.POST)
 	public String addProduct(@ModelAttribute("product") Product product, @RequestParam("file") MultipartFile file) throws Exception {
 		String fileName = file.getOriginalFilename();
