@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,10 +22,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.model2.mvc.common.Page;
 import com.model2.mvc.common.Search;
 import com.model2.mvc.service.domain.Product;
+import com.model2.mvc.service.domain.UploadFile;
 import com.model2.mvc.service.domain.User;
 import com.model2.mvc.service.product.ProductService;
 
@@ -54,33 +57,31 @@ public class ProductController {
 		return "forward:/product/addProductView.jsp";
 	}
 
-//	@RequestMapping(value = "addProduct", method = RequestMethod.POST)
-//	public String addProduct(@ModelAttribute("product") Product product, @RequestParam("file") MultipartFile file) throws Exception {
-//		String fileName = file.getOriginalFilename();
-//		if(!fileName.equals("")) {
-//			File uploadFile = new File(productFilePath,fileName);
-//			file.transferTo(uploadFile);
-//			product.setFileName(fileName);
-//		}else {
-//			product.setFileName("../empty.GIF");
-//		}
-//		
-//		product.setManuDate(product.getManuDate().replaceAll("-", ""));
-//		
-//		service.addProduct(product);
-//		
-//		return "forward:/product/addProduct.jsp";
-//	}
-
 	@RequestMapping(value = "addProduct", method = RequestMethod.POST)
-	public String addProduct(@ModelAttribute("product") Product product, @RequestParam("file") MultipartFile file) throws Exception {
-		String fileName = file.getOriginalFilename();
-		if(!fileName.equals("")) {
-			File uploadFile = new File(productFilePath,fileName);
-			file.transferTo(uploadFile);
-			product.setFileName(fileName);
-		}else {
-			product.setFileName("../empty.GIF");
+	public String addProduct(@ModelAttribute("product") Product product, MultipartHttpServletRequest multi) throws Exception {
+		List<MultipartFile> files = multi.getFiles("file");
+		if(files.size()>0 && !files.get(0).getOriginalFilename().equals("")) {
+			for(MultipartFile file : files) {
+				UploadFile mainFile = new UploadFile(file);
+				mainFile.setPath(productFilePath);
+				mainFile.setImageType("main");
+				File uploadFile = new File(productFilePath, mainFile.getFileName());
+				file.transferTo(uploadFile);
+				product.setMainFile(mainFile);
+			}
+		}
+		files = multi.getFiles("extraFile");
+		if(files.size()>0 && !files.get(0).getOriginalFilename().equals("")) {
+			List<UploadFile> fileList = new ArrayList<UploadFile>();
+			for(MultipartFile file : files) {
+				UploadFile extraFile = new UploadFile(file);
+				extraFile.setPath(productFilePath);
+				extraFile.setImageType("extra");
+				File uploadFile = new File(productFilePath, extraFile.getFileName());
+				file.transferTo(uploadFile);
+				fileList.add(extraFile);
+			}
+			product.setExtraFileList(fileList);
 		}
 		
 		product.setManuDate(product.getManuDate().replaceAll("-", ""));
@@ -96,21 +97,39 @@ public class ProductController {
 	}
 
 	@RequestMapping(value = "updateProduct", method = RequestMethod.POST)
-	public String updateProduct(@ModelAttribute("product") Product product, @RequestParam("file") MultipartFile file, @RequestParam("existFileName") String existFileName) throws Exception{
-		String fileName = file.getOriginalFilename();
-		if(!fileName.equals("")) {
-			File uploadFile = new File(productFilePath,fileName);
-			file.transferTo(uploadFile);
-			product.setFileName(fileName);
-		}else if(!existFileName.equals("")){
-			product.setFileName(existFileName);
-		}else {
-			product.setFileName("../empty.GIF");
+	public String updateProduct(@ModelAttribute("product") Product product, MultipartHttpServletRequest multi, @RequestParam(value = "deteleFileList", required = false) List<String> deleteFileList, Map<String, Object> map) throws Exception{
+		map.put("deteleFileList", deleteFileList);
+		List<MultipartFile> files = multi.getFiles("file");
+		if(files.size()>0 && !files.get(0).getOriginalFilename().equals("")) {
+			for(MultipartFile file : files) {
+				UploadFile mainFile = new UploadFile(file);
+				mainFile.setPath(productFilePath);
+				mainFile.setImageType("main");
+				mainFile.setRefKey(product.getProdNo());
+				File uploadFile = new File(productFilePath, mainFile.getFileName());
+				file.transferTo(uploadFile);
+				product.setMainFile(mainFile);
+			}
+		}
+		files = multi.getFiles("extraFile");
+		if(files.size()>0 && !files.get(0).getOriginalFilename().equals("")) {
+			List<UploadFile> fileList = new ArrayList<UploadFile>();
+			for(MultipartFile file : files) {
+				UploadFile extraFile = new UploadFile(file);
+				extraFile.setPath(productFilePath);
+				extraFile.setImageType("extra");
+				extraFile.setRefKey(product.getProdNo());
+				File uploadFile = new File(productFilePath, extraFile.getFileName());
+				file.transferTo(uploadFile);
+				fileList.add(extraFile);
+			}
+			product.setExtraFileList(fileList);
 		}
 		
 		product.setManuDate(product.getManuDate().replaceAll("-", ""));
 		
-		service.updateProduct(product);
+		map.put("product", product);
+		service.updateProduct(map);
 		
 		return "redirect:/product/getProduct?prodNo="+product.getProdNo()+"&flag=";
 	}

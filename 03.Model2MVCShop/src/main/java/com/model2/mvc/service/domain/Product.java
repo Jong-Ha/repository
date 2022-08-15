@@ -1,11 +1,13 @@
 package com.model2.mvc.service.domain;
 
 import java.sql.Date;
+import java.util.List;
 
 
 public class Product {
-	
-	private String fileName;
+
+	private UploadFile mainFile;
+	private List<UploadFile> extraFileList;
 	private String manuDate;
 	private int price;
 	private String prodDetail;
@@ -26,11 +28,19 @@ public class Product {
 	public void setProTranCode(String proTranCode) {
 		this.proTranCode = proTranCode;
 	}
-	public String getFileName() {
-		return fileName;
+	public UploadFile getMainFile() {
+		return mainFile;
 	}
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
+
+	public void setMainFile(UploadFile mainFile) {
+		this.mainFile = mainFile;
+	}
+
+	public List<UploadFile> getExtraFileList() {
+		return extraFileList;
+	}
+	public void setExtraFileList(List<UploadFile> extraFileList) {
+		this.extraFileList = extraFileList;
 	}
 	public String getManuDate() {
 		return manuDate;
@@ -95,8 +105,10 @@ public class Product {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Product [fileName=");
-		builder.append(fileName);
+		builder.append("Product [mainFile=");
+		builder.append(mainFile);
+		builder.append(", extraFileList=");
+		builder.append(extraFileList);
 		builder.append(", manuDate=");
 		builder.append(manuDate);
 		builder.append(", price=");
@@ -119,5 +131,5 @@ public class Product {
 		builder.append(prodGrade);
 		builder.append("]");
 		return builder.toString();
-	}	
+	}
 }

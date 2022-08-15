@@ -45,7 +45,6 @@ public class TestReviewService implements ReviewService {
 		Product product = new Product();
 		product.setProdNo(10011);
 		product.setProdName("testProduct");
-		product.setFileName("test img 颇老");
 		product.setProdDetail("asdjfklasdlkasdhfkljasdhfkjlasdhfklasdhjkflasdjkfdajkflhk");
 		review.setDetail("test侩 府轰");
 		review.setFileName("test.jpg");
@@ -78,7 +77,6 @@ public class TestReviewService implements ReviewService {
 		product.setProdNo(10011);
 		review.setDetail("test侩 府轰");
 		product.setProdName("testProduct");
-		product.setFileName("test img 颇老");
 		review.setFileName("test.jpg");
 		review.setGrade(5);
 		review.setProd(product);

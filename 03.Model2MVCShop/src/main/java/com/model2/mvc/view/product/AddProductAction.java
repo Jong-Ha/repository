@@ -35,7 +35,7 @@ public class AddProductAction extends Action {
 		product.setProdDetail(request.getParameter("prodDetail"));
 		product.setManuDate(request.getParameter("manuDate").replaceAll("-", ""));
 		product.setPrice(Integer.parseInt(request.getParameter("price")));
-		product.setFileName(request.getParameter("fileName"));
+//		product.setFileName(request.getParameter("fileName"));
 		product.setAmount(Integer.parseInt(request.getParameter("amount")));
 		System.out.println(product);
 		

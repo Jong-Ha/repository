@@ -48,6 +48,16 @@ function fncAddProduct(){
 function resetData(){
 	document.detailForm.reset();
 }
+function fncAddExtraImage(){
+	document.getElementById('addImageBox').parentNode.removeChild(document.getElementById('addImageBox'));
+	document.getElementById('extraImageView').innerHTML = '<br/>추가 이미지(최대 5장)<br/><input		type="file" name="extraFile" multiple="multiple" class="ct_input_g" style="width: 200px; height: 19px" maxLength="13" onchange="fncCheckExtraImage()"/>';
+}
+function fncCheckExtraImage(){
+	if(parseInt(document.detailForm.extraFile.files.length)>5){
+		alert('파일 갯수를 초과하였습니다.');
+		document.getElementById('extraImageView').innerHTML = '<br/>추가 이미지(최대 5장)<br/><input		type="file" name="extraFile" multiple="multiple" class="ct_input_g" style="width: 200px; height: 19px" maxLength="13" onchange="fncCheckExtraImage()"/>';
+	}
+}	
 -->
 </script>
 </head>
@@ -153,11 +163,14 @@ function resetData(){
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
 	</tr>
 	<tr>
-		<td width="104" class="ct_write">상품이미지</td>
+		<td width="104" class="ct_write">상품 이미지</td>
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">
-			<input		type="file" name="file" multiple="multiple" class="ct_input_g" 
+			<input		type="file" name="file" class="ct_input_g" 
 							style="width: 200px; height: 19px" maxLength="13"/>
+			<input 		type="button" id="addImageBox" value="이미지 추가" onclick="fncAddExtraImage()">
+			<span id="extraImageView">
+			</span>
 		</td>
 	</tr>
 	<tr>

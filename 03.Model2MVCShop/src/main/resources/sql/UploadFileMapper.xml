@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+				
+<mapper namespace="UploadFileMapper">
+
+  	<resultMap type="com.model2.mvc.service.domain.Product" id="productSelectMap">
+  		<result property="manuDate"		column="manufacture_day"	jdbcType="VARCHAR"/>
+  		<result property="price"		column="price"				jdbcType="NUMERIC"/>
+  		<result property="prodDetail"	column="prod_detail"		jdbcType="VARCHAR"/>
+  		<result property="prodName"		column="prod_name"			jdbcType="VARCHAR"/>
+  		<result property="prodNo"		column="prod_no"			jdbcType="NUMERIC"/>
+  		<result property="regDate"		column="reg_date"			jdbcType="DATE"/>
+  		<result property="rowNum"		column="row_num"			jdbcType="VARCHAR"/>
+  		<result property="amount"		column="amount"				jdbcType="NUMERIC"/>
+  		<result property="proTranCode"	column="tran_code"			jdbcType="VARCHAR"/>
+  		<result property="prodGrade"	column="prod_grade"			jdbcType="NUMERIC"/>
+  		<association property="mainFile" resultMap="fileResultMap"/>
+  		<collection property="extraFileList" 	column="prod_no" ofType="file" select="getExtraFile"/>
+  	</resultMap>
+  	
+  	<resultMap type="file" id="fileResultMap">
+		<id property="refKey" 			column="prod_no" 		jdbcType="NUMERIC"/>
+		<result property="fileName" 		column="file_name" 		jdbcType="VARCHAR"/>
+		<result property="originalFileName"	column="original_name" 	jdbcType="VARCHAR"/>
+		<result property="path" 			column="path" 			jdbcType="VARCHAR"/>
+		<result property="size" 			column="file_size" 		jdbcType="NUMERIC"/>
+		<result property="imageType" 		column="image_type" 	jdbcType="NUMERIC"/>
+  	</resultMap>
+  	
+  	<insert id="addFile" parameterType="file">
+  		INSERT
+  		INTO prod_file(prod_no, file_name, original_name, path, file_size, image_type)
+  		VALUES(	
+  				<if test="refKey==0">seq_product_prod_no.CURRVAL</if>
+  				<if test="refKey!=0">#{refKey}</if>,
+  				#{fileName:VARCHAR},
+  				#{originalFileName:VARCHAR},
+  				#{path:VARCHAR},
+  				#{size:INTEGER},
+  				#{imageType:VARCHAR}
+  				)
+  	</insert>
+  	
+  	<delete id="deleteFile" parameterType="map">
+  		DELETE prod_file
+  		WHERE prod_no = #{product.prodNo}
+  		AND file_name IN
+  		<foreach collection="deteleFileList" open="(" separator="," close=")" item="fileName">
+  		#{fileName}
+  		</foreach>
+  	</delete>
+  	
+</mapper>

@@ -7,7 +7,6 @@
 <mapper namespace="ProductMapper">
 
   	<resultMap type="com.model2.mvc.service.domain.Product" id="productSelectMap">
-  		<result property="fileName"		column="image_file"			jdbcType="VARCHAR"/>
   		<result property="manuDate"		column="manufacture_day"	jdbcType="VARCHAR"/>
   		<result property="price"		column="price"				jdbcType="NUMERIC"/>
   		<result property="prodDetail"	column="prod_detail"		jdbcType="VARCHAR"/>
@@ -18,24 +17,42 @@
   		<result property="amount"		column="amount"				jdbcType="NUMERIC"/>
   		<result property="proTranCode"	column="tran_code"			jdbcType="VARCHAR"/>
   		<result property="prodGrade"	column="prod_grade"			jdbcType="NUMERIC"/>
+  		<association property="mainFile" resultMap="fileResultMap"/>
+  		<collection property="extraFileList" 	column="prod_no" ofType="file" select="getExtraFile"/>
   	</resultMap>
+  	
+  	<resultMap type="file" id="fileResultMap">
+		<id property="refKey" 			column="prod_no" 		jdbcType="NUMERIC"/>
+		<result property="fileName" 		column="file_name" 		jdbcType="VARCHAR"/>
+		<result property="originalFileName"	column="original_name" 	jdbcType="VARCHAR"/>
+		<result property="path" 			column="path" 			jdbcType="VARCHAR"/>
+		<result property="size" 			column="file_size" 		jdbcType="NUMERIC"/>
+		<result property="imageType" 		column="image_type" 	jdbcType="NUMERIC"/>
+  	</resultMap>
+  	
+  	<select id="getExtraFile" resultMap="fileResultMap">
+  		SELECT prod_no, file_name, original_name, path, file_size, image_type
+  		FROM prod_file
+  		WHERE prod_no = #{prod_no} AND image_type = 'extra'
+  	</select>
   	
   	<select id="getProduct" parameterType="int" resultMap="productSelectMap">
   		SELECT
-  		p.image_file, p.manufacture_day, p.price, p.prod_detail, p.prod_name, p.prod_no, p.reg_date, p.amount, ROUND(AVG(r.grade),1) AS prod_grade
-  		FROM product p, review r
+  		p.manufacture_day, p.price, p.prod_detail, p.prod_name, p.prod_no, p.reg_date, p.amount, ROUND(AVG(r.grade),1) AS prod_grade, f.file_name, f.original_name, f.path, f.file_size, f.image_type
+  		FROM product p, review r, prod_file f
   		<where>
   			p.prod_no = #{prodNo}
 			AND p.prod_no = r.prod_no(+)
+			AND p.prod_no = f.prod_no(+)
+			AND (f.image_type = 'main' OR f.image_type IS NULL)
   		</where>
-  		GROUP BY p.image_file, p.manufacture_day, p.price, p.prod_detail, p.prod_name, p.prod_no, p.reg_date, p.amount
+  		GROUP BY p.manufacture_day, p.price, p.prod_detail, p.prod_name, p.prod_no, p.reg_date, p.amount, f.file_name, f.original_name, f.path, f.file_size, f.image_type
   	</select>
   	
   	<insert id="addProduct" parameterType="product">
   		INSERT
-  		INTO product(image_file, manufacture_day, price, prod_detail, prod_name, prod_no, reg_date, amount)
-  		VALUES(	#{fileName:VARCHAR},
-  				#{manuDate:VARCHAR},
+  		INTO product(manufacture_day, price, prod_detail, prod_name, prod_no, reg_date, amount)
+  		VALUES(	#{manuDate:VARCHAR},
   				#{price:INTEGER},
   				#{prodDetail:VARCHAR},
   				#{prodName:VARCHAR},
@@ -52,7 +69,6 @@
   			prod_detail = #{prodDetail:VARCHAR},
   			manufacture_day = #{manuDate:VARCHAR},
   			price = #{price:INTEGER},
-  			image_file = #{fileName:VARCHAR},
   			amount = #{amount:INTEGER},
   		</set>
   		<where>
@@ -72,8 +88,8 @@
   	
   	<sql id="getProductListSql">
   		SELECT
-  		p.image_file, p.manufacture_day, p.price, p.prod_detail, p.prod_name, p.prod_no, p.reg_date, p.amount, ROUND(AVG(r.grade),1) AS prod_grade
-  		FROM product p, review r
+  		p.manufacture_day, p.price, p.prod_detail, p.prod_name, p.prod_no, p.reg_date, p.amount, ROUND(AVG(r.grade),1) AS prod_grade, f.file_name, f.original_name, f.path, f.file_size, f.image_type
+  		FROM product p, review r, prod_file f
   		<where>
   			<if test="searchKeyword!=null and searchKeyword!=''">
   				<choose>
@@ -98,8 +114,10 @@
 				AND p.price >= #{minPrice}
 			</if>
 			AND p.prod_no = r.prod_no(+)
+			AND p.prod_no = f.prod_no(+)
+			AND (f.image_type = 'main' OR f.image_type IS NULL)
   		</where>
-  		GROUP BY p.image_file, p.manufacture_day, p.price, p.prod_detail, p.prod_name, p.prod_no, p.reg_date, p.amount
+  		GROUP BY p.manufacture_day, p.price, p.prod_detail, p.prod_name, p.prod_no, p.reg_date, p.amount, f.file_name, f.original_name, f.path, f.file_size, f.image_type
   		ORDER BY 	<choose>
   						<when test="prodListCondition==0">
   							p.reg_date DESC

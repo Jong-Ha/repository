@@ -1,5 +1,8 @@
 package com.model2.mvc.view.product;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -35,10 +38,13 @@ public class UpdateProductAction extends Action {
 		product.setProdDetail(request.getParameter("prodDetail"));
 		product.setManuDate(request.getParameter("manuDate").replaceAll("-", ""));
 		product.setPrice(Integer.parseInt(request.getParameter("price")));
-		product.setFileName(request.getParameter("fileName"));
+//		product.setFileName(request.getParameter("fileName"));
 		product.setAmount(Integer.parseInt(request.getParameter("amount")));
 		
-		service.updateProduct(product);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("product", product);
+		
+		service.updateProduct(map);
 		
 		request.setAttribute("flag", "update");
 		

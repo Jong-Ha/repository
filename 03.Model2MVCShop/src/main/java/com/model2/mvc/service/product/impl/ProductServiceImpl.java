@@ -1,6 +1,7 @@
 package com.model2.mvc.service.product.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,10 @@ import org.springframework.stereotype.Service;
 
 import com.model2.mvc.common.Search;
 import com.model2.mvc.service.domain.Product;
+import com.model2.mvc.service.domain.UploadFile;
 import com.model2.mvc.service.product.ProductDao;
 import com.model2.mvc.service.product.ProductService;
+import com.model2.mvc.service.uploadFile.UploadFileDao;
 
 @Service("productServiceImpl")
 public class ProductServiceImpl implements ProductService {
@@ -20,9 +23,9 @@ public class ProductServiceImpl implements ProductService {
 	@Qualifier("productDaoImpl")
 	private ProductDao productDao;
 
-	public void setProductDao(ProductDao productDao) {
-		this.productDao = productDao;
-	}
+	@Autowired
+	@Qualifier("uploadFileDaoImpl")
+	private UploadFileDao uploadFileDao;
 
 	///Constructor
 	public ProductServiceImpl() {
@@ -32,6 +35,16 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public void addProduct(Product product) throws Exception {
 		productDao.addProduct(product);
+		UploadFile mainFile = product.getMainFile();
+		List<UploadFile> extraFileList = product.getExtraFileList();
+		if(mainFile!=null) {
+			uploadFileDao.addProdFile(mainFile);
+		}
+		if(extraFileList!=null) {
+			for(UploadFile file : extraFileList) {
+				uploadFileDao.addProdFile(file);
+			}
+		}
 	}
 
 	@Override
@@ -48,7 +61,21 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public void updateProduct(Product product) throws Exception {
+	public void updateProduct(Map<String, Object> map) throws Exception {
+		if(map.get("deteleFileList")!=null) {
+			uploadFileDao.deleteProdFile(map);
+		}
+		Product product = (Product)map.get("product");
+		UploadFile mainFile = product.getMainFile();
+		List<UploadFile> extraFileList = product.getExtraFileList();
+		if(mainFile!=null) {
+			uploadFileDao.addProdFile(mainFile);
+		}
+		if(extraFileList!=null) {
+			for(UploadFile file : extraFileList) {
+				uploadFileDao.addProdFile(file);
+			}
+		}
 		productDao.updateProduct(product);
 	}
 

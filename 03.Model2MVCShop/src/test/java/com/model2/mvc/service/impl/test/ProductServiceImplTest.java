@@ -35,7 +35,6 @@ public class ProductServiceImplTest {
 		product.setProdDetail("prodDetail");
 		product.setManuDate("20220803");
 		product.setPrice(10000);
-		product.setFileName("fileName");
 		product.setAmount(5);
 		productService.addProduct(product);
 	}
@@ -76,7 +75,9 @@ public class ProductServiceImplTest {
 
 	//@Test
 	public void updateProduct(Product product) throws Exception {
-		productService.updateProduct(product);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("product", product);
+		productService.updateProduct(map);
 	}
 
 }

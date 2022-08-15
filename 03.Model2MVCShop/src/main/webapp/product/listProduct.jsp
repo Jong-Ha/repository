@@ -178,7 +178,9 @@ function fncCheck(){
 	<tr class="ct_list_pop" height="300">
 		<td align="center">${ i.rowNum }</td>
 		<td></td>
-		<td align="center"><img src = "/images/uploadFiles/${ i.fileName }" width="200"/></td>
+		<td align="center">
+			<c:if test="${ !empty i.mainFile.fileName }"><img src = "/images/${ i.mainFile.path }/${ i.mainFile.fileName }" style="max-width: 200px; max-height: 200px;"/></c:if>
+			<c:if test="${ empty i.mainFile.fileName }"><img src = "/images/empty.GIF" style="max-width: 200px; max-height: 200px;"/></c:if>
 		</td>
 		<td></td>
 		<td align="left">

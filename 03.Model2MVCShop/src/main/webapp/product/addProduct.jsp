@@ -99,15 +99,15 @@
 	<tr>
 		<td width="104" class="ct_write">상품이미지</td>
 		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01"><img src="/images/uploadFiles/${ product.fileName }"/>
-			<!-- 테이블 시작 -->
-			<table border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td height="26">
-						<img src="/images/uploadFiles/../../images/empty.GIF"/>
-					</td>
-				</tr>
-			</table>
+		<td class="ct_write01">
+			<c:if test="${ !empty product.mainFile }"><img src = "/images/${ product.mainFile.path }/${ product.mainFile.fileName }" style="max-width: 300px; max-height: 300px;"/></c:if>
+			<c:if test="${ empty product.mainFile }"><img src = "/images/empty.GIF" style="max-width: 200px; max-height: 200px;"/></c:if>
+			<c:if test="${ !empty product.extraFileList }">
+				<c:forEach items="${ product.extraFileList }" var="i">
+					<br/>
+					<img src = "/images/${ i.path }/${ i.fileName }" style="max-width: 150px; max-height: 150px;"/>
+				</c:forEach>
+			</c:if>
 		</td>
 	</tr>
 	<tr>

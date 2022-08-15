@@ -31,7 +31,6 @@ public class CartSqlTest {
 		prod.setProdDetail("소니 바이오 노트북 신동품");
 		prod.setPrice(2000000);
 		cart.setAmount(1);
-		prod.setFileName("AHlbAAAAtBqyWAAA.jpg");
 		cart.setProd(prod);
 		
 		Integer i = sqlSession.selectOne("CartMapper.checkCart", cart);

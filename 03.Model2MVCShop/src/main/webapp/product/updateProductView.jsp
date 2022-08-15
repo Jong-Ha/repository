@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
     
 <!DOCTYPE html>
 <html>
@@ -42,9 +43,34 @@ function fncAddProduct(){
 	document.detailForm.submit();
 }
 -->
-function deleteImg(){
-	document.detailForm.existFileName.value = '';
-	document.getElementById('existFileName').src = '/images/empty.GIF';
+function deleteMainImg(filleName){
+	document.getElementById('existMainFileName').src = '/images/empty.GIF';
+	document.getElementById('mainFileSpan').innerHTML = '<input	type="file" name="file" class="ct_input_g" style="width: 200px; height: 19px" maxLength="13">';
+	addDeleteList(filleName);
+}
+function deleteExtraImg(fileName){
+	document.getElementById(fileName).parentNode.removeChild(document.getElementById(fileName));
+	document.getElementById('nowExtraFile').value = parseInt(document.getElementById('nowExtraFile').value)-1;
+	addDeleteList(fileName);
+	reExtraSpan();
+}
+function fncCheckExtraImage(){
+	var maxFile = 5 - parseInt(document.getElementById('nowExtraFile').value);
+	if(parseInt(document.detailForm.extraFile.files.length)>parseInt(maxFile)){
+		alert('파일 갯수를 초과하였습니다.');
+		reExtraSpan();
+	}
+}
+function reExtraSpan(){
+	var maxFile = 5 - parseInt(document.getElementById('nowExtraFile').value);
+	document.getElementById('extraImageSpan').innerHTML = '추가 이미지(최대 '+maxFile+'장)<br/><input		type="file" name="extraFile" multiple="multiple" class="ct_input_g" style="width: 200px; height: 19px" maxLength="13" onchange="fncCheckExtraImage()"/>';
+}
+function addDeleteList(fileName){
+	var input = document.createElement('input');
+	input.setAttribute('type','hidden');
+	input.setAttribute('name','deteleFileList');
+	input.setAttribute('value',fileName);
+	document.detailForm.appendChild(input);
 }
 </script>
 </head>
@@ -171,14 +197,43 @@ function deleteImg(){
 		<td width="104" class="ct_write">상품이미지</td>
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">
-			<img id="existFileName" src = "/images/uploadFiles/${ product.fileName }"/>
-			<input type="hidden" name="existFileName" value="${ product.fileName }">
-			<input	type="file" name="file" class="ct_input_g" 
-						style="width: 200px; height: 19px" maxLength="13">
-						<%-- style="width: 200px; height: 19px" maxLength="13" value="../../images/empty.GIF/">${ product.fileName } --%>
-			<a href="javascript:deleteImg();"><input type="button" value="삭제"></a>
+			<span id="mainFileSpan">
+				<c:if test="${ !empty product.mainFile.fileName }">
+					<img id="existMainFileName" src = "/images/${ product.mainFile.path }/${ product.mainFile.fileName }"/>
+					<a href="javascript:deleteMainImg('${ product.mainFile.fileName }');"><input type="button" value="삭제"></a>
+				</c:if>
+				<c:if test="${ empty product.mainFile.fileName }">
+					<input	type="file" name="file" class="ct_input_g" style="width: 200px; height: 19px" maxLength="13">
+				</c:if>
+			</span>
 		</td>
 	</tr>
+	
+	<tr>
+		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
+	</tr>
+	<tr>
+		<td width="104" class="ct_write">추가이미지</td>
+		<td bgcolor="D6D6D6" width="1"></td>
+		<td class="ct_write01">
+		
+			<c:forEach items="${ product.extraFileList }" var="i">
+				<span id="${ i.fileName }">
+					<img id="existFileName" src = "/images/${ i.path }/${ i.fileName }"/>
+					<a href="javascript:deleteExtraImg('${ i.fileName }');"><input type="button" value="삭제"></a>
+					<br/>
+				</span>
+			</c:forEach>
+			
+			<input type="hidden" id="nowExtraFile" value="${ fn:length(product.extraFileList) }">
+			<span id="extraImageSpan">
+				추가 이미지(최대 ${ 5-fn:length(product.extraFileList) }장)<br/>
+				<input		type="file" name="extraFile" multiple="multiple" class="ct_input_g" style="width: 200px; height: 19px" maxLength="13" onchange="fncCheckExtraImage()"/>
+			</span>
+			
+		</td>
+	</tr>
+	
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
 	</tr>
