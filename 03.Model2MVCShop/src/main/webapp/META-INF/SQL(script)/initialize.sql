@@ -1,5 +1,5 @@
 
-DROP TABLE prod_file;
+DROP TABLE files;
 DROP TABLE review;
 DROP TABLE cart;
 DROP TABLE transaction;
@@ -76,13 +76,15 @@ CREATE TABLE review (
 	PRIMARY KEY(tran_no)
 );
 
-CREATE TABLE prod_file ( 
-	prod_no 				NUMBER(16)		NOT NULL REFERENCES product(prod_no),
-	file_name				VARCHAR2(150),
+CREATE TABLE files ( 
+	ref_key 				NUMBER(16),
+	file_name				VARCHAR2(150)	NOT NULL,
 	original_name			VARCHAR2(100),
 	path					VARCHAR2(100),
 	file_size				NUMBER,
-	image_type				VARCHAR2(10)
+	image_type				VARCHAR2(10),
+	target					VARCHAR2(20),
+	PRIMARY KEY(file_name)
 );
 
 
@@ -161,13 +163,13 @@ insert into product values (seq_product_prod_no.nextval,'»ï¼º¼¾½º 2G','sens ¸Þ¸ð
 insert into product values (seq_product_prod_no.nextval,'¿¬²É','Á¤¿øÀ» °¡²ãº¸¼¼¿ä','20121022',232300, to_date('2012/11/15 17:39:01', 'YYYY/MM/DD HH24:MI:SS'),5);
 insert into product values (seq_product_prod_no.nextval,'»ï¼º¼¾½º','³ëÆ®ºÏ','20120212',600000, to_date('2012/11/12 13:04:31', 'YYYY/MM/DD HH24:MI:SS'),5);
 
-INSERT INTO prod_file VALUES(10000,'AHlbAAAAtBqyWAAA.jpg','AHlbAAAAtBqyWAAA.jpg','uploadFiles',0,'main');
-INSERT INTO prod_file VALUES(10001,'AHlbAAAAvetFNwAA.jpg','AHlbAAAAvetFNwAA.jpg','uploadFiles',0,'main');
-INSERT INTO prod_file VALUES(10002,'AHlbAAAAvewfegAB.jpg','AHlbAAAAvewfegAB.jpg','uploadFiles',0,'main');
-INSERT INTO prod_file VALUES(10003,'AHlbAAAAve1WwgAC.jpg','AHlbAAAAve1WwgAC.jpg','uploadFiles',0,'main');
-INSERT INTO prod_file VALUES(10004,'AHlbAAAAve37LwAD.jpg','AHlbAAAAve37LwAD.jpg','uploadFiles',0,'main');
-INSERT INTO prod_file VALUES(10005,'AHlbAAAAtBqyWAAA.jpg','AHlbAAAAtBqyWAAA.jpg','uploadFiles',0,'main');
-INSERT INTO prod_file VALUES(10006,'AHlbAAAAtDPSiQAA.jpg','AHlbAAAAtDPSiQAA.jpg','uploadFiles',0,'main');
-INSERT INTO prod_file VALUES(10007,'AHlbAAAAug1vsgAA.jpg','AHlbAAAAug1vsgAA.jpg','uploadFiles',0,'main');
+INSERT INTO files VALUES(10000,'AHlbAAAAtBqyWAAA.jpg','AHlbAAAAtBqyWAAA.jpg','uploadFiles',0,'main','product');
+INSERT INTO files VALUES(10001,'AHlbAAAAvetFNwAA.jpg','AHlbAAAAvetFNwAA.jpg','uploadFiles',0,'main','product');
+INSERT INTO files VALUES(10002,'AHlbAAAAvewfegAB.jpg','AHlbAAAAvewfegAB.jpg','uploadFiles',0,'main','product');
+INSERT INTO files VALUES(10003,'AHlbAAAAve1WwgAC.jpg','AHlbAAAAve1WwgAC.jpg','uploadFiles',0,'main','product');
+INSERT INTO files VALUES(10004,'AHlbAAAAve37LwAD.jpg','AHlbAAAAve37LwAD.jpg','uploadFiles',0,'main','product');
+INSERT INTO files VALUES(10005,'AHlbAAAAtBqyWAAB.jpg','AHlbAAAAtBqyWAAA.jpg','uploadFiles',0,'main','product');
+INSERT INTO files VALUES(10006,'AHlbAAAAtDPSiQAA.jpg','AHlbAAAAtDPSiQAA.jpg','uploadFiles',0,'main','product');
+INSERT INTO files VALUES(10007,'AHlbAAAAug1vsgAA.jpg','AHlbAAAAug1vsgAA.jpg','uploadFiles',0,'main','product');
 
 commit;

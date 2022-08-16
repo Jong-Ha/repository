@@ -12,6 +12,7 @@ public class UploadFile {
 	private String path;
 	private long size;
 	private String imageType;
+	private String target;
 
 	public UploadFile() {
 	}
@@ -67,6 +68,12 @@ public class UploadFile {
 	public void setImageType(String imageType) {
 		this.imageType = imageType;
 	}
+	public String getTarget() {
+		return target;
+	}
+	public void setTarget(String target) {
+		this.target = target;
+	}
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -82,6 +89,8 @@ public class UploadFile {
 		builder.append(size);
 		builder.append(", imageType=");
 		builder.append(imageType);
+		builder.append(", target=");
+		builder.append(target);
 		builder.append("]");
 		return builder.toString();
 	}

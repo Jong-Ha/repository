@@ -1,5 +1,6 @@
 package com.model2.mvc.web.user;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -60,22 +61,24 @@ public class UserRestController {
 		return user;
 	}
 	
-//	@RequestMapping(value = "addUser", method = RequestMethod.POST)
-//	public String addUser(@ModelAttribute("user") User user) throws Exception {
-//		service.addUser(user);
-//		return "redirect:/user/loginView.jsp";
-//	}
-//	
-//	@RequestMapping(value = "checkDuplication", method = RequestMethod.POST)
-//	public String checkDuplication(@RequestParam("userId") String userId) throws Exception {
-//		boolean result=service.checkDuplication(userId);
-//		
-//		model.addAttribute("result", new Boolean(result));
-//		model.addAttribute("userId", userId);
-//		
-//		return "forward:/user/checkDuplication.jsp";
-//	}
-//	
+	@RequestMapping(value = "/json/addUser", method = RequestMethod.POST)
+	public User addUser(@RequestBody User user) throws Exception {
+		service.addUser(user);
+		return user;
+	}
+	
+	@RequestMapping(value = "/json/checkDuplication", method = RequestMethod.POST)
+	public Map<String, Object> checkDuplication(@RequestBody User user) throws Exception {
+		boolean result=service.checkDuplication(user.getUserId());
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("result", new Boolean(result));
+		map.put("userId", user.getUserId());
+		
+		return map;
+	}
+	
 //	@RequestMapping(value = "logout", method = RequestMethod.GET)
 //	public String logout(HttpSession session) {
 //		

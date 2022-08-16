@@ -38,11 +38,11 @@ public class ProductServiceImpl implements ProductService {
 		UploadFile mainFile = product.getMainFile();
 		List<UploadFile> extraFileList = product.getExtraFileList();
 		if(mainFile!=null) {
-			uploadFileDao.addProdFile(mainFile);
+			uploadFileDao.addFile(mainFile);
 		}
 		if(extraFileList!=null) {
 			for(UploadFile file : extraFileList) {
-				uploadFileDao.addProdFile(file);
+				uploadFileDao.addFile(file);
 			}
 		}
 	}
@@ -63,17 +63,17 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public void updateProduct(Map<String, Object> map) throws Exception {
 		if(map.get("deteleFileList")!=null) {
-			uploadFileDao.deleteProdFile(map);
+			uploadFileDao.deleteFile((List<String>)map.get("deteleFileList"));
 		}
 		Product product = (Product)map.get("product");
 		UploadFile mainFile = product.getMainFile();
 		List<UploadFile> extraFileList = product.getExtraFileList();
 		if(mainFile!=null) {
-			uploadFileDao.addProdFile(mainFile);
+			uploadFileDao.addFile(mainFile);
 		}
 		if(extraFileList!=null) {
 			for(UploadFile file : extraFileList) {
-				uploadFileDao.addProdFile(file);
+				uploadFileDao.addFile(file);
 			}
 		}
 		productDao.updateProduct(product);

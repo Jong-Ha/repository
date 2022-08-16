@@ -1,16 +1,12 @@
 package com.model2.mvc.service.uploadFile;
 
-import java.util.Map;
+import java.util.List;
 
 import com.model2.mvc.service.domain.UploadFile;
 
 public interface UploadFileDao {
 	
-	public void addProdFile(UploadFile file) throws Exception ;
+	public void addFile(UploadFile file) throws Exception ;
 	
-	public void deleteProdFile(Map<String, Object> map) throws Exception ;
-	
-	public void addReviewFile(UploadFile file) throws Exception ;
-	
-	public void deleteReviewFile(Map<String, Object> map) throws Exception ;
+	public void deleteFile(List<String> list) throws Exception ;
 }

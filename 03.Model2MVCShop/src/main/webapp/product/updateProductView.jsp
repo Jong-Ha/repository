@@ -63,7 +63,7 @@ function fncCheckExtraImage(){
 }
 function reExtraSpan(){
 	var maxFile = 5 - parseInt(document.getElementById('nowExtraFile').value);
-	document.getElementById('extraImageSpan').innerHTML = '추가 이미지(최대 '+maxFile+'장)<br/><input		type="file" name="extraFile" multiple="multiple" class="ct_input_g" style="width: 200px; height: 19px" maxLength="13" onchange="fncCheckExtraImage()"/>';
+	document.getElementById('extraImageSpan').innerHTML = '추가 이미지(최대 '+maxFile+'장)<br/><input type="file" name="extraFile" multiple="multiple" class="ct_input_g" style="width: 200px; height: 19px" maxLength="13" onchange="fncCheckExtraImage()"/>';
 }
 function addDeleteList(fileName){
 	var input = document.createElement('input');
@@ -219,7 +219,7 @@ function addDeleteList(fileName){
 		
 			<c:forEach items="${ product.extraFileList }" var="i">
 				<span id="${ i.fileName }">
-					<img id="existFileName" src = "/images/${ i.path }/${ i.fileName }"/>
+					<img id="existFileName" src = "/images/${ i.path }/${ i.fileName }" style="max-height: 100px; max-width: 100px;"/>
 					<a href="javascript:deleteExtraImg('${ i.fileName }');"><input type="button" value="삭제"></a>
 					<br/>
 				</span>

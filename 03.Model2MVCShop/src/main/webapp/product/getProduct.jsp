@@ -126,8 +126,8 @@ function fncCheck(){
 			<c:if test="${ !empty product.mainFile.fileName }"><img src = "/images/${ product.mainFile.path }/${ product.mainFile.fileName }" style="max-width: 300px; max-height: 300px;"/></c:if>
 			<c:if test="${ empty product.mainFile.fileName }"><img src = "/images/empty.GIF" style="max-width: 200px; max-height: 200px;"/></c:if>
 			<c:if test="${ !empty product.extraFileList }">
+				<br/>
 				<c:forEach items="${ product.extraFileList }" var="i">
-					<br/>
 					<img src = "/images/${ i.path }/${ i.fileName }" style="max-width: 150px; max-height: 150px;"/>
 				</c:forEach>
 			</c:if>

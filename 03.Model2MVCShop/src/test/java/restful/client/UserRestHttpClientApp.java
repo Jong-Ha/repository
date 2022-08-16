@@ -3,6 +3,7 @@ package restful.client;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Map;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -14,6 +15,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.model2.mvc.service.domain.User;
 
@@ -28,6 +30,14 @@ public class UserRestHttpClientApp {
 //		post_login_JSONSimple();
 		
 //		post_login_CodeHaus();
+		
+//		post_addUser_JSONSimple();
+		
+//		post_addUser_CodeHaus();
+		
+//		post_checkDuplication_JSONSimple();
+		
+		post_checkDuplication_CodeHaus();
 		
 	}
 	
@@ -141,5 +151,135 @@ public class UserRestHttpClientApp {
 		System.out.println(returnUser);
 		
 	}
-	
+
+	public static void post_addUser_JSONSimple() throws Exception {
+		
+		HttpClient httpClient = new DefaultHttpClient();
+		
+		String uri = "http://127.0.0.1:8080/user/json/addUser";
+		
+		HttpPost httpPost = new HttpPost(uri);
+		httpPost.setHeader("Accept", "application/json");
+		httpPost.setHeader("Content-Type", "application/json");
+		
+		JSONObject inputObj = new JSONObject();
+		inputObj.put("userId", "test");
+		inputObj.put("password", "1111");
+		inputObj.put("userName", "testName");
+		
+		StringEntity entity = new StringEntity(inputObj.toString());
+		httpPost.setEntity(entity);
+		
+		HttpResponse response = httpClient.execute(httpPost);
+		System.out.println(response);
+		
+		HttpEntity responseEntity = response.getEntity();
+		InputStream is = responseEntity.getContent();
+		BufferedReader br = new BufferedReader(new InputStreamReader(is,"UTF-8"));
+		String jsonValue = br.readLine();
+		
+		System.out.println(jsonValue);
+		JSONObject jsonObj = (JSONObject)JSONValue.parse(jsonValue);
+		System.out.println(jsonObj);
+	}
+
+	public static void post_addUser_CodeHaus() throws Exception {
+		
+		HttpClient httpClient = new DefaultHttpClient();
+		
+		String uri = "http://127.0.0.1:8080/user/json/addUser";
+		
+		HttpPost httpPost = new HttpPost(uri);
+		httpPost.setHeader("Accept", "application/json");
+		httpPost.setHeader("Content-Type", "application/json");
+		
+		User user = new User();
+		user.setUserId("test");
+		user.setPassword("1111");
+		user.setUserName("testName");
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		String inputValue = objectMapper.writeValueAsString(user);
+		
+		StringEntity entity = new StringEntity(inputValue);
+		httpPost.setEntity(entity);
+		
+		HttpResponse response = httpClient.execute(httpPost);
+		System.out.println(response);
+		
+		HttpEntity responseEntity = response.getEntity();
+		InputStream is = responseEntity.getContent();
+		BufferedReader br = new BufferedReader(new InputStreamReader(is,"UTF-8"));
+		String jsonValue = br.readLine();
+		
+		System.out.println(jsonValue);
+		User returnUser = objectMapper.readValue(jsonValue, User.class);
+		System.out.println(returnUser);
+		
+	}
+
+	public static void post_checkDuplication_JSONSimple() throws Exception {
+		
+		HttpClient httpClient = new DefaultHttpClient();
+		
+		String uri = "http://127.0.0.1:8080/user/json/checkDuplication";
+		
+		HttpPost httpPost = new HttpPost(uri);
+		httpPost.setHeader("Accept", "application/json");
+		httpPost.setHeader("Content-Type", "application/json");
+		
+		JSONObject inputObj = new JSONObject();
+		inputObj.put("userId", "admin");
+		
+		StringEntity entity = new StringEntity(inputObj.toString());
+		httpPost.setEntity(entity);
+		
+		HttpResponse response = httpClient.execute(httpPost);
+		System.out.println(response);
+		
+		HttpEntity responseEntity = response.getEntity();
+		InputStream is = responseEntity.getContent();
+		BufferedReader br = new BufferedReader(new InputStreamReader(is,"UTF-8"));
+		String jsonValue = br.readLine();
+		
+		System.out.println(jsonValue);
+		JSONObject jsonObj = (JSONObject)JSONValue.parse(jsonValue);
+		System.out.println(jsonObj.get("result"));
+		System.out.println(jsonObj.get("userId"));
+	}
+
+	public static void post_checkDuplication_CodeHaus() throws Exception {
+		
+		HttpClient httpClient = new DefaultHttpClient();
+		
+		String uri = "http://127.0.0.1:8080/user/json/checkDuplication";
+		
+		HttpPost httpPost = new HttpPost(uri);
+		httpPost.setHeader("Accept", "application/json");
+		httpPost.setHeader("Content-Type", "application/json");
+
+		User user = new User();
+		user.setUserId("admin");
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		String inputValue = objectMapper.writeValueAsString(user);
+		
+		StringEntity entity = new StringEntity(inputValue);
+		httpPost.setEntity(entity);
+		
+		HttpResponse response = httpClient.execute(httpPost);
+		System.out.println(response);
+		
+		HttpEntity responseEntity = response.getEntity();
+		InputStream is = responseEntity.getContent();
+		BufferedReader br = new BufferedReader(new InputStreamReader(is,"UTF-8"));
+		String jsonValue = br.readLine();
+		
+		System.out.println(jsonValue);
+		Map<String, Object> map = objectMapper.readValue(jsonValue, new TypeReference<Map<String, Object>>() {});
+		System.out.println(map.get("result"));
+		System.out.println(map.get("userId"));
+		
+	}
+
 }

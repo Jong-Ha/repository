@@ -65,6 +65,7 @@ public class ProductController {
 				UploadFile mainFile = new UploadFile(file);
 				mainFile.setPath(productFilePath);
 				mainFile.setImageType("main");
+				mainFile.setTarget("product");
 				File uploadFile = new File(productFilePath, mainFile.getFileName());
 				file.transferTo(uploadFile);
 				product.setMainFile(mainFile);
@@ -77,6 +78,7 @@ public class ProductController {
 				UploadFile extraFile = new UploadFile(file);
 				extraFile.setPath(productFilePath);
 				extraFile.setImageType("extra");
+				extraFile.setTarget("product");
 				File uploadFile = new File(productFilePath, extraFile.getFileName());
 				file.transferTo(uploadFile);
 				fileList.add(extraFile);
@@ -106,6 +108,7 @@ public class ProductController {
 				mainFile.setPath(productFilePath);
 				mainFile.setImageType("main");
 				mainFile.setRefKey(product.getProdNo());
+				mainFile.setTarget("product");
 				File uploadFile = new File(productFilePath, mainFile.getFileName());
 				file.transferTo(uploadFile);
 				product.setMainFile(mainFile);
@@ -119,6 +122,7 @@ public class ProductController {
 				extraFile.setPath(productFilePath);
 				extraFile.setImageType("extra");
 				extraFile.setRefKey(product.getProdNo());
+				extraFile.setTarget("product");
 				File uploadFile = new File(productFilePath, extraFile.getFileName());
 				file.transferTo(uploadFile);
 				fileList.add(extraFile);

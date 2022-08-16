@@ -141,7 +141,7 @@ function fncCheck(){
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
 	<tr>
-		<td colspan="10" >전체 ${ resultPage.totalCount } 건수, 현재 ${ search.currentPage } 페이지</td>
+		<td colspan="12" >전체 ${ resultPage.totalCount } 건수, 현재 ${ search.currentPage } 페이지</td>
 		<td colspan="1" align="right" >
 			<input type="hidden" id="checkSoldOut" name="checkSoldOut" value="${ search.checkSoldOut }"/>
 			<c:if test="${ user.role != 'admin' }">
