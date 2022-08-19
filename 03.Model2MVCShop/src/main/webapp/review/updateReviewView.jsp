@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,34 +9,49 @@
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="../javascript/calendar.js">
 </script>
 
 <script type="text/javascript">
-<!--
 function fncUpdateReview(){
-	document.detailForm.action='/review/updateReview?flag=수정';
-	document.detailForm.submit();
+	$('form').attr('method','post').attr('action','/review/updateReview?flag=수정').submit();
 }
 function fncDeleteReview(){
-	document.detailForm.action='/review/deleteReview?flag=삭제';
-	document.detailForm.submit();
+	$('form').attr('method','post').attr('action','/review/deleteReview?flag=삭제').submit();
 }
-
-function closeWindow(){
-	window.close();
-}
-function deleteImg(){
-	document.detailForm.existFileName.value = '';
-	document.getElementById('existFileName').src = '/images/empty.GIF';
-}
--->
+$(function(){
+	$('span').text($('#maxImage').val());
+	$('.ct_btn01').eq(0).bind('click',function(){
+		fncUpdateReview();
+	})
+	$('.ct_btn01').eq(1).bind('click',function(){
+		fncDeleteReview();
+	})
+	$('.ct_btn01').eq(2).bind('click',function(){
+		window.close();
+	})
+	$('input:button').bind('click',function(){
+		var div = $(this).parent();
+		var fileName = div.children(':hidden').val();
+		$('form').append('<input type="hidden" name="deleteFileList" value="'+fileName+'">');
+		$('#maxImage').val(parseInt($('#maxImage').val())+1);
+		$('span').text($('#maxImage').val());
+		div.remove();
+	})
+	$('input:file').bind('change',function(){
+		if($(this)[0].files.length > $('#maxImage').val()){
+			alert('파일 갯수를 초과하였습니다.');
+			$(this).val('');
+		}
+	})
+})
 </script>
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
 
-<form name="detailForm" method="post" enctype="multipart/form-data" >
+<form name="detailForm" enctype="multipart/form-data" >
 <input type="hidden" id="tranNo" name="tranNo" value="${ review.tranNo }">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
@@ -82,11 +99,17 @@ function deleteImg(){
 		<td width="104" class="ct_write">상품이미지</td>
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">
-			<img id="existFileName" src = "/images/reviewImg/${ review.fileName }" height="20"/>
-			<input type="hidden" name="existFileName" value="${ review.fileName }">
-			<input		type="file" name="file" class="ct_input_g" 
+			<c:forEach items="${ review.fileList }" var="i">
+				<div>
+					<img id="existFileName" src = "/images/${ i.path }/${ i.fileName }" height="20"/>
+					<input type="hidden" name="existFileName" value="${ i.fileName }">
+					<input type="button" value="삭제">
+				</div>
+			</c:forEach>
+			<br>추가등록 (최대 <span>10</span>장)<br>
+			<input type="hidden" id="maxImage" value="${ 10 - fn:length(review.fileList) }">
+			<input		type="file" name="file" class="ct_input_g" multiple="multiple"
 							style="width: 200px; height: 19px" maxLength="13"/>
-			<a href="javascript:deleteImg();"><input type="button" value="삭제"></a>
 		</td>
 	</tr>
 	<tr>
@@ -117,7 +140,7 @@ function deleteImg(){
 					<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 				</td>
 				<td background="/images/ct_btnbg02.gif" class="ct_btn01"  style="padding-top: 3px;">
-					<a href="javascript:fncUpdateReview();">수정</a>
+					수정
 				</td>
 				<td width="14" height="23">
 					<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
@@ -127,7 +150,7 @@ function deleteImg(){
 					<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 				</td>
 				<td background="/images/ct_btnbg02.gif" class="ct_btn01"  style="padding-top: 3px;">
-					<a href="javascript:fncDeleteReview();">삭제</a>
+					삭제
 				</td>
 				<td width="14" height="23">
 					<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
@@ -137,7 +160,7 @@ function deleteImg(){
 					<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 				</td>
 				<td background="/images/ct_btnbg02.gif" class="ct_btn01"	 style="padding-top: 3px;">
-					<a href="javascript:closeWindow();">취소</a>
+					취소
 				</td>
 				<td width="14" height="23">
 					<img src="/images/ct_btnbg03.gif" width="14" height="23"/>

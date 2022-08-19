@@ -120,18 +120,12 @@ public class UserController {
 	@RequestMapping(value = "listUser")
 	public String listUser(@ModelAttribute("search") Search search, Model model) throws Exception {
 
-		
-		System.out.println(search);
-		
 		if(search.getCurrentPage()==0) {
 			search.setCurrentPage(1);
 		}
 		search.setPageSize(pageSize);
 		search.setPageUnit(pageUnit);
 
-		System.out.println(search.getPageSize());
-		System.out.println(search.getPageUnit());
-		System.out.println(search.getCurrentPage());
 		Map<String,Object> map=service.getUserList(search);
 		
 		Page resultPage = new Page(search, ((Integer)map.get("totalCount")).intValue());

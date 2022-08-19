@@ -10,17 +10,17 @@
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="../javascript/calendar.js">
 </script>
 
 <script type="text/javascript">
-<!--
 function fncAddProduct(){
 	//Form 유효성 검증
- 	var name = document.detailForm.prodName.value;
-	var detail = document.detailForm.prodDetail.value;
-	var manuDate = document.detailForm.manuDate.value;
-	var price = document.detailForm.price.value;
+ 	var name = $('input[name="prodName"]').val();
+	var detail = $('input[name="prodDetail"]').val();
+	var manuDate = $('input[name="manuDate"]').val();
+	var price = $('input[name="price"]').val();
 
 	if(name == null || name.length<1){
 		alert("상품명은 반드시 입력하여야 합니다.");
@@ -39,45 +39,51 @@ function fncAddProduct(){
 		return;
 	}
 		
-	document.detailForm.action='/product/updateProduct?';
-	document.detailForm.submit();
-}
--->
-function deleteMainImg(filleName){
-	document.getElementById('existMainFileName').src = '/images/empty.GIF';
-	document.getElementById('mainFileSpan').innerHTML = '<input	type="file" name="file" class="ct_input_g" style="width: 200px; height: 19px" maxLength="13">';
-	addDeleteList(filleName);
-}
-function deleteExtraImg(fileName){
-	document.getElementById(fileName).parentNode.removeChild(document.getElementById(fileName));
-	document.getElementById('nowExtraFile').value = parseInt(document.getElementById('nowExtraFile').value)-1;
-	addDeleteList(fileName);
-	reExtraSpan();
+	$('form').attr('method','post').attr('action','/product/updateProduct?').submit();
 }
 function fncCheckExtraImage(){
-	var maxFile = 5 - parseInt(document.getElementById('nowExtraFile').value);
-	if(parseInt(document.detailForm.extraFile.files.length)>parseInt(maxFile)){
+	var maxFile = 5 - parseInt($('#nowExtraFile').val());
+	if(parseInt($('input[name="extraFile"]')[0].files.length)>parseInt(maxFile)){
 		alert('파일 갯수를 초과하였습니다.');
-		reExtraSpan();
+		$('input[name="extraFile"]').val('');
 	}
 }
-function reExtraSpan(){
-	var maxFile = 5 - parseInt(document.getElementById('nowExtraFile').value);
-	document.getElementById('extraImageSpan').innerHTML = '추가 이미지(최대 '+maxFile+'장)<br/><input type="file" name="extraFile" multiple="multiple" class="ct_input_g" style="width: 200px; height: 19px" maxLength="13" onchange="fncCheckExtraImage()"/>';
-}
 function addDeleteList(fileName){
-	var input = document.createElement('input');
-	input.setAttribute('type','hidden');
-	input.setAttribute('name','deteleFileList');
-	input.setAttribute('value',fileName);
-	document.detailForm.appendChild(input);
+	$('form').append('<input type="hidden" name="deleteFileList" value="'+fileName+'">');
 }
+$(function(){
+	$('td.ct_btn01').eq(0).bind('click',function(){
+		fncAddProduct();
+	})
+	$('td.ct_btn01').eq(1).bind('click',function(){
+		history.go(-1);
+	})
+	$('img[src="../images/ct_icon_date.gif"]').bind('click',function(){
+		show_calendar('document.detailForm.manuDate', $('input[name="manuDate"]').val());
+	})
+	$('#mainFileSpan input:button').bind('click',function(){
+		var mainFileName = $('#mainFileName').val();
+		$(this).parent().html('<input	type="file" name="file" class="ct_input_g" style="width: 200px; height: 19px" maxLength="13">');
+		addDeleteList(mainFileName);
+	})
+	$('img[name="existFileName"]').siblings(':button').bind('click',function(){
+		var extraFileName = $(this).parent().attr('id');
+		$('#nowExtraFile').val($('#nowExtraFile').val()-1);
+		addDeleteList(extraFileName);
+		$(this).parent().remove();
+		var maxFile = 5 - parseInt($('#nowExtraFile').val());
+		$('#extraImageSpan').html('추가 이미지(최대 '+maxFile+'장)');
+	})
+	$('input[name="extraFile"]').bind('change',function(){
+		fncCheckExtraImage();
+	})
+})
 </script>
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
 
-<form name="detailForm" method="post" enctype="multipart/form-data" >
+<form name="detailForm" enctype="multipart/form-data" >
 
 <input type="hidden" name="prodNo" value="${ product.prodNo }"/>
 
@@ -160,8 +166,7 @@ function addDeleteList(fileName){
 		<td class="ct_write01">
 			<input type="text" readonly="readonly" name="manuDate" value="${ product.manuDate }" 	
 						class="ct_input_g" style="width: 100px; height: 19px" maxLength="10" minLength="6">&nbsp;
-						<img 	src="../images/ct_icon_date.gif" width="15" height="15" 
-									onclick="show_calendar('document.detailForm.manuDate', document.detailForm.manuDate.value)" />
+						<img 	src="../images/ct_icon_date.gif" width="15" height="15"  />
 		</td>
 	</tr>
 	<tr>
@@ -199,8 +204,9 @@ function addDeleteList(fileName){
 		<td class="ct_write01">
 			<span id="mainFileSpan">
 				<c:if test="${ !empty product.mainFile.fileName }">
+					<input type="hidden" id="mainFileName" value="${ product.mainFile.fileName }">
 					<img id="existMainFileName" src = "/images/${ product.mainFile.path }/${ product.mainFile.fileName }"/>
-					<a href="javascript:deleteMainImg('${ product.mainFile.fileName }');"><input type="button" value="삭제"></a>
+					<input type="button" value="삭제">
 				</c:if>
 				<c:if test="${ empty product.mainFile.fileName }">
 					<input	type="file" name="file" class="ct_input_g" style="width: 200px; height: 19px" maxLength="13">
@@ -219,8 +225,8 @@ function addDeleteList(fileName){
 		
 			<c:forEach items="${ product.extraFileList }" var="i">
 				<span id="${ i.fileName }">
-					<img id="existFileName" src = "/images/${ i.path }/${ i.fileName }" style="max-height: 100px; max-width: 100px;"/>
-					<a href="javascript:deleteExtraImg('${ i.fileName }');"><input type="button" value="삭제"></a>
+					<img name="existFileName" src = "/images/${ i.path }/${ i.fileName }" style="max-height: 100px; max-width: 100px;"/>
+					<input type="button" value="삭제">
 					<br/>
 				</span>
 			</c:forEach>
@@ -228,8 +234,8 @@ function addDeleteList(fileName){
 			<input type="hidden" id="nowExtraFile" value="${ fn:length(product.extraFileList) }">
 			<span id="extraImageSpan">
 				추가 이미지(최대 ${ 5-fn:length(product.extraFileList) }장)<br/>
-				<input		type="file" name="extraFile" multiple="multiple" class="ct_input_g" style="width: 200px; height: 19px" maxLength="13" onchange="fncCheckExtraImage()"/>
 			</span>
+			<input type="file" name="extraFile" multiple="multiple" class="ct_input_g" style="width: 200px; height: 19px" maxLength="13"/>
 			
 		</td>
 	</tr>
@@ -251,7 +257,7 @@ function addDeleteList(fileName){
 						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01"	style="padding-top: 3px;">
-						<a href="javascript:fncAddProduct();">수정</a>
+						수정
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
@@ -263,7 +269,7 @@ function addDeleteList(fileName){
 						<img src="/images/ct_btnbg01.gif"width="17" height="23"/>
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-						<a href="javascript:history.go(-1)">취소</a>
+						취소
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>

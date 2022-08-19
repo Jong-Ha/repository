@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
 <title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
 
 function fncAddPurchase(){
@@ -16,32 +17,46 @@ function fncAddPurchase(){
 		alert('수량을 확인해주세요');
 		return;
 	}
-	document.detailForm.action = '/purchase/addPurchaseView';
-	document.detailForm.submit();
+	$('form').attr('action','/purchase/addPurchaseView').attr('method','post').submit();
 }
 function fncAddCart(){
 	if(!fncCheck()){
 		alert('수량을 확인해주세요');
 		return;
 	}
-	document.detailForm.action = '/cart/addCart';
-	document.detailForm.submit();
+	$('form').attr('action','/cart/addCart').attr('method','post').submit();
 }
 function fncCheck(){
-	var amount = parseInt(document.getElementById("amount").value);
-	var productAmount = parseInt(document.getElementById("productAmount").value);
+	var amount = parseInt($('#amount').val());
+	var productAmount = parseInt($('#productAmount').val());
 	if(amount-0<=productAmount-0 && amount-0>0){
 		return true;
 	}
 		return false;
 }
-
+$(function(){
+	$('span').bind('click',function(){
+		self.location = '/review/listReview?prodNo=${ product.prodNo }';
+	})
+	$('td.ct_btn01:contains("확인")').bind('click',function(){
+		self.location = '/product/listProduct';
+	})
+	$('td.ct_btn01:contains("장바구니")').bind('click',function(){
+		fncAddCart();
+	})
+	$('td.ct_btn01:contains("구매")').bind('click',function(){
+		fncAddPurchase();
+	})
+	$('td.ct_btn01:contains("이전")').bind('click',function(){
+		history.go(-1);
+	})
+})
 </script>
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
 
-<form name="detailForm" method="post">
+<form name="detailForm">
 <input type="hidden" id="prodNo" name="prodNo" value="${ product.prodNo }">
 <input type="hidden" id="productAmount" name="productAmount" value="${ product.amount }">
 
@@ -107,7 +122,7 @@ function fncCheck(){
 					<c:when test="${ product.prodGrade >= 3.5 and product.prodGrade < 4.5 }">★★★★☆</c:when>
 					<c:when test="${ product.prodGrade >= 4.5 and product.prodGrade <= 5.0 }">★★★★★</c:when>
 				</c:choose>
-				${ product.prodGrade } - <a href="/review/listReview?prodNo=${ product.prodNo }">리뷰보기</a>
+				${ product.prodGrade } - <span>리뷰보기</span>
 			</c:if>
 			<c:if test="${ product.prodGrade == 0 }">
 				등록된 리뷰가 없습니다.	
@@ -205,7 +220,7 @@ function fncCheck(){
 					<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 				</td>
 				<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-					<a href="/product/listProduct?">확인</a>
+					확인
 				</td>
 				<td width="14" height="23">
 					<img src="/images/ct_btnbg03.gif" width="14" height="23">
@@ -218,7 +233,7 @@ function fncCheck(){
 					<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 				</td>
 				<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-					<a href="javascript:fncAddCart();">장바구니</a>
+					장바구니
 				</td>
 				<td width="14" height="23">
 					<img src="/images/ct_btnbg03.gif" width="14" height="23">
@@ -229,7 +244,7 @@ function fncCheck(){
 						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-						<a href="javascript:fncAddPurchase();">구매</a>
+						구매
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif" width="14" height="23">
@@ -241,7 +256,7 @@ function fncCheck(){
 					<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 				</td>
 				<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-					<a href="javascript:history.go(-1)">이전</a>
+					이전
 				</td>
 				<td width="14" height="23">
 					<img src="/images/ct_btnbg03.gif" width="14" height="23">

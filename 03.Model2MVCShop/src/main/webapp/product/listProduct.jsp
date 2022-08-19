@@ -9,24 +9,26 @@
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
-function fncCheckSoldOut(checkSoldOut){
-	document.detailForm.checkSoldOut.value = checkSoldOut;
-	fncCheck();
-	document.detailForm.submit();
-}
 function fncCheck(){
-	if(document.detailForm.minPriceInput.value==''){
-		document.detailForm.minPrice.value=0;
-	}else{
-		document.detailForm.minPrice.value=document.detailForm.minPriceInput.value;
-	}
-	if(document.detailForm.maxPriceInput.value==''){
-		document.detailForm.maxPrice.value=0;
-	}else{
-		document.detailForm.maxPrice.value=document.detailForm.maxPriceInput.value;
-	}
+	$('form').attr('method','post').attr('action','/product/listProduct');
+	$('#minPrice').val($('#minPriceInput').val()==''?0:$('#minPriceInput').val());
+	$('#maxPrice').val($('#maxPriceInput').val()==''?0:$('#maxPriceInput').val());
 }
+$(function(){
+	$('#soldOut').bind('click',function(){
+		$('#checkSoldOut').val($('#checkSoldOut').val()==''?'soldOut':'');
+		fncCheck();
+		$('form').submit();
+	})
+	$('.ct_list_pop td:nth-child(3)').bind('click',function(){
+		self.location = '/product/getProduct?prodNo='+$(this).parent().attr('id');
+	})
+	$('.ct_list_pop span').bind('click',function(){
+		self.location = "/review/listReview?prodNo="+$(this).parent().parent().attr('id');
+	})
+})
 </script>
 <style type="text/css">
 .tdleft{
@@ -40,7 +42,7 @@ function fncCheck(){
 
 <div style="width:98%; margin-left:10px;">
 
-<form name="detailForm" action="/product/listProduct?" method="post">
+<form name="detailForm">
 <input type="hidden" id="prodNo" name="prodNo" value="">
 <input type="hidden" id="minPrice" name="minPrice" value="">
 <input type="hidden" id="maxPrice" name="maxPrice" value="">
@@ -87,7 +89,7 @@ function fncCheck(){
 						<img src="/images/ct_btnbg01.gif" width="17" height="23">
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
-						<a href="javascript:fncPageNavigator('1');">검색</a>
+						검색
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif" width="14" height="23">
@@ -120,7 +122,7 @@ function fncCheck(){
 	</tr>
 	<tr>
 		<td class="tdleft" >
-			<select name="prodListCondition" class="ct_input_g" onchange="fncPageNavigator('1')">
+			<select name="prodListCondition" class="ct_input_g">
 				<option value="0" ${ search.prodListCondition=='0'?'selected':'' } align="center">신규 상품 순</option>
 				<option value="1" ${ search.prodListCondition=='1'?'selected':'' } align="center">높은 가격 순</option>
 				<option value="2" ${ search.prodListCondition=='2'?'selected':'' } align="center">낮은 가격 순</option>
@@ -145,14 +147,16 @@ function fncCheck(){
 		<td colspan="1" align="right" >
 			<input type="hidden" id="checkSoldOut" name="checkSoldOut" value="${ search.checkSoldOut }"/>
 			<c:if test="${ user.role != 'admin' }">
+			<span id="soldOut">
 				<c:choose>
 					<c:when test="${ search.checkSoldOut == 'soldOut' }">
-						<a href="javascript:fncCheckSoldOut('');">품절상품 보기</a>
+						품절상품 보기
 					</c:when>
 					<c:otherwise>
-						<a href="javascript:fncCheckSoldOut('soldOut');">품절상품 숨기기</a>
+						품절상품 숨기기
 					</c:otherwise>
 				</c:choose>
+			</span>
 			</c:if>
 		</td>
 	</tr>
@@ -175,7 +179,7 @@ function fncCheck(){
 		<td colspan="13" bgcolor="808285" height="1"></td>
 	</tr>
 	<c:forEach var="i" items="${ list }">
-	<tr class="ct_list_pop" height="300">
+	<tr class="ct_list_pop" height="300" id="${ i.prodNo }">
 		<td align="center">${ i.rowNum }</td>
 		<td></td>
 		<td align="center">
@@ -184,7 +188,7 @@ function fncCheck(){
 		</td>
 		<td></td>
 		<td align="left">
-			<a href="/product/getProduct?prodNo=${ i.prodNo }">${ i.prodName }</a>
+			${ i.prodName }
 		</td>
 		<td></td>
 		<td align="left">${ i.price }</td>
@@ -213,7 +217,7 @@ function fncCheck(){
 				<c:when test="${ i.prodGrade >= 4.5 and i.prodGrade <= 5.0 }">★★★★★</c:when>
 			</c:choose>
 			${ i.prodGrade }
-			 - <a href="/review/listReview?prodNo=${ i.prodNo }">리뷰보기</a>
+			 - <span>리뷰보기</span>
 			 </td>	
 		</c:if>
 		<c:if test="${ i.prodGrade == 0 }">
@@ -240,5 +244,12 @@ function fncCheck(){
 </form>
 
 </div>
+<script type="text/javascript">
+$(function(){
+	$('select[name="prodListCondition"]').bind('change',function(){
+		fncPageNavigator('1');
+	})
+})
+</script>
 </body>
 </html>

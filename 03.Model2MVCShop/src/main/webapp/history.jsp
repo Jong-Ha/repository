@@ -5,6 +5,19 @@
 <html>
 <head>
 
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$('span').each(function(){
+		$(this).bind('click',function(){
+			if(opener) {
+				$(opener.parent.frames["rightFrame"].document.location).attr("href","/product/getProduct?prodNo="+$(this).text().trim()+"&menu=search");
+			}
+			window.close();
+		})
+	})
+})
+</script>
 <title>열어본 상품 보기</title>
 
 </head>
@@ -13,8 +26,8 @@
 <br>
 <br>
 <c:forEach var="i" items="${ list }">
-	<a href="/product/getProduct?prodNo=${ i }&menu=search"	target="rightFrame" onclick="window.close()">${ i }</a>
-	<br>
+	<span>${ i }</span>
+	<br/>
 </c:forEach>
 </body>
 </html>

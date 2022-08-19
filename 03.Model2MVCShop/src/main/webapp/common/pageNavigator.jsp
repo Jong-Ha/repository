@@ -6,25 +6,45 @@
 
 	<input type="hidden" name="currentPage" id="currentPage" value="1">
 	
-	<a href="javascript:fncPageNavigator('1');"><input type='button' value='&lt;&lt;'></a>
+	<input type='button' value='&lt;&lt;'>
 	<c:if test="${ resultPage.beginUnitPage>1 }">
-		<a href="javascript:fncPageNavigator('${ resultPage.beginUnitPage-1 }');"><input type='button' value='&lt;'></a>
+		<input type='button' value='&lt;'>
 	</c:if>
 	
 	<c:forEach var="i" begin="${ resultPage.beginUnitPage }" end="${ resultPage.endUnitPage }">
-		<a href="javascript:fncPageNavigator('${i}');">${i}</a>
+		<span name="navi">${i}</span>
 	</c:forEach>
 	
 	<c:if test="${ resultPage.endUnitPage < resultPage.maxPage }">
-		<a href="javascript:fncPageNavigator('${ resultPage.endUnitPage+1 }');"><input type='button' value='&gt;'></a>
+		<input type='button' value='&gt;'>
 	</c:if>
-	<a href="javascript:fncPageNavigator('${ resultPage.maxPage }');"><input type='button' value='&gt;&gt;'></a>
+	<input type='button' value='&gt;&gt;'>
 				
 
 	<script type="text/javascript"> 
 	function fncPageNavigator(currentPage) {
-		document.getElementById("currentPage").value = currentPage;
+		$('#currentPage').val(currentPage);
 		fncCheck();
-	   	document.detailForm.submit();		
+	   	$('form').submit();
 	}
+	$(function(){
+		$('input:button[value="<<"]').bind('click',function(){
+			fncPageNavigator('1');
+		})
+		$('input:button[value="<"]').bind('click',function(){
+			fncPageNavigator('${ resultPage.beginUnitPage-1 }');
+		})
+		$('input:button[value=">"]').bind('click',function(){
+			fncPageNavigator('${ resultPage.endUnitPage+1 }');
+		})
+		$('input:button[value=">>"]').bind('click',function(){
+			fncPageNavigator('${ resultPage.maxPage }');
+		})
+		$('td.ct_btn01').bind('click',function(){
+			fncPageNavigator('1');
+		})
+		$('span[name="navi"]').bind('click',function(){
+			fncPageNavigator($(this).text().trim());
+		})
+	})
 	</script>

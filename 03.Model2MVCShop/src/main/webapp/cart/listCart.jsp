@@ -8,22 +8,17 @@
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
 function fncAction(action){
 	var boxList = document.getElementsByName("cartBox");
-	var check = false;
-	for(i=0; i<boxList.length ;i++){
-		if(boxList[i].checked){
-			check = true;
-			break;
-		}
-	}
-	if(check){
-		if(action=="delete"){
-			document.detailForm.action="/cart/deleteCart";
-		}else if(document.getElementById("userId").value==""){
+	if($('input[name="cartBox"]:checked').size()!=0){
+		$('form').attr('method','post').attr('action','/cart/buyCartView');
+		if(action=="삭제"){
+			$('form').attr('action',"/cart/deleteCart");
+		}else if($('#userId').val()==""){
 			alert("로그인이 필요합니다.");
-			document.detailForm.action="/user/loginView.jsp";
+			$('form').attr('action',"/user/login");
 		}
 		document.detailForm.submit();
 	}else{
@@ -31,67 +26,73 @@ function fncAction(action){
 	}
 }
 function fncAmount(type,cartNo){
-	var amountId = cartNo+"amount";
-	var priceId = cartNo+"price";
-	var productAmountId = cartNo+"productAmount";
-	var cartAmountId = cartNo+"cartAmount";
-	var cartPriceId = cartNo+"cartPrice";
-	var cartPriceViewId = cartNo+"cartPriceView";
-	var amount = parseInt(document.getElementById(amountId).value);
-	var productAmount = parseInt(document.getElementById(productAmountId).value);
+	var amountObj = $('#'+cartNo+'amount');
+	var amount = parseInt(amountObj.val());
+	var productAmount = parseInt($('#'+cartNo+'productAmount').val());
 	if(type=='+' && amount<productAmount){
-		document.getElementById(amountId).value = amount + 1;
+		amountObj.val(amount + 1);
 	}else if(type=='-' && amount>1){
-		document.getElementById(amountId).value = amount - 1;
+		amountObj.val(amount - 1);
 	}
-	var amount = parseInt(document.getElementById(amountId).value);
-	var price = parseInt(document.getElementById(priceId).value);
-	document.getElementById(cartAmountId).innerHTML = amount;
-	document.getElementById(cartPriceViewId).innerHTML = price+" X "+amount+" = "+(price*amount);
-	document.getElementById(cartPriceId).value = price*amount;
+	var amount = parseInt(amountObj.val());
+	var price = parseInt($('#'+cartNo+'price').val());
+	$('#'+cartNo+'cartAmount').html(amount);
+	$('#'+cartNo+'cartPriceView').html(price+" X "+amount+" = "+(price*amount));
+	$('#'+cartNo+'cartPrice').val(price*amount);
 	fncTotalPrice();
 }
 function fncTotalBox(){
-	var totalBox = document.getElementById("totalBox");
-	var boxList = document.getElementsByName("cartBox");
-	for(i=0; i<boxList.length ;i++){
-		boxList[i].checked=totalBox.checked;
-	}
+	$('input[name="cartBox"]').prop('checked',$('#totalBox').prop('checked'));
 	fncTotalPrice();
 }
 function fncToggleBox(){
-	var totalBox = document.getElementById("totalBox");
-	var boxList = document.getElementsByName("cartBox");
-	for(i=0; i<boxList.length ;i++){
-		if(!boxList[i].checked){
-			totalBox.checked = false;
-			fncTotalPrice();
-			return;
-		}
+	if($('input:checkbox[name="cartBox"]').size()==$('input:checkbox[name="cartBox"]:checked').size()){
+		$('#totalBox').prop('checked',true);
+	}else{
+		$('#totalBox').prop('checked',false);
 	}
-	totalBox.checked = true;
 	fncTotalPrice();
 }
 function fncTotalPrice(){
 	var totalPrice = 0;
-	var boxList = document.getElementsByName("cartBox");
-	var cartPriceList = document.getElementsByName("cartPrice");
+	var boxList = $('input[name="cartBox"]').get();
+	var cartPriceList = $('input[name="cartPrice"]').get();
 	for(i=0; i<boxList.length ;i++){
 		if(boxList[i].checked){
 			totalPrice += parseInt(cartPriceList[i].value);
 		}
 	}
-	document.getElementById("totalPriceView").innerHTML = "총 가격 : "+totalPrice+"원";
+	$('#totalPriceView').html("총 가격 : "+totalPrice+"원");
 }
 function fncDeleteSoldOut(){
-	var boxList = document.getElementsByName("cartBox");
-	for(i=0; i<boxList.length ;i++){
-		boxList[i].checked=true;
-	}
-	document.getElementById("flag").value = "check";
-	document.detailForm.action="/cart/deleteCart";
-	document.detailForm.submit();
+	$('input[name="cartBox"]').prop('checked',true);
+	$('#flag').val("check");
+	$('form').attr('method','post').attr('action',"/cart/deleteCart").submit();
 }
+$(function(){
+	$('input:checkbox').prop('checked',true);
+	$('.ct_list_pop td:nth-child(5)').bind('click',function(){
+		self.location = '/product/getProduct?prodNo='+$('#'+$(this).parent().attr('id')+'prodNo').val();
+	})
+	$('input[value="상품보러가기"]').bind('click',function(){
+		self.location = '/product/listProduct';
+	})
+	$('span:contains("품절상품 삭제")').bind('click',function(){
+		fncDeleteSoldOut();
+	})
+	$('input[name="cartBox"]').bind('click',function(){
+		fncToggleBox();
+	})
+	$('#totalBox').bind('click',function(){
+		fncTotalBox();
+	})
+	$('.ct_list_pop input:button').bind('click',function(){
+		fncAmount($(this).val(),$(this).parents('.ct_list_pop').attr('id'));
+	})
+	$('table:last input:button').bind('click',function(){
+		fncAction($(this).val());
+	})
+})
 </script>
 </head>
 
@@ -99,7 +100,7 @@ function fncDeleteSoldOut(){
 
 <div style="width: 98%; margin-left: 10px;">
 
-<form name="detailForm" action="/cart/buyCartView" method="post">
+<form name="detailForm">
 <input type="hidden" id="userId" name="userId" value="${ user.userId }"/>
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
@@ -117,7 +118,7 @@ function fncDeleteSoldOut(){
 <c:if test="${ !empty list }">
 	<tr>
 		<td align="right" width="15" height="37" colspan="3">
-			<a href="javascript:fncDeleteSoldOut();">품절상품 삭제</a>
+			<span>품절상품 삭제</span>
 			<input type="hidden" id="flag" name="flag" value=""/>
 		</td>
 	</tr>
@@ -130,14 +131,14 @@ function fncDeleteSoldOut(){
 			<td align="center" height="50">장바구니에 담긴 상품이 없습니다.</td>
 		</tr>
 		<tr>
-			<td align="center"><a href="/product/listProduct"><input type="button" value="상품보러가기"/></a></td>
+			<td align="center"><input type="button" value="상품보러가기"/></td>
 		</tr>
 	</table>
 </c:if>
 <c:if test="${ !empty list }">
 	<table width="100%" border="0" cellspacing="0" cellpadding="0"	style="margin-top: 10px;">
 		<tr>
-			<td class="ct_list_b" width="50"><input type="checkbox" id="totalBox" name="totalBox" onclick="fncTotalBox()" checked/></td>
+			<td class="ct_list_b" width="50"><input type="checkbox" id="totalBox" name="totalBox"/></td>
 			<td class="ct_line02"></td>
 			<td class="ct_list_b" width="300">이미지</td>
 			<td class="ct_line02"></td>
@@ -159,19 +160,22 @@ function fncDeleteSoldOut(){
 				<input type="hidden" id="${ i.cartNo }price" name="${ i.cartNo }price" value="${ i.prod.price }"/>
 				<input type="hidden" id="${ i.cartNo }productAmount" name="${ i.cartNo }productAmount" value="${ i.prod.amount }"/>
 				<input type="hidden" id="${ i.cartNo }cartPrice" name="cartPrice" value="${ i.prod.price*i.amount }"/>
-				<tr class="ct_list_pop" height="300">
-					<td align="center"><input type="checkbox" id="${ i.cartNo }cartBox" name="cartBox" onclick="fncToggleBox()" checked value="${ i.cartNo }"/></td>
+				<tr class="ct_list_pop" height="300" id="${ i.cartNo }">
+					<td align="center"><input type="checkbox" id="${ i.cartNo }cartBox" name="cartBox" value="${ i.cartNo }"/></td>
 					<td></td>
-					<td align="center"><img src = "/images/uploadFiles/${ i.prod.fileName }" width="200"/></td>
+					<td align="center">
+						<c:if test="${ !empty i.prod.mainFile }"><img src = "/images/${ i.prod.mainFile.path }/${ i.prod.mainFile.fileName }" width="200"/></c:if>
+						<c:if test="${ empty i.prod.mainFile }"><img src = "/images/empty.GIF" width="200"/></c:if>
+					</td>
 					<td></td>
-					<td align="center"><a href="/product/getProduct?prodNo=${ i.prod.prodNo }">${ i.prod.prodName }</a></td>
+					<td align="center">${ i.prod.prodName }</td>
 					<td></td>
 					<td align="center">${ i.prod.prodDetail }</td>
 					<td></td>
 					<td align="center">
-						<input type="button" onclick="fncAmount('-','${ i.cartNo }')" value="-">
+						<input type="button" value="-">
 						<span id="${ i.cartNo }cartAmount">${ i.amount }</span>
-						<input type="button" onclick="fncAmount('+','${ i.cartNo }')" value="+">
+						<input type="button" value="+">
 					</td>
 					<td></td>
 					<td align="center" id="${ i.cartNo }cartPriceView">${ i.prod.price } X ${ i.amount } = ${ i.prod.price*i.amount }</td>
@@ -188,8 +192,8 @@ function fncDeleteSoldOut(){
 		</tr>
 		<tr>
 			<td align="center">
-				<input type="button" value="구매" onclick="fncAction('purchase')"/>
-				<input type="button" value="삭제" onclick="fncAction('delete')"/>
+				<input type="button" value="구매"/>
+				<input type="button" value="삭제"/>
 				<input type="hidden" id="totalPrice" name="totalPrice" value=""/>
 	    	</td>
 		</tr>

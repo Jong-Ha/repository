@@ -1,6 +1,7 @@
 package com.model2.mvc.service.uploadFile.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,12 @@ public class UploadFileDaoImpl implements UploadFileDao {
 	@Override
 	public void deleteFile(List<String> list) throws Exception {
 		sqlSession.delete("UploadFileMapper.deleteFile", list);
+	}
+
+	@Override
+	public void deleteObject(Map<String, Object> map) throws Exception {
+		sqlSession.delete("UploadFileMapper.deleteObject", map);
+		
 	}
 
 }

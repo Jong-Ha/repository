@@ -23,7 +23,6 @@ public class TestReviewService implements ReviewService {
 			if(review.getUserId()!=null) {
 				if(review.getTranNo()!=0) {
 					System.out.println(review.getGrade());
-					System.out.println(review.getFileName());
 					System.out.println(review.getDetail());
 					System.out.println("addReview");
 				}
@@ -47,7 +46,6 @@ public class TestReviewService implements ReviewService {
 		product.setProdName("testProduct");
 		product.setProdDetail("asdjfklasdlkasdhfkljasdhfkjlasdhfklasdhjkflasdjkfdajkflhk");
 		review.setDetail("test¿ë ¸®ºä");
-		review.setFileName("test.jpg");
 		review.setGrade(5);
 		review.setProd(product);
 		review.setRowNum(1);
@@ -61,10 +59,10 @@ public class TestReviewService implements ReviewService {
 	}
 
 	@Override
-	public void updateReview(Review review) throws Exception {
+	public void updateReview(Map<String, Object> map) throws Exception {
+		Review review = (Review)map.get("review");
 		if(review.getTranNo()!=0) {
 			System.out.println(review.getGrade());
-			System.out.println(review.getFileName());
 			System.out.println(review.getDetail());
 			System.out.println("updateReview");
 		}
@@ -77,7 +75,6 @@ public class TestReviewService implements ReviewService {
 		product.setProdNo(10011);
 		review.setDetail("test¿ë ¸®ºä");
 		product.setProdName("testProduct");
-		review.setFileName("test.jpg");
 		review.setGrade(5);
 		review.setProd(product);
 		review.setRowNum(1);

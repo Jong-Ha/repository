@@ -14,7 +14,6 @@
   	</resultMap>
   	
   	<resultMap type="com.model2.mvc.service.domain.Product" id="productSelectMap">
-  		<result property="fileName"		column="image_file"			jdbcType="VARCHAR"/>
   		<result property="manuDate"		column="manufacture_day"	jdbcType="VARCHAR"/>
   		<result property="price"		column="price"				jdbcType="NUMERIC"/>
   		<result property="prodDetail"	column="prod_detail"		jdbcType="VARCHAR"/>
@@ -24,7 +23,28 @@
   		<result property="rowNum"		column="row_num"			jdbcType="VARCHAR"/>
   		<result property="amount"		column="product_amount"		jdbcType="NUMERIC"/>
   		<result property="proTranCode"	column="tran_code"			jdbcType="VARCHAR"/>
+  		<association property="mainFile" column="prod_no" javaType="file" select="getMainFile"/>
   	</resultMap>
+  	
+  	<resultMap type="file" id="fileResultMap">
+		<id property="refKey" 			column="ref_key" 		jdbcType="NUMERIC"/>
+		<result property="fileName" 		column="file_name" 		jdbcType="VARCHAR"/>
+		<result property="originalFileName"	column="original_name" 	jdbcType="VARCHAR"/>
+		<result property="path" 			column="path" 			jdbcType="VARCHAR"/>
+		<result property="size" 			column="file_size" 		jdbcType="NUMERIC"/>
+		<result property="imageType" 		column="image_type" 	jdbcType="NUMERIC"/>
+		<result property="target" 			column="target" 		jdbcType="VARCHAR"/>
+  	</resultMap>
+  	
+  	<select id="getMainFile" resultMap="fileResultMap">
+  		SELECT ref_key, file_name, original_name, path, file_size, image_type, target
+  		FROM files
+  		<where>
+  			target = 'product'
+  			AND ref_key = #{prodNo}
+  			AND image_type = 'main'
+  		</where>
+  	</select>
   	
   	<select id="checkCart" parameterType="cart" resultType="int">
   		SELECT cart_no FROM cart
@@ -63,7 +83,7 @@
   	
   	<select id="getCartList" parameterType="string" resultMap="cartSelectMap">
   		SELECT
-  		c.cart_no,c.user_id,c.prod_no,c.amount,p.prod_name,p.prod_detail,p.price,p.image_file,p.amount AS product_amount
+  		c.cart_no,c.user_id,c.prod_no,c.amount,p.prod_name,p.prod_detail,p.price,p.amount AS product_amount
   		FROM cart c, product p
   		<where>
   			c.prod_no = p.prod_no

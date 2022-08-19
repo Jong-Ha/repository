@@ -39,4 +39,10 @@
   		</foreach>
   	</delete>
   	
+  	<delete id="deleteObject" parameterType="map">
+  		DELETE files
+  		WHERE target = #{target}
+  		AND ref_key = #{refKey}
+  	</delete>
+  	
 </mapper>

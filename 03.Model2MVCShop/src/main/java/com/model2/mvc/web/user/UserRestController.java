@@ -79,56 +79,50 @@ public class UserRestController {
 		return map;
 	}
 	
-//	@RequestMapping(value = "logout", method = RequestMethod.GET)
-//	public String logout(HttpSession session) {
-//		
-//		session.removeAttribute("user");
-//		
-//		return "redirect:/index.jsp";
-//	}
-//
-//	@RequestMapping(value = "updateUser", method = RequestMethod.GET)
-//	public String updateUser(@RequestParam("userId") String userId) throws Exception {
-//		
-//		User user=service.getUser(userId);
-//		
-//		model.addAttribute("vo", user);
-//		
-//		return "forward:/user/updateUser.jsp";
-//	}
-//
-//	@RequestMapping(value = "updateUser", method = RequestMethod.POST)
-//	public String updateUser(@ModelAttribute("user") User user) throws Exception {
-//		
-//		service.updateUser(user);
-//		
-//		return "redirect:/user/getUser?userId="+user.getUserId();
-//	}
-//	
-//	@RequestMapping(value = "listUser")
-//	public String listUser(@ModelAttribute("search") Search search) throws Exception {
-//
-//		
-//		System.out.println(search);
-//		
-//		if(search.getCurrentPage()==0) {
-//			search.setCurrentPage(1);
-//		}
-//		search.setPageSize(pageSize);
-//		search.setPageUnit(pageUnit);
-//
-//		System.out.println(search.getPageSize());
-//		System.out.println(search.getPageUnit());
-//		System.out.println(search.getCurrentPage());
-//		Map<String,Object> map=service.getUserList(search);
-//		
-//		Page resultPage = new Page(search, ((Integer)map.get("totalCount")).intValue());
-//
-//		model.addAllAttributes(map);
-//		model.addAttribute("search", search);
-//		model.addAttribute("resultPage", resultPage);
-//		
-//		return "forward:/user/listUser.jsp";
-//	}
+	@RequestMapping(value = "/json/logout", method = RequestMethod.GET)
+	public void logout(HttpSession session) {
+		
+		session.removeAttribute("user");
+		
+	}
+
+	@RequestMapping(value = "/json/updateUser/{userId}", method = RequestMethod.GET)
+	public User updateUser(@PathVariable String userId) throws Exception {
+		
+		User user=service.getUser(userId);
+		
+		return user;
+	}
+
+	@RequestMapping(value = "/json/updateUser", method = RequestMethod.POST)
+	public User updateUser(@RequestBody User user) throws Exception {
+		
+		service.updateUser(user);
+		
+		return user;
+	}
+	
+	@RequestMapping(value = "/json/listUser")
+	public Map<String,Object> listUser(@RequestBody(required = false) Search search) throws Exception {
+		
+		if(search==null) {
+			search = new Search();
+		}
+		
+		if(search.getCurrentPage()==0) {
+			search.setCurrentPage(1);
+		}
+		search.setPageSize(pageSize);
+		search.setPageUnit(pageUnit);
+
+		Map<String,Object> map=service.getUserList(search);
+		
+		Page resultPage = new Page(search, ((Integer)map.get("totalCount")).intValue());
+
+		map.put("search", search);
+		map.put("resultPage", resultPage);
+		
+		return map;
+	}
 
 }

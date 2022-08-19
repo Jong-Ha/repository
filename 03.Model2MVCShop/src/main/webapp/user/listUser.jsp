@@ -6,8 +6,16 @@
 <title>회원 목록조회</title>
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
-	function fncCheck(){}
+	function fncCheck(){
+		$('form').attr('action','/user/listUser').attr('method','post');
+	}
+	$(function(){
+		$('.ct_list_pop td:nth-child(3)').bind('click', function(){
+			self.location = "/user/getUser?userId="+$(this).text().trim();
+		})
+	})
 </script>
 </head>
 
@@ -15,7 +23,7 @@
 
 <div style="width:98%; margin-left:10px;">
 
-<form name="detailForm" action="/user/listUser" method="post">
+<form name="detailForm">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -53,7 +61,7 @@
 						<img src="/images/ct_btnbg01.gif" width="17" height="23">
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
-						<a href="javascript:fncPageNavigator('1');">검색</a>
+						검색
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif" width="14" height="23">
@@ -86,9 +94,7 @@
 		<tr class="ct_list_pop">
 			<td align="center">${ i.rowNum }</td>
 			<td></td>
-			<td align="left">
-				<a href="/user/getUser?userId=${ i.userId }">${ i.userId }</a>
-			</td>
+			<td align="left">${ i.userId }</td>
 			<td></td>
 			<td align="left">${ i.userName }</td>
 			<td></td>

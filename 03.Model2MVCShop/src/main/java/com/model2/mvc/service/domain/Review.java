@@ -1,13 +1,14 @@
 package com.model2.mvc.service.domain;
 
 import java.sql.Date;
+import java.util.List;
 
 public class Review {
 	
 	private int tranNo;
 	private Product prod;
 	private String userId;
-	private String fileName;
+	private List<UploadFile> FileList;
 	private double grade;
 	private String detail;
 	private Date reviewDate;
@@ -33,11 +34,11 @@ public class Review {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public String getFileName() {
-		return fileName;
+	public List<UploadFile> getFileList() {
+		return FileList;
 	}
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
+	public void setFileList(List<UploadFile> fileList) {
+		FileList = fileList;
 	}
 	public double getGrade() {
 		return grade;
@@ -72,8 +73,8 @@ public class Review {
 		builder.append(prod);
 		builder.append(", userId=");
 		builder.append(userId);
-		builder.append(", fileName=");
-		builder.append(fileName);
+		builder.append(", FileList=");
+		builder.append(FileList);
 		builder.append(", grade=");
 		builder.append(grade);
 		builder.append(", detail=");

@@ -7,47 +7,53 @@
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
-<!--
 function fncUpdateUser() {
 
-	var name=document.detailForm.userName.value;
+	var name=$('input[name="userName"]').val();
 	
 	if(name == null || name.length <1){
 		alert("이름은  반드시 입력하셔야 합니다.");
 		return;
 	}
 		
-	if(document.detailForm.phone2.value != "" && document.detailForm.phone3.value != "") {
-		document.detailForm.phone.value = document.detailForm.phone1.value + "-" + document.detailForm.phone2.value + "-" + document.detailForm.phone3.value;
+	if($('input[name="phone2"]').val() != "" && $('input[name="phone3"]').val() != "") {
+		$('input[name="phone"]').val($('input[name="phone1"]').val() + "-" + $('input[name="phone2"]').val() + "-" + $('input[name="phone3"]').val());
 	} else {
-		document.detailForm.phone.value = "";
+		$('input[name="phone"]').val("");
 	}
 		
-	document.detailForm.action='/user/updateUser';
-	document.detailForm.submit();
+	$('form').attr('method','post').attr('action','/user/updateUser').submit();
 }
 
-function check_email(frm) {
-	alert
-	var email=document.detailForm.email.value;
-    if(email != "" && (email.indexOf('@') < 1 || email.indexOf('.') == -1)){
-    	alert("이메일 형식이 아닙니다.");
-		return false;
-    }
-    return true;
-}
-
-function resetData() {
-	document.detailForm.reset();
-}
--->
+$(function(){
+	$('input[name="email"]').bind('focusout',function(){
+		var email=$(this).val();
+	    if(email != "" && (email.indexOf('@') < 1 || email.indexOf('.') == -1)){
+	    	alert("이메일 형식이 아닙니다.");
+			$(this).val("");
+			$(this).focus();
+	    }
+	})
+	
+	$('select').bind('change',function(){
+		$('input[name="phone2"]').focus();
+	})
+	
+	$('td.ct_btn01').eq(0).bind('click',function(){
+		fncUpdateUser();
+	})
+	$('td.ct_btn01').eq(1).bind('click',function(){
+		$('form')[0].reset();
+	})
+})
 </script>
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
 
-<form name="detailForm"  method="post" >
+<form name="detailForm">
 
 <input type="hidden" name="userId" value="${ vo.userId }">
 
@@ -119,8 +125,7 @@ function resetData() {
 		<td width="104" class="ct_write">휴대전화번호</td>
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">
-			<select 	name="phone1" class="ct_input_g" style="width:50px" 
-							onChange="document.detailForm.phone2.focus();">
+			<select 	name="phone1" class="ct_input_g" style="width:50px">
 				<option value="010" ${vo.phone1=='010'?'selected':'' }>010</option>
 				<option value="011" ${vo.phone1=='011'?'selected':'' }>011</option>
 				<option value="016" ${vo.phone1=='016'?'selected':'' }>016</option>
@@ -145,7 +150,7 @@ function resetData() {
 				<tr>
 					<td height="26">
 						<input 	type="text" name="email" value="${ vo.email }" class="ct_input_g" 
-										style="width:100px; height:19px" onChange="check_email(this.form);">
+										style="width:100px; height:19px">
 					</td>
 				</tr>
 			</table>
@@ -166,7 +171,7 @@ function resetData() {
 						<img src="/images/ct_btnbg01.gif" width="17" height="23">
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
-						<a href="javascript:fncUpdateUser();">수정</a>
+						수정
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
@@ -176,7 +181,7 @@ function resetData() {
 						<img src="/images/ct_btnbg01.gif" width="17" height="23">
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
-						<a href="javascript:resetData();">취소</a>
+						취소
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif" width="14" height="23">

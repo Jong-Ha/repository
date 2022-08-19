@@ -12,7 +12,7 @@ public interface ReviewService {
 
 	public Map<String, Object> getReviewList(Map<String, Object> map) throws Exception;
 	
-	public void updateReview(Review review) throws Exception;
+	public void updateReview(Map<String, Object> map) throws Exception;
 	
 	public Review getReview(int tranNo) throws Exception;
 

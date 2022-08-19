@@ -8,11 +8,16 @@
 <title>상품 목록조회</title>
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
-
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
 function fncCheck(){
-	
+	$('form').attr('method','post').attr('action','/review/listReview?prodNo=${ product.prodNo }');
 }
+$(function(){
+	$('span').bind('click',function(){
+		self.location = '/product/getProduct?prodNo=${ product.prodNo }';
+	})
+})
 </script>
 </head>
 
@@ -20,7 +25,7 @@ function fncCheck(){
 
 <div style="width:98%; margin-left:10px;">
 
-<form name="detailForm" action="/review/listReview?prodNo=${ product.prodNo }" method="post">
+<form name="detailForm">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -31,7 +36,7 @@ function fncCheck(){
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr>
 					<td width="93%" class="ct_ttl01">
-						<a href="/product/getProduct?prodNo=${ product.prodNo }">${ product.prodName }</a> 리뷰
+						<span>${ product.prodName }</span> 리뷰
 					</td>
 				</tr>
 			</table>
@@ -50,7 +55,7 @@ function fncCheck(){
 	</tr>
 	<tr>
 		<td align="right" >
-			<select name="searchCondition" class="ct_input_g" onchange="fncPageNavigator('1')">
+			<select name="searchCondition" class="ct_input_g">
 				<option value="0" ${ search.searchCondition=='0'?'selected':'' } align="center">최신 리뷰 순</option>
 				<option value="1" ${ search.searchCondition=='1'?'selected':'' } align="center">평점 높은 순</option>
 				<option value="2" ${ search.searchCondition=='2'?'selected':'' } align="center">평점 낮은 순</option>
@@ -73,7 +78,7 @@ function fncCheck(){
 	</tr>
 	<c:forEach var="i" items="${ list }">
 		<tr class="ct_list_pop">
-			<td align="center" rowspan="5"><img src = "/images/reviewImg/${ i.fileName }" style="width: 70%; max-height: 100px;"/></td>
+			<td align="center" rowspan="5"><img src = "/images/reviewImg/${ i.fileList[0].fileName }" style="width: 70%; max-height: 100px;"/></td>
 			<td></td>
 			<td align="left" height="30">
 				<c:if test="${ i.grade == 1 }">★☆☆☆☆</c:if>
@@ -118,5 +123,12 @@ function fncCheck(){
 </form>
 
 </div>
+<script type="text/javascript">
+$(function(){
+	$('select[name="searchCondition"]').bind('change',function(){
+		fncPageNavigator('1');
+	})
+})
+</script>
 </body>
 </html>

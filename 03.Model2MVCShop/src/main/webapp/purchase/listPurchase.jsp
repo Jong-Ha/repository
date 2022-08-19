@@ -8,17 +8,30 @@
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
-function fncDelivery(tranNo,currentPage){
-	document.getElementById('tranNo').value=tranNo;
-	document.getElementById("currentPage").value = currentPage;
-	document.detailForm.action='/purchase/updateTranCode?tranCode=3';
-	document.detailForm.submit();
+function fncDelivery(tranNo){
+	$('#tranNo').val(tranNo);
+	$('#currentPage').val(${ resultPage.currentPage });
+	$('form').attr('method','post').attr('action','/purchase/updateTranCode?tranCode=3').submit();
 }
-function fncCheck(){}
+function fncCheck(){
+	$('form').attr('method','post').attr('action',"/purchase/listPurchase");
+}
 function fncAddReview(tranNo) {
 	popWin = window.open("/review/addReview?tranNo="+tranNo,"popWin", "left=300,top=200,width=800,height=500,marginwidth=0,marginheight=0,scrollbars=no,scrolling=no,menubar=no,resizable=no");
 }
+$(function(){
+	$('.ct_list_pop td:nth-child(5)').bind('click',function(){
+		self.location = '/purchase/getPurchase?tranNo='+$(this).parent().attr('id');
+	})
+	$('span:contains("물건도착")').bind('click',function(){
+		fncDelivery($(this).parents(".ct_list_pop").attr('id'));
+	})
+	$('span:contains("리뷰작성")').bind('click',function(){
+		fncAddReview($(this).parents(".ct_list_pop").attr('id'));
+	})
+})
 </script>
 </head>
 
@@ -26,7 +39,7 @@ function fncAddReview(tranNo) {
 
 <div style="width: 98%; margin-left: 10px;">
 
-<form name="detailForm" action="/purchase/listPurchase" method="post">
+<form name="detailForm">
 <input type="hidden" id="tranNo" name="tranNo" value="">
 <input type="hidden" id="updateBy" name="updateBy" value="user">
 
@@ -48,7 +61,7 @@ function fncAddReview(tranNo) {
 	<tr>
 		<td colspan="10">전체 ${ resultPage.totalCount } 건수, 현재 ${ resultPage.currentPage } 페이지</td>
 		<td colspan="1" align="right">
-			<select name="tranCondition" class="ct_input_g" onchange="fncPageNavigator('1')">
+			<select name="tranCondition" class="ct_input_g">
 				<option value="" ${ search.tranCondition=='0'?'selected':'' } align="center">배송상태조회</option>
 				<option value="4" ${ search.tranCondition=='4'?'selected':'' } align="center">구매취소</option>
 				<option value="1" ${ search.tranCondition=='1'?'selected':'' } align="center">배송준비</option>
@@ -74,36 +87,36 @@ function fncAddReview(tranNo) {
 		<td colspan="11" bgcolor="808285" height="1"></td>
 	</tr>
 		<c:forEach var="i" items="${ list }">
-			<tr class="ct_list_pop">
-			<td align="center">${ i.rowNum }</td>
-			<td></td>
-			<td align="left">${ i.receiverName }</td>
-			<td></td>
-			<td align="left"><a href="/purchase/getPurchase?tranNo=${ i.tranNo }">${ i.purchaseProd.prodName }</a></td>
-			<td></td>
-			<td align="left">${ i.amount }</td>
-			<td></td>
-			<td align="left">${ i.orderDate }</td>	
-			<td></td>
-			<td align="left">
-				<c:choose>
-					<c:when test="${ i.tranCode==4 }">구매 취소</c:when>
-					<c:when test="${ i.tranCode==1 }">배송준비중</c:when>
-					<c:when test="${ i.tranCode==2 }">
-						배송중 - <a href="javascript:fncDelivery(${ i.tranNo }, ${ resultPage.currentPage });">물건도착</a>
-					</c:when>
-					<c:when test="${ i.tranCode==3 }">
-						배송완료
-						<c:if test="${ i.reviewGrade == 0 }">
-							- <a href="javascript:fncAddReview('${ i.tranNo }');">리뷰작성</a>
-						</c:if>
-					</c:when>
-				</c:choose>
-			</td>
-		</tr>
-		<tr>
-			<td colspan="11" bgcolor="D6D7D6" height="1"></td>
-		</tr>
+			<tr class="ct_list_pop" id="${ i.tranNo }">
+				<td align="center">${ i.rowNum }</td>
+				<td></td>
+				<td align="left">${ i.receiverName }</td>
+				<td></td>
+				<td align="left">${ i.purchaseProd.prodName }</td>
+				<td></td>
+				<td align="left">${ i.amount }</td>
+				<td></td>
+				<td align="left">${ i.orderDate }</td>	
+				<td></td>
+				<td align="left">
+					<c:choose>
+						<c:when test="${ i.tranCode==4 }">구매 취소</c:when>
+						<c:when test="${ i.tranCode==1 }">배송준비중</c:when>
+						<c:when test="${ i.tranCode==2 }">
+							배송중 - <span>물건도착</span>
+						</c:when>
+						<c:when test="${ i.tranCode==3 }">
+							배송완료
+							<c:if test="${ i.reviewGrade == 0 }">
+								- <span>리뷰작성</span>
+							</c:if>
+						</c:when>
+					</c:choose>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="11" bgcolor="D6D7D6" height="1"></td>
+			</tr>
 		</c:forEach>
 </table>
 
@@ -121,6 +134,12 @@ function fncAddReview(tranNo) {
 </form>
 
 </div>
-
+<script type="text/javascript">
+$(function(){
+	$('select').bind('change',function(){
+		fncPageNavigator('1');
+	})
+})
+</script>
 </body>
 </html>

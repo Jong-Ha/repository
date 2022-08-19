@@ -4,19 +4,20 @@ import java.io.File;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -99,8 +100,8 @@ public class ProductController {
 	}
 
 	@RequestMapping(value = "updateProduct", method = RequestMethod.POST)
-	public String updateProduct(@ModelAttribute("product") Product product, MultipartHttpServletRequest multi, @RequestParam(value = "deteleFileList", required = false) List<String> deleteFileList, Map<String, Object> map) throws Exception{
-		map.put("deteleFileList", deleteFileList);
+	public String updateProduct(@ModelAttribute("product") Product product, MultipartHttpServletRequest multi, @RequestParam(value = "deleteFileList", required = false) List<String> deleteFileList, Map<String, Object> map) throws Exception{
+		map.put("deleteFileList", deleteFileList);
 		List<MultipartFile> files = multi.getFiles("file");
 		if(files.size()>0 && !files.get(0).getOriginalFilename().equals("")) {
 			for(MultipartFile file : files) {
@@ -139,15 +140,15 @@ public class ProductController {
 	}
 
 	@RequestMapping(value = "getProduct", method = RequestMethod.GET)
-	public String getProduct(@RequestParam("prodNo") int prodNo, HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "flag", required = false) String flag) throws Exception{
+	public String getProduct(@RequestParam("prodNo") int prodNo, HttpSession session, Model model, HttpServletResponse response, @RequestParam(value = "flag", required = false) String flag, @CookieValue(value = "history", required = false) String history) throws Exception{
 		
 		Product product = service.getProduct(prodNo);
-		request.setAttribute("product", product);
+		model.addAttribute("product", product);
 		
 		String result = "";
 		
 		String userRole = "user";
-		User user = (User)request.getSession().getAttribute("user");
+		User user = (User)session.getAttribute("user");
 		if(user!=null && user.getRole().equals("admin")) {
 			userRole = "admin";
 		}
@@ -160,15 +161,10 @@ public class ProductController {
 		
 		
 //		ÄíÅ°°ü¸®
-		Cookie[] cookies = request.getCookies();
-		String history = "";
-		
-		if(cookies!=null && cookies.length>0) {
-			for(Cookie c : cookies) {
-				if(c.getName().equals("history")) {
-					history = URLDecoder.decode(c.getValue(),"EUC_KR");
-				}
-			}
+		if(history!=null) {
+			history = URLDecoder.decode(history,"EUC_KR");
+		}else {
+			history = "";
 		}
 		
 		String[] histories = history.split(",");

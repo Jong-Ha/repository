@@ -34,7 +34,6 @@ public class ReviewControllerTest {
 		review.setTranNo(10001);
 		review.setProd(product);
 		review.setUserId("user09");
-		review.setFileName("asdf.jpg");
 		review.setGrade(5);
 		review.setDetail("test용 리뷰입니다.");
 		
@@ -50,11 +49,12 @@ public class ReviewControllerTest {
 	public void updateReview() throws Exception {
 		Review review = new Review();
 		review.setTranNo(10000);
-		review.setFileName("qwer.jpg");
 		review.setGrade(3.5);
 		review.setDetail("test용 수정된 리뷰입니다.");
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("review", review);
 		
-		service.updateReview(review);
+		service.updateReview(map);
 	}
 	
 //	@Test
@@ -77,6 +77,12 @@ public class ReviewControllerTest {
 		System.out.println("\n================================\n");
 		System.out.println(map.get("list"));
 		
+	}
+	
+	@Test
+	public void getReview() throws Exception {
+		Review review = service.getReview(10000);
+		System.out.println(review);
 	}
 
 }

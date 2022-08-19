@@ -6,11 +6,37 @@
 <title>Model2 MVC Shop</title>
 
 <link href="/css/left.css" rel="stylesheet" type="text/css">
-
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
-function history(){
-	popWin = window.open("/product/history","popWin","left=300, top=200, width=300, height=200, marginwidth=0, marginheight=0, scrollbars=no, scrolling=no, menubar=no, resizable=no");
-}
+	$(function(){
+		$('td.Depth03:contains("개인정보조회")').bind("click",function(){
+			$(window.parent.frames["rightFrame"].document.location).attr("href","/user/getUser?userId=${ user.userId }");
+		})
+		$('td.Depth03:contains("회원정보조회")').bind("click",function(){
+			$(window.parent.frames["rightFrame"].document.location).attr("href","/user/listUser");
+		})
+		$('td.Depth03:contains("판매상품등록")').bind("click",function(){
+			$(window.parent.frames["rightFrame"].document.location).attr("href","/product/addProduct");
+		})
+		$('td.Depth03:contains("판매상품관리"), td.Depth03:contains("상 품 검 색")').bind("click",function(){
+			$(window.parent.frames["rightFrame"].document.location).attr("href","/product/listProduct");
+		})
+		$('td.Depth03:contains("배 송 관 리")').bind("click",function(){
+			$(window.parent.frames["rightFrame"].document.location).attr("href","/purchase/listDelivery");
+		})
+		$('td.Depth03:contains("구매이력조회")').bind("click",function(){
+			$(window.parent.frames["rightFrame"].document.location).attr("href","/purchase/listPurchase");
+		})
+		$('td.Depth03:contains("장 바 구 니")').bind("click",function(){
+			$(window.parent.frames["rightFrame"].document.location).attr("href","/cart/listCart");
+		})
+		$('td.Depth03:contains("내가 쓴 리뷰")').bind("click",function(){
+			$(window.parent.frames["rightFrame"].document.location).attr("href","/review/myReview");
+		})
+		$('td.Depth03:contains("최근 본 상품")').bind("click",function(){
+			popWin = window.open("/product/history","popWin","left=300, top=200, width=300, height=200, marginwidth=0, marginheight=0, scrollbars=no, scrolling=no, menubar=no, resizable=no");
+		})
+	})
 </script>
 </head>
 
@@ -26,14 +52,14 @@ function history(){
 		<c:if test="${ !empty user }">
 			<tr>
 				<td class="Depth03">
-					<a href="/user/getUser?userId=${ user.userId }" target="rightFrame">개인정보조회</a>
+					개인정보조회
 				</td>
 			</tr>
 		</c:if>
 		<c:if test="${ user.role=='admin' }">
 			<tr>
 				<td class="Depth03" >
-					<a href="/user/listUser" target="rightFrame">회원정보조회</a>
+					회원정보조회
 				</td>
 			</tr>
 		</c:if>
@@ -51,23 +77,21 @@ function history(){
 		<c:if test="${ user.role=='admin' }">
 			<tr>
 				<td class="Depth03">
-					<a href="/product/addProduct" target="rightFrame">판매상품등록</a>
+					판매상품등록
 				</td>
 			</tr>
 		</c:if>
 		
 		<tr>
 			<td class="Depth03">
-				<a href="/product/listProduct" target="rightFrame">
 					${ user.role=='admin'?'판매상품관리':'상 품 검 색' }
-				</a>
 			</td>
 		</tr>
 		
 		<c:if test="${ user.role=='admin' }">
 			<tr>
 				<td class="Depth03">
-					<a href="/purchase/listDelivery" target="rightFrame">배 송 관 리</a>
+					배 송 관 리
 				</td>
 			</tr>
 		</c:if>
@@ -75,7 +99,7 @@ function history(){
 		<c:if test="${ user.role=='user' }">
 			<tr>
 				<td class="Depth03">
-					<a href="/purchase/listPurchase" target="rightFrame">구매이력조회</a>
+					구매이력조회
 				</td>
 			</tr>
 		</c:if>
@@ -84,7 +108,7 @@ function history(){
 		<c:if test="${ user.role!='admin' }">
 			<tr>
 				<td class="Depth03">
-					<a href="/cart/listCart" target="rightFrame">장 바 구 니</a>
+					장 바 구 니
 				</td>
 			</tr>
 		</c:if>
@@ -93,7 +117,7 @@ function history(){
 		<c:if test="${ user.role=='user' }">
 			<tr>
 				<td class="Depth03">
-					<a href="/review/myReview" target="rightFrame">내가 쓴 리뷰</a>
+					내가 쓴 리뷰
 				</td>
 			</tr>
 		</c:if>
@@ -104,7 +128,7 @@ function history(){
 		
 		<tr>
 			<td class="Depth03">
-			<a href="javascript:history()">최근 본 상품</a>
+			최근 본 상품
 			</td>
 		</tr>
 	</table>

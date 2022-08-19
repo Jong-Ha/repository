@@ -62,8 +62,8 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public void updateProduct(Map<String, Object> map) throws Exception {
-		if(map.get("deteleFileList")!=null) {
-			uploadFileDao.deleteFile((List<String>)map.get("deteleFileList"));
+		if(map.get("deleteFileList")!=null) {
+			uploadFileDao.deleteFile((List<String>)map.get("deleteFileList"));
 		}
 		Product product = (Product)map.get("product");
 		UploadFile mainFile = product.getMainFile();

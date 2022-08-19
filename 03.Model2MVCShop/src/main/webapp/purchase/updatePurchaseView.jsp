@@ -8,21 +8,29 @@
 
 <title>구매정보 수정</title>
 
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="../javascript/calendar.js">
 </script>
 <script type="text/javascript">
-<!--
-function fncSubmit() {
-	document.updatePurchase.submit();
-}
--->
+$(function(){
+	$('img[src="../images/ct_icon_date.gif"]').bind('click',function(){
+		show_calendar('document.updatePurchase.divyDate', $('input[name="divyDate"]').val());
+	})
+	$('td.ct_btn01').eq(0).bind('click',function(){
+		$('form').attr('method','post').attr('action','/purchase/updatePurchase?tranNo=${ purchase.tranNo }').submit();
+	})
+	$('td.ct_btn01').eq(1).bind('click',function(){
+		history.go(-1);
+	})
+})
 </script>
 
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
 
-<form name="updatePurchase" method="post"	action="/purchase/updatePurchase?tranNo=${ purchase.tranNo }">
+<form name="updatePurchase">
+<input type="hidden" name="buyerId" value="${ purchase.buyer.userId }">
 
 <table width="100%" height="37" border="0" cellpadding="0" cellspacing="0">
 	<tr>
@@ -51,7 +59,6 @@ function fncSubmit() {
 		<td width="104" class="ct_write">구매자아이디</td>
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">${ purchase.buyer.userId }</td>
-		<input type="hidden" name="buyerId" value="${ purchase.buyer.userId }">
 	</tr>
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
@@ -121,8 +128,7 @@ function fncSubmit() {
 		<td width="200" class="ct_write01">
 			<input type="text" readonly="readonly" name="divyDate" class="ct_input_g" 
 						style="width: 100px; height: 19px" maxLength="20"/>
-				<img 	src="../images/ct_icon_date.gif" width="15" height="15"	
-							onclick="show_calendar('document.updatePurchase.divyDate', document.updatePurchase.divyDate.value)"/>
+				<img 	src="../images/ct_icon_date.gif" width="15" height="15"	/>
 		</td>
 	</tr>
 	<tr>
@@ -140,7 +146,7 @@ function fncSubmit() {
 					<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 				</td>
 				<td background="/images/ct_btnbg02.gif" class="ct_btn01"	style="padding-top: 3px;">
-					<a href="javascript:fncSubmit();">수정</a>
+					수정
 				</td>
 				<td width="14" height="23">
 					<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
@@ -150,7 +156,7 @@ function fncSubmit() {
 					<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 				</td>
 				<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-					<a href="javascript:history.go(-1)">취소</a>
+					취소
 				</td>
 				<td width="14" height="23">
 					<img src="/images/ct_btnbg03.gif" width="14" height="23"/>

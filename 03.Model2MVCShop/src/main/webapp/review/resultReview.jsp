@@ -8,28 +8,31 @@
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="../javascript/calendar.js">
 </script>
 
 <script type="text/javascript">
-<!--
-function fncMyReview(){
-	if(opener) {
-		opener.document.detailForm.action='/review/myReview';
-		opener.document.detailForm.submit();
-	}
-}
-
-function closeWindow(){
-	window.close();
-}
--->
+$(function(){
+	$('.ct_btn01').eq(0).bind('click',function(){
+		$('form').attr('method','post');
+		if(opener) {
+			$(opener.document.detailForm).attr('action','/review/myReview').submit();
+			//opener.document.detailForm.action='/review/myReview';
+			//opener.document.detailForm.submit();
+		}
+		window.close();
+	})
+	$('.ct_btn01').eq(1).bind('click',function(){
+		window.close();
+	})
+})
 </script>
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
 
-<form name="detailForm" method="post" <%--enctype="multipart/form-data"--%> >
+<form name="detailForm">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -75,7 +78,7 @@ function closeWindow(){
 					<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 				</td>
 				<td background="/images/ct_btnbg02.gif" class="ct_btn01"  style="padding-top: 3px;">
-					<a href="javascript:fncMyReview();" onclick="window.close();">³»°¡ ¾´ ¸®ºä</a>
+					³»°¡ ¾´ ¸®ºä
 				</td>
 				<td width="14" height="23">
 					<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
@@ -85,7 +88,7 @@ function closeWindow(){
 					<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 				</td>
 				<td background="/images/ct_btnbg02.gif" class="ct_btn01"	 style="padding-top: 3px;">
-					<a href="javascript:closeWindow();">´Ý±â</a>
+					´Ý±â
 				</td>
 				<td width="14" height="23">
 					<img src="/images/ct_btnbg03.gif" width="14" height="23"/>

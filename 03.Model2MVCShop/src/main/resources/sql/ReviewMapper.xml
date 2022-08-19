@@ -8,43 +8,85 @@
 
   	<resultMap type="com.model2.mvc.service.domain.Review" id="ReviewSelectMap">
  		<result property="tranNo"			column="tran_no"		jdbcType="INTEGER"/>
-  		<result property="prod.prodNo"		column="prod_no"		jdbcType="INTEGER"/>
-  		<result property="prod.prodName"	column="prod_name"		jdbcType="INTEGER"/>
-  		<result property="prod.prodDetail"	column="prod_detail"	jdbcType="INTEGER"/>
-  		<result property="prod.fileName"	column="prod_image"		jdbcType="INTEGER"/>
   		<result property="userId"			column="user_id"		jdbcType="VARCHAR"/>
   		<result property="fileName"			column="image_file"		jdbcType="VARCHAR"/>
   		<result property="grade"			column="grade"			jdbcType="NUMERIC"/>
   		<result property="detail"			column="detail"			jdbcType="VARCHAR"/>
   		<result property="reviewDate"		column="review_date"	jdbcType="DATE"/>
   		<result property="rowNum"			column="row_num"		jdbcType="VARCHAR"/>
+  		<association property="prod" column="prod_no" javaType="product" select="getProduct"/>
+  		<collection property="FileList" column="tran_no" ofType="file" select="getReviewFileList"/>
   	</resultMap>
+  	
+  	<resultMap type="com.model2.mvc.service.domain.Product" id="productSelectMap">
+  		<result property="manuDate"		column="manufacture_day"	jdbcType="VARCHAR"/>
+  		<result property="price"		column="price"				jdbcType="NUMERIC"/>
+  		<result property="prodDetail"	column="prod_detail"		jdbcType="VARCHAR"/>
+  		<result property="prodName"		column="prod_name"			jdbcType="VARCHAR"/>
+  		<result property="prodNo"		column="prod_no"			jdbcType="NUMERIC"/>
+  		<result property="regDate"		column="reg_date"			jdbcType="DATE"/>
+  		<result property="rowNum"		column="row_num"			jdbcType="VARCHAR"/>
+  		<result property="amount"		column="product_amount"		jdbcType="NUMERIC"/>
+  		<result property="proTranCode"	column="tran_code"			jdbcType="VARCHAR"/>
+  		<association property="mainFile" column="prod_no" javaType="file" select="getMainFile"/>
+  	</resultMap>
+  	
+  	<resultMap type="file" id="fileResultMap">
+		<id property="refKey" 			column="ref_key" 		jdbcType="NUMERIC"/>
+		<result property="fileName" 		column="file_name" 		jdbcType="VARCHAR"/>
+		<result property="originalFileName"	column="original_name" 	jdbcType="VARCHAR"/>
+		<result property="path" 			column="path" 			jdbcType="VARCHAR"/>
+		<result property="size" 			column="file_size" 		jdbcType="NUMERIC"/>
+		<result property="imageType" 		column="image_type" 	jdbcType="NUMERIC"/>
+		<result property="target" 			column="target" 		jdbcType="VARCHAR"/>
+  	</resultMap>
+  	
+  	<select id="getReviewFileList" resultMap="fileResultMap">
+  		SELECT ref_key, file_name, original_name, path, file_size, image_type, target
+  		FROM files
+  		WHERE ref_key = #{tran_no} AND target = 'review'
+  	</select>
+  	
+  	<select id="getMainFile" resultMap="fileResultMap">
+  		SELECT ref_key, file_name, original_name, path, file_size, image_type, target
+  		FROM files
+  		<where>
+  			target = 'product'
+  			AND ref_key = #{prodNo}
+  			AND image_type = 'main'
+  		</where>
+  	</select>
+  	
+  	<select id="getProduct" resultMap="productSelectMap">
+  		SELECT manufacture_day, price, prod_detail, prod_name, prod_no, reg_date, amount
+  		FROM product
+  		<where>
+  			prod_no = #{prodNo}
+  		</where>
+  	</select>
   	
   	<insert id="addReview" parameterType="review">
   		INSERT
-  		INTO review(tran_no,prod_no,user_id,image_file,grade,detail,review_date)
+  		INTO review(tran_no,prod_no,user_id,grade,detail,review_date)
   		VALUES(	#{tranNo}, 
   				#{prod.prodNo}, 
   				#{userId}, 
-  				#{fileName:VARCHAR}, 
   				#{grade}, 
   				#{detail}, 
   				SYSDATE	)
   	</insert>
   	
   	<select id="getReview" parameterType="int" resultMap="ReviewSelectMap">
-  		SELECT r.tran_no, r.prod_no, r.user_id, r.image_file, r.grade, r.detail, r.review_date, p.prod_name, p.prod_detail, p.image_file AS prod_image
-  		FROM review r, product p
+  		SELECT r.tran_no, r.prod_no, r.user_id, r.grade, r.detail, r.review_date
+  		FROM review r
   		<where>
   			tran_no = #{tranNo}
-  			AND r.prod_no = p.prod_no
   		</where>
   	</select>
   	
   	<update id="updateReview" parameterType="review">
   		UPDATE review
   		<set>
-  			image_file = #{fileName},
   			grade = #{grade},
   			detail = #{detail}
   		</set>
@@ -61,8 +103,8 @@
   	</delete>
   	
   	<sql id="getReviewListSql">
-  		SELECT r.tran_no, r.prod_no, r.user_id, r.image_file, r.grade, r.detail, r.review_date, p.prod_name, p.prod_detail, p.image_file AS prod_image
-  		FROM review r, product p
+  		SELECT r.tran_no, r.prod_no, r.user_id, r.grade, r.detail, r.review_date
+  		FROM review r
   		<where>
   			<if test="prodNo!=null">
   				AND r.prod_no = #{prodNo}
@@ -70,7 +112,6 @@
   			<if test="userId!=null">
   				AND user_id = #{userId}
   			</if>
-  			AND r.prod_no = p.prod_no
   		</where>
   		ORDER BY 
   		<if test="search.searchCondition!=null">
