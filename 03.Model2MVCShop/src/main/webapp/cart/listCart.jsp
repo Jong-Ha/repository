@@ -29,10 +29,18 @@ function fncAmount(type,cartNo){
 	var amountObj = $('#'+cartNo+'amount');
 	var amount = parseInt(amountObj.val());
 	var productAmount = parseInt($('#'+cartNo+'productAmount').val());
-	if(type=='+' && amount<productAmount){
-		amountObj.val(amount + 1);
-	}else if(type=='-' && amount>1){
-		amountObj.val(amount - 1);
+	if(type=='+'){
+		if(amount<productAmount){
+			amountObj.val(amount + 1);
+		}else{
+			alert('더이상 구매하실 수 없습니다.');
+		}
+	}else if(type=='-'){
+		if(amount>1){
+			amountObj.val(amount - 1);
+		}else{
+			alert('최소 구매 수량입니다.');
+		}
 	}
 	var amount = parseInt(amountObj.val());
 	var price = parseInt($('#'+cartNo+'price').val());

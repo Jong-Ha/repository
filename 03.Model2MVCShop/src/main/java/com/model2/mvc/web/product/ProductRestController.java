@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -79,98 +80,32 @@ public class ProductRestController {
 		return service.getProduct(product.getProdNo());
 	}
 
-//	@RequestMapping(value = "/json/getProduct", method = RequestMethod.GET)
-//	public String getProduct(@RequestParam("prodNo") int prodNo, HttpSession session, Model model, HttpServletResponse response, @RequestParam(value = "flag", required = false) String flag, @CookieValue(value = "history", required = false) String history) throws Exception{
-//		
-//		Product product = service.getProduct(prodNo);
-//		model.addAttribute("product", product);
-//		
-//		String result = "";
-//		
-//		String userRole = "user";
-//		User user = (User)session.getAttribute("user");
-//		if(user!=null && user.getRole().equals("admin")) {
-//			userRole = "admin";
-//		}
-//		
-//		if(userRole.equals("admin")&&flag==null) {
-//			result = "forward:/product/updateProduct?prodNo="+prodNo;
-//		}else {
-//			result = "forward:/product/getProduct.jsp?prodNo="+prodNo;
-//		}
-//		
-//		
-////		ÄíÅ°°ü¸®
-//		if(history!=null) {
-//			history = URLDecoder.decode(history,"EUC_KR");
-//		}else {
-//			history = "";
-//		}
-//		
-//		String[] histories = history.split(",");
-//		history = "";
-//		if(histories.length>0) {
-//			for(String str : histories) {
-//				if(str!=null && str.length()>4 && Integer.parseInt(str) != prodNo ) {
-//					history+= (history.length()==0?"":",")+str;
-//				}
-//			}
-//		}
-//
-//		history+= (history.length()==0?"":",")+prodNo;
-//		
-//		Cookie cookie = new Cookie("history", URLEncoder.encode(history,"EUC_KR"));
-//		cookie.setMaxAge(30*60);
-//		response.addCookie(cookie);
-//		
-//		return result;
-//	}
-//	
-//	@RequestMapping("listProduct")
-//	public String listProduct(@ModelAttribute("search") Search search , Model model) throws Exception{
-//
-//		System.out.println(search);
-//		if(search.getCurrentPage()==0) {
-//			search.setCurrentPage(1);
-//			search.setSearchKeyword("");
-//		}
-//		search.setPageSize(pageSize);
-//		search.setPageUnit(pageUnit);
-//
-//		Map<String, Object> map = service.getProductList(search);
-//		
-//		Page resultPage = new Page(search, ((Integer)map.get("totalCount")).intValue());
-//		
-//		model.addAllAttributes(map);
-//		model.addAttribute("search", search);
-//		model.addAttribute("resultPage", resultPage);
-//		
-//		return "forward:/product/listProduct.jsp";
-//	}
-//
-//	@RequestMapping(value = "/json/history", method = RequestMethod.GET)
-//	public String history(HttpServletRequest request, Model model) throws Exception {
-//		
-//		Cookie[] cookies = request.getCookies();
-//		String history="";
-//		for(Cookie c : cookies) {
-//			if(c.getName().equals("history")) {
-//				history = URLDecoder.decode(c.getValue(),"EUC_KR");
-//			}
-//		}
-//		
-//		if(!history.equals("")) {
-//			List<String> list = new ArrayList<String>();
-//			
-//			String[] records = history.trim().split(",");
-//			for(String str : records) {
-//				list.add(0,str);
-//			}
-//			
-//			model.addAttribute("list", list);
-//		}
-//		
-//		return "forward:/history.jsp";
-//	}
+	@RequestMapping(value = "/json/getProduct/{prodNo}", method = RequestMethod.GET)
+	public Product getProduct(@PathVariable int prodNo) throws Exception{
+		return service.getProduct(prodNo);
+	}
+	
+	@RequestMapping("/json/listProduct")
+	public Map<String, Object> listProduct(@RequestBody(required = false) Search search) throws Exception{
+
+		if(search==null) {
+			search = new Search();
+		}
+		if(search.getCurrentPage()==0) {
+			search.setCurrentPage(1);
+			search.setSearchKeyword("");
+		}
+		search.setPageSize(pageSize);
+		search.setPageUnit(pageUnit);
+
+		Map<String, Object> map = service.getProductList(search);
+		
+		Page resultPage = new Page(search, ((Integer)map.get("totalCount")).intValue());
+		
+		map.put("search", search);
+		map.put("resultPage", resultPage);
+		
+		return map;
+	}
 
 }

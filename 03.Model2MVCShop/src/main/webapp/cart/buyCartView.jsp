@@ -9,9 +9,11 @@
 
 <title>Insert title here</title>
 
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="../javascript/calendar.js">
-</script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<!-- <script type="text/javascript" src="../javascript/calendar.js">
+</script> -->
 
 <script type="text/javascript">
 function fncAddPurchase() {
@@ -24,9 +26,17 @@ $(function(){
 	$('td.ct_btn01').eq(1).bind('click',function(){
 		history.go(-1);
 	})
-	$('img[src="../images/ct_icon_date.gif"]').bind('click',function(){
+	/* $('img[src="../images/ct_icon_date.gif"]').bind('click',function(){
 		show_calendar('document.cartPurchase.divyDate', $('input[name="divyDate"]').val());
-	})
+	}) */
+	$('input[name="divyDate"]').datepicker({
+	      showOn: "button",
+	      buttonImage: "/images/ct_icon_date.gif",
+	      buttonImageOnly: true,
+	      buttonText: "Select date",
+	      dateFormat: "yy-mm-dd",
+	      minDate: 1
+	    });
 })
 </script>
 </head>
@@ -139,7 +149,7 @@ $(function(){
 		<td width="200" class="ct_write01">
 			<input 	type="text" readonly="readonly" name="divyDate" class="ct_input_g" 
 							style="width: 100px; height: 19px" maxLength="20"/>
-			<img 	src="../images/ct_icon_date.gif" width="15" height="15"	/>
+			<!-- <img 	src="../images/ct_icon_date.gif" width="15" height="15"	/> -->
 		</td>
 	</tr>
 	<tr>

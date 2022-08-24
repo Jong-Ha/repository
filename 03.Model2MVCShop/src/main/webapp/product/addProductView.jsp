@@ -7,9 +7,11 @@
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="../javascript/calendar.js">
-</script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<!-- <script type="text/javascript" src="../javascript/calendar.js">
+</script> -->
 
 <script type="text/javascript">
 var html = '<br/>추가 이미지(최대 5장)<br/><input type="file" name="extraFile" multiple="multiple" class="ct_input_g" style="width: 200px; height: 19px" maxLength="13"/>';
@@ -58,9 +60,9 @@ $(function(){
 	$('td.ct_btn01').eq(1).bind('click',function(){
 		$('form')[0].reset();
 	})
-	$('img[src="../images/ct_icon_date.gif"]').bind('click',function(){
+	/* $('img[src="../images/ct_icon_date.gif"]').bind('click',function(){
 		show_calendar('document.detailForm.manuDate', $('input[name="manuDate"]').val());
-	})
+	}) */
 	$('#addImageBox').bind('click',function(){
 		$('#addImageBox').remove();
 		$('#extraImageView').html(html);
@@ -68,6 +70,14 @@ $(function(){
 			fncCheckExtraImage();
 		});
 	})
+	$('input[name="manuDate"]').datepicker({
+	      showOn: "button",
+	      buttonImage: "/images/ct_icon_date.gif",
+	      buttonImageOnly: true,
+	      buttonText: "Select date",
+	      dateFormat: "yy-mm-dd",
+	      maxDate: 0
+	    });
 })
 </script>
 </head>
@@ -139,7 +149,7 @@ $(function(){
 		<td class="ct_write01">
 			<input type="text" name="manuDate" readonly="readonly" class="ct_input_g"  
 						style="width: 100px; height: 19px"	maxLength="10" minLength="6"/>
-				&nbsp;<img src="../images/ct_icon_date.gif" width="15" height="15" />
+				<!-- &nbsp;<img src="../images/ct_icon_date.gif" width="15" height="15" /> -->
 		</td>
 	</tr>
 	<tr>

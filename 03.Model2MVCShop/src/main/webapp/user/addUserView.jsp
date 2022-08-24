@@ -111,7 +111,8 @@ $(function(){
 	})
 	var p = $('<p title="아이디 중복 확인"><input type="text" width="50"> <input type="button" id="check" value="검사"></p>');
     p.dialog({
-        autoOpen: false
+        autoOpen: false,
+        position: {of: $('td.ct_btn'), my:"left+40.5", at:"top+71"}
       });
    
       $( "td.ct_btn" ).on( "click", function() {

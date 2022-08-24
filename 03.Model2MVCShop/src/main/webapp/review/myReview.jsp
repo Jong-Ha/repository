@@ -72,7 +72,10 @@ $(function(){
 	</tr>
 	<c:forEach var="i" items="${ list }">
 		<tr class="ct_list_pop" height="300" id="${ i.tranNo }">
-			<td align="center" rowspan="5"><img src = "/images/${ i.prod.mainFile.path }/${ i.prod.mainFile.fileName }" width="150"/></td>
+			<td align="center" rowspan="5">
+			<c:if test="${ !empty i.prod.mainFile }"><img src = "/images/${ i.prod.mainFile.path }/${ i.prod.mainFile.fileName }" width="150"/></c:if>
+			<c:if test="${ empty i.prod.mainFile }"><img src = "/images/empty.GIF" width="150"/></c:if>
+			</td>
 			<td></td>
 			<td align="left">
 				<c:if test="${ i.grade == 1 }">【』』』』</c:if>

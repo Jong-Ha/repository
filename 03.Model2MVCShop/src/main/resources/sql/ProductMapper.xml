@@ -40,12 +40,15 @@
   	<select id="getProduct" parameterType="int" resultMap="productSelectMap">
   		SELECT
   		p.manufacture_day, p.price, p.prod_detail, p.prod_name, p.prod_no, p.reg_date, p.amount, ROUND(AVG(r.grade),1) AS prod_grade, f.file_name, f.original_name, f.path, f.file_size, f.image_type, f.target
-  		FROM product p, review r, files f
+  		FROM product p, review r, (	SELECT 
+  									ref_key, file_name, original_name, path, file_size, image_type, target
+  									FROM files
+  									WHERE image_type = 'main' AND target = 'product'
+  								  ) f
   		<where>
   			p.prod_no = #{prodNo}
 			AND p.prod_no = r.prod_no(+)
 			AND p.prod_no = f.ref_key(+)
-			AND ((f.image_type = 'main' AND f.target = 'product') OR f.file_name IS NULL)
   		</where>
   		GROUP BY p.manufacture_day, p.price, p.prod_detail, p.prod_name, p.prod_no, p.reg_date, p.amount, f.file_name, f.original_name, f.path, f.file_size, f.image_type, f.target
   	</select>
@@ -90,7 +93,11 @@
   	<sql id="getProductListSql">
   		SELECT
   		p.manufacture_day, p.price, p.prod_detail, p.prod_name, p.prod_no, p.reg_date, p.amount, ROUND(AVG(r.grade),1) AS prod_grade, f.file_name, f.original_name, f.path, f.file_size, f.image_type, f.target
-  		FROM product p, review r, files f
+  		FROM product p, review r, (	SELECT 
+  									ref_key, file_name, original_name, path, file_size, image_type, target
+  									FROM files
+  									WHERE image_type = 'main' AND target = 'product'
+  								  ) f
   		<where>
   			<if test="searchKeyword!=null and searchKeyword!=''">
   				<choose>
@@ -116,7 +123,6 @@
 			</if>
 			AND p.prod_no = r.prod_no(+)
 			AND p.prod_no = f.ref_key(+)
-			AND ((f.image_type = 'main' AND f.target = 'product') OR f.file_name IS NULL)
   		</where>
   		GROUP BY p.manufacture_day, p.price, p.prod_detail, p.prod_name, p.prod_no, p.reg_date, p.amount, f.file_name, f.original_name, f.path, f.file_size, f.image_type, f.target
   		ORDER BY 	<choose>

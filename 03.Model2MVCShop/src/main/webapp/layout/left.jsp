@@ -6,36 +6,44 @@
 <title>Model2 MVC Shop</title>
 
 <link href="/css/left.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 <script type="text/javascript">
 	$(function(){
-		$('td.Depth03:contains("개인정보조회")').bind("click",function(){
+		$('p.Depth03:contains("개인정보조회")').bind("click",function(){
 			$(window.parent.frames["rightFrame"].document.location).attr("href","/user/getUser?userId=${ user.userId }");
 		})
-		$('td.Depth03:contains("회원정보조회")').bind("click",function(){
+		$('p.Depth03:contains("회원정보조회")').bind("click",function(){
 			$(window.parent.frames["rightFrame"].document.location).attr("href","/user/listUser");
 		})
-		$('td.Depth03:contains("판매상품등록")').bind("click",function(){
+		$('p.Depth03:contains("판매상품등록")').bind("click",function(){
 			$(window.parent.frames["rightFrame"].document.location).attr("href","/product/addProduct");
 		})
-		$('td.Depth03:contains("판매상품관리"), td.Depth03:contains("상 품 검 색")').bind("click",function(){
+		$('p.Depth03:contains("판매상품관리"), p.Depth03:contains("상 품 검 색")').bind("click",function(){
 			$(window.parent.frames["rightFrame"].document.location).attr("href","/product/listProduct");
 		})
-		$('td.Depth03:contains("배 송 관 리")').bind("click",function(){
+		$('p.Depth03:contains("배 송 관 리")').bind("click",function(){
 			$(window.parent.frames["rightFrame"].document.location).attr("href","/purchase/listDelivery");
 		})
-		$('td.Depth03:contains("구매이력조회")').bind("click",function(){
+		$('p.Depth03:contains("구매이력조회")').bind("click",function(){
 			$(window.parent.frames["rightFrame"].document.location).attr("href","/purchase/listPurchase");
 		})
-		$('td.Depth03:contains("장 바 구 니")').bind("click",function(){
+		$('p.Depth03:contains("장 바 구 니")').bind("click",function(){
 			$(window.parent.frames["rightFrame"].document.location).attr("href","/cart/listCart");
 		})
-		$('td.Depth03:contains("내가 쓴 리뷰")').bind("click",function(){
+		$('p.Depth03:contains("내가 쓴 리뷰")').bind("click",function(){
 			$(window.parent.frames["rightFrame"].document.location).attr("href","/review/myReview");
 		})
-		$('td.Depth03:contains("최근 본 상품")').bind("click",function(){
+		$('p.Depth03:contains("최근 본 상품")').bind("click",function(){
 			popWin = window.open("/product/history","popWin","left=300, top=200, width=300, height=200, marginwidth=0, marginheight=0, scrollbars=no, scrolling=no, menubar=no, resizable=no");
 		})
+		$('td[valign="top"]').accordion({
+		      collapsible: true,
+		      active : false,
+		      heightStyle: "content",
+		      event: "click"
+	    });
 	})
 </script>
 </head>
@@ -44,97 +52,72 @@
 
 <table width="159" border="0" cellspacing="0" cellpadding="0">
 
-<!--menu 01 line-->
-<tr>
-<td valign="top"> 
-	<table  border="0" cellspacing="0" cellpadding="0" width="159" >	
-		<tr>
-		<c:if test="${ !empty user }">
-			<tr>
-				<td class="Depth03">
-					개인정보조회
-				</td>
-			</tr>
-		</c:if>
-		<c:if test="${ user.role=='admin' }">
-			<tr>
-				<td class="Depth03" >
-					회원정보조회
-				</td>
-			</tr>
-		</c:if>
-		<tr>
-			<td class="DepthEnd">&nbsp;</td>
-		</tr>
-	</table>
-</td>
-</tr>
-
-<!--menu 02 line-->
-<tr>
-<td valign="top"> 
-	<table  border="0" cellspacing="0" cellpadding="0" width="159">
-		<c:if test="${ user.role=='admin' }">
-			<tr>
-				<td class="Depth03">
-					판매상품등록
-				</td>
-			</tr>
-		</c:if>
+	<tr>
+		<td valign="top"> 
 		
-		<tr>
-			<td class="Depth03">
-					${ user.role=='admin'?'판매상품관리':'상 품 검 색' }
-			</td>
-		</tr>
-		
-		<c:if test="${ user.role=='admin' }">
-			<tr>
-				<td class="Depth03">
-					배 송 관 리
-				</td>
-			</tr>
-		</c:if>
-		
-		<c:if test="${ user.role=='user' }">
-			<tr>
-				<td class="Depth03">
-					구매이력조회
-				</td>
-			</tr>
-		</c:if>
-		
-		
-		<c:if test="${ user.role!='admin' }">
-			<tr>
-				<td class="Depth03">
-					장 바 구 니
-				</td>
-			</tr>
-		</c:if>
-		
-		
-		<c:if test="${ user.role=='user' }">
-			<tr>
-				<td class="Depth03">
-					내가 쓴 리뷰
-				</td>
-			</tr>
-		</c:if>
+			<c:if test="${ !empty user }">
+				<h1>개인정보</h1>
+				<div>
+								<p class="Depth03">
+									개인정보조회
+								</p>
+						
+						<c:if test="${ user.role=='admin' }">
+								<p class="Depth03" >
+									회원정보조회
+								</p>
+						</c:if>
+				</div>
+			</c:if>
+					
+			<h1>판매중인 상품</h1>
+			<div>
+					<c:if test="${ user.role=='admin' }">
+							<p class="Depth03">
+								판매상품등록
+							</p>
+					</c:if>
+					
+						<p class="Depth03">
+								${ user.role=='admin'?'판매상품관리':'상 품 검 색' }
+						</p>
+					
+					<c:if test="${ user.role!='admin' }">
+							<p class="Depth03">
+								장 바 구 니
+							</p>
+					</c:if>
+					
+						<p class="Depth03">
+						최근 본 상품
+						</p>
+			</div>
 			
-		<tr>
-			<td class="DepthEnd">&nbsp;</td>
-		</tr>
-		
-		<tr>
-			<td class="Depth03">
-			최근 본 상품
-			</td>
-		</tr>
-	</table>
-</td>
-</tr>
-
+			<c:if test="${ !empty user }">
+			<h1>구매한 상품</h1>
+				<div>
+						<c:if test="${ user.role=='admin' }">
+								<p class="Depth03">
+									배 송 관 리
+								</p>
+						</c:if>
+						
+						<c:if test="${ user.role=='user' }">
+								<p class="Depth03">
+									구매이력조회
+								</p>
+						</c:if>
+						
+						<c:if test="${ user.role=='user' }">
+								<p class="Depth03">
+									내가 쓴 리뷰
+								</p>
+						</c:if>
+				</div>
+			</c:if>
+			
+		</td>
+	</tr>
 </table>
 </body>
 </html>
