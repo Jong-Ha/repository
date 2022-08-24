@@ -27,6 +27,11 @@
 		})
 	})
 </script>
+<style type="text/css">
+	td[align="center"] {
+		cursor: pointer;
+	}
+</style>
 </head>
 
 <body topmargin="0" leftmargin="0">

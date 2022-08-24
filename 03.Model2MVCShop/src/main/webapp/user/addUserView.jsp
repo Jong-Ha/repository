@@ -109,19 +109,51 @@ $(function(){
 			$('span').html('');
 		}
 	})
-	var p = $('<p title="아이디 중복 확인"><input type="text" width="50"> <input type="button" id="check" value="검사"></p>');
+	var p = $('<p title="아이디 중복 확인"><input type="text" width="50"> <input type="button" id="check" value="사용" disabled="disabled"></p>');
+	var div = $('<div style="font-size: 13;"></div>');
     p.dialog({
         autoOpen: false,
-        position: {of: $('td.ct_btn'), my:"left+40.5", at:"top+71"}
+        position: {of: $('td.ct_btn'), my:"left+40.5", at:"top+71"},
+        appendTo: $('form'),
+        close: function(){p.find(':text').val('');},
+        open: function(){div.html('아이디는 4자이상 입력하십시오');}
       });
    
-      $( "td.ct_btn" ).on( "click", function() {
-        p.dialog( "open" );
-        $('#check').bind('click',function(){
-        	alert('아직 안됨 Ajax해야함');
-        	p.dialog("close");
-        })
-      });
+	$( "td.ct_btn" ).on( "click", function() {
+	  p.dialog( "open" );
+	})
+	$('input[value="사용"]').on('click',function(){
+		$('input[name="viewUserId"]').val($(this).siblings(':text').val());
+		$('input[name="userId"]').val($(this).siblings(':text').val());
+		p.dialog("close");
+	})
+	p.find(":text").on('keyup',function(){
+		var id = $(this).val();
+		if(id.length<4){
+			div.html('아이디는 4자이상 입력하십시오');
+			return;
+		}
+		$.ajax({
+			url : "/user/json/checkDuplication",
+			method : "POST" ,
+			data: JSON.stringify({userId:id}),
+			headers : {
+				"Accept" : "application/json",
+				"Content-Type" : "application/json"
+			},
+			dataType:"json",
+			success:function(map){
+				if(map.result){
+					div.html('사용가능한 아이디입니다.');
+					$('input:button').prop('disabled',false);
+				}else{
+					div.html('이미 사용중인 아이디입니다.');
+					$('input:button').prop('disabled',true);
+				}
+			}
+		});//end of ajax
+	})
+	p.append(div);
 })
 </script>
 </head>
@@ -163,7 +195,8 @@ $(function(){
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr>
 					<td width="105">
-						<input type="text" name="userId" class="ct_input_bg" style="width:100px; height:19px"  maxLength="20" >
+						<input type="text" name="viewUserId" class="ct_input_bg" style="width:100px; height:19px"  maxLength="20" disabled="disabled">
+						<input type="hidden" name="userId" class="ct_input_bg" style="width:100px; height:19px"  maxLength="20">
 					</td>
 					<td>
 						<table border="0" cellspacing="0" cellpadding="0">
