@@ -46,9 +46,9 @@
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 		<multipart-config>
-			<location>C:/Users/bitcamp/git/repository/03.Model2MVCShop/src/main/webapp/images/</location> <!-- 업로드 파일 저장되는 기본 경로 -->
+			<location>C:/Users/903-14/git/repository/03.Model2MVCShop/src/main/webapp/images/</location> <!-- 업로드 파일 저장되는 기본 경로 -->
 			<max-file-size>10485760</max-file-size> <!-- 한파일 : 10mb -->
-			<max-request-size>20971520</max-request-size> <!-- 리퀘스트 용량 : 20mb -->
+			<max-request-size>104857600</max-request-size> <!-- 리퀘스트 용량 : 100mb -->
 			<file-size-threshold>102400</file-size-threshold> <!-- 임시저장단위, 이하일 경우 메모리 : 100kb -->
 		</multipart-config>
 	</servlet>

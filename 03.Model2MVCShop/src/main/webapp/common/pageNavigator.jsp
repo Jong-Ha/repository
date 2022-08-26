@@ -6,7 +6,7 @@
 
 	<input type="hidden" name="currentPage" id="currentPage" value="1">
 	
-	<input type='button' value='&lt;&lt;'>
+	<%-- <input type='button' value='&lt;&lt;'>
 	<c:if test="${ resultPage.beginUnitPage>1 }">
 		<input type='button' value='&lt;'>
 	</c:if>
@@ -18,7 +18,7 @@
 	<c:if test="${ resultPage.endUnitPage < resultPage.maxPage }">
 		<input type='button' value='&gt;'>
 	</c:if>
-	<input type='button' value='&gt;&gt;'>
+	<input type='button' value='&gt;&gt;'> --%>
 				
 
 	<script type="text/javascript"> 

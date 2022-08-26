@@ -1,5 +1,7 @@
 package com.model2.mvc.web.product;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,6 +69,19 @@ public class ProductRestController {
 	@RequestMapping(value = "/json/getProduct/{prodNo}", method = RequestMethod.GET)
 	public Product getProduct(@PathVariable int prodNo) throws Exception{
 		return service.getProduct(prodNo);
+	}
+	
+	@RequestMapping(value = "json/getProductNames/{input}",method = RequestMethod.GET)
+	public List<String> getProductNames(@PathVariable String input) throws Exception{
+		Search search = new Search();
+		search.setSearchKeyword(input);
+		Map<String, Object> map = service.getProductList(search);
+		List<Product> listProd = (List<Product>)map.get("list");
+		List<String> list = new ArrayList<String>();
+		for(Product prod : listProd) {
+			list.add(prod.getProdName());
+		}
+		return list;
 	}
 	
 	@RequestMapping("/json/listProduct")

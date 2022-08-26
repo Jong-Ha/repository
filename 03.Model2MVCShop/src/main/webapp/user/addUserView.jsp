@@ -154,6 +154,13 @@ $(function(){
 		});//end of ajax
 	})
 	p.append(div);
+	p.find(":text").on('keydown',function(key){
+		if(key.keyCode==13 && !$('input:button').prop('disabled')){
+			$('input[name="viewUserId"]').val($(this).val());
+			$('input[name="userId"]').val($(this).val());
+			p.dialog("close");
+		}
+	})
 })
 </script>
 </head>

@@ -21,14 +21,44 @@
 			$('input:password').focus();
 			return;
 		}
-	    $('form').attr('method','post').attr('action',"/user/login").attr('target',"_parent").submit();
+	    //$('form').attr('method','post').attr('action',"/user/login").attr('target',"_parent").submit();
+	    $.ajax("/user/json/login",{
+	    	method:"post",
+	    	dataType:"json",
+	    	data:JSON.stringify({userId:id,password:pw}),
+	    	headers:{
+	    		"Accept":"application/json",
+	    		"Content-Type":"application/json"
+	    	},
+	    	success:function(JSONData){
+				//[规过1]
+				$(window.parent.document.location).attr("href","/index.jsp");
+				
+				//[规过2]
+				//window.parent.document.location.reload();
+				
+				//[规过3]
+				//$(window.parent.frames["topFrame"].document.location).attr("href","/layout/top.jsp");
+				//$(window.parent.frames["leftFrame"].document.location).attr("href","/layout/left.jsp");
+				//$(window.parent.frames["rightFrame"].document.location).attr("href","/user/getUser?userId="+JSONData.userId);
+	    	},
+	    	error:function(){
+	    		alert("肺弊牢 角菩");
+	    	}
+	    })
 	}
 	$(function(){
+		$('#userId').focus();
 		$('img[src="/images/btn_login.gif"]').bind('click',function(){
 			fncLogin();
 		})
 		$('img[src="/images/btn_add.gif"]').bind('click',function(){
 			self.location = "/user/addUser";
+		})
+		$('input[name="password"]').on('keydown',function(key){
+			if(key.keyCode==13){
+				fncLogin();
+			}
 		})
 	})
 </script>

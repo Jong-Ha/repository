@@ -9,7 +9,9 @@
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 <script type="text/javascript">
 function fncCheck(){
 	$('form').attr('method','post').attr('action','/product/listProduct');
@@ -28,6 +30,32 @@ $(function(){
 	$('.ct_list_pop span').bind('click',function(){
 		self.location = "/review/listReview?prodNo="+$(this).parent().parent().attr('id');
 	})
+    $( 'input[name="searchKeyword"]' ).autocomplete({});
+    $( 'input[name="searchKeyword"]' ).on('keydown',function(key){
+    	if(key.keyCode==13){
+			fncPageNavigator('1');
+    	}
+    })
+    $( 'input[name="searchKeyword"]' ).on('keyup',function(){
+    	var box = $(this);
+    	console.log("json/getProductNames/"+box.val());
+    	if(box.val().length==0){
+    		return;
+    	}
+    	$.ajax({
+    		dataType : 'json',
+    		headers : {
+    			"Accept":"application/json",
+    			"Content-Type":"application/json"
+    		},
+    		success : function(serverData){
+    			box.autocomplete({
+    				source : serverData
+    			})
+    		}
+    	})
+    });
+	
 })
 </script>
 <style type="text/css">

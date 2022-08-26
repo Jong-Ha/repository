@@ -47,6 +47,7 @@ public class UserRestController {
 			session.setAttribute("user", dbVO);
 			user = dbVO;
 		}catch (Exception e) {
+			user=null;
 			System.out.println("로그인 실패");
 		}
 		
