@@ -1,171 +1,16 @@
 <%@ page contentType="text/html; charset=euc-kr" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <html>
 <head>
 <title>회원가입</title>
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
-
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-<script type="text/javascript">
-function fncAddUser() {
-	// Form 유효성 검증
-	var id=$('input[name="userId"]').val();
-	var pw=$('input[name="password"]').val();
-	var pw_confirm=$('input[name="password2"]').val();
-	var name=$('input[name="userName"]').val();
-	
-	if(id == null || id.length <1){
-		alert("아이디는 반드시 입력하셔야 합니다.");
-		return;
-	}
-	if(pw == null || pw.length <1){
-		alert("패스워드는  반드시 입력하셔야 합니다.");
-		return;
-	}
-	if(pw_confirm == null || pw_confirm.length <1){
-		alert("패스워드 확인은  반드시 입력하셔야 합니다.");
-		return;
-	}
-	if(name == null || name.length <1){
-		alert("이름은  반드시 입력하셔야 합니다.");
-		return;
-	}
-	
-	if(pw != pw_confirm) {
-		alert("비밀번호 확인이 일치하지 않습니다.");
-		$('input[name="password2"]').focus();
-		return;
-	}
-		
-	if($('input[name="phone2"]').val() != "" && $('input[name="phone3"]').val() != "") {
-		$('input[name="phone"]').val($('input[name="phone1"]').val() + "-" + $('input[name="phone2"]').val() + "-" + $('input[name="phone3"]').val());
-	} else {
-		$('input[name="phone"]').val("");
-	}
-		
-	$('form').attr('action','/user/addUser').attr('method','post').submit();
-}
-
-$(function(){
-	$('input[name="ssn"]').bind('click',function(){
-		var ssn1, ssn2; 
-		var nByear, nTyear; 
-		var today; 
-
-		ssn = $('input[name="ssn"]').val();
-		// 유효한 주민번호 형식인 경우만 나이 계산 진행, PortalJuminCheck 함수는 CommonScript.js 의 공통 주민번호 체크 함수임 
-		if(!PortalJuminCheck(ssn)) {
-			alert("잘못된 주민번호입니다.");
-			return false;
-		}
-	})
-})
-
-function PortalJuminCheck(fieldValue){
-    var pattern = /^([0-9]{6})-?([0-9]{7})$/; 
-	var num = fieldValue;
-    if (!pattern.test(num)) return false; 
-    num = RegExp.$1 + RegExp.$2;
-
-	var sum = 0;
-	var last = num.charCodeAt(12) - 0x30;
-	var bases = "234567892345";
-	for (var i=0; i<12; i++) {
-		if (isNaN(num.substring(i,i+1))) return false;
-		sum += (num.charCodeAt(i) - 0x30) * (bases.charCodeAt(i) - 0x30);
-	}
-	var mod = sum % 11;
-	return ((11 - mod) % 10 == last) ? true : false;
-}
-
-$(function(){
-	$('input[name="email"]').bind('focusout',function(){
-		var email=$(this).val();
-	    if(email != "" && (email.indexOf('@') < 1 || email.indexOf('.') == -1)){
-	    	alert("이메일 형식이 아닙니다.");
-			$(this).val("");
-			$(this).focus();
-	    }
-	})
-	$('select').bind('change',function(){
-		$('input[name="phone2"]').focus();
-	})
-	$('td.ct_btn').bind('click',function(){
-		//popWin = window.open("/user/checkDuplication.jsp","popWin", "left=300,top=200,width=300,height=200,marginwidth=0,marginheight=0,scrollbars=no,scrolling=no,menubar=no,resizable=no");
-	})
-	$('td.ct_btn01').eq(0).bind('click',function(){
-		fncAddUser();
-	})
-	$('td.ct_btn01').eq(1).bind('click',function(){
-		$('form')[0].reset();
-	})
-	$('input[name="password2"]').bind('keyup',function(){
-		if($(this).val()!=$('input[name="password"]').val()){
-			$('span').html(' 비밀번호가 일치하지 않습니다.');
-		}else{
-			$('span').html('');
-		}
-	})
-	var p = $('<p title="아이디 중복 확인"><input type="text" width="50"> <input type="button" id="check" value="사용" disabled="disabled"></p>');
-	var div = $('<div style="font-size: 13;"></div>');
-    p.dialog({
-        autoOpen: false,
-        position: {of: $('td.ct_btn'), my:"left+40.5", at:"top+71"},
-        appendTo: $('form'),
-        close: function(){p.find(':text').val('');},
-        open: function(){div.html('아이디는 4자이상 입력하십시오');}
-      });
-   
-	$( "td.ct_btn" ).on( "click", function() {
-	  p.dialog( "open" );
-	})
-	$('input[value="사용"]').on('click',function(){
-		$('input[name="viewUserId"]').val($(this).siblings(':text').val());
-		$('input[name="userId"]').val($(this).siblings(':text').val());
-		p.dialog("close");
-	})
-	p.find(":text").on('keyup',function(){
-		var id = $(this).val();
-		if(id.length<4){
-			div.html('아이디는 4자이상 입력하십시오');
-			return;
-		}
-		$.ajax({
-			url : "/user/json/checkDuplication",
-			method : "POST" ,
-			data: JSON.stringify({userId:id}),
-			headers : {
-				"Accept" : "application/json",
-				"Content-Type" : "application/json"
-			},
-			dataType:"json",
-			success:function(map){
-				if(map.result){
-					div.html('사용가능한 아이디입니다.');
-					$('input:button').prop('disabled',false);
-				}else{
-					div.html('이미 사용중인 아이디입니다.');
-					$('input:button').prop('disabled',true);
-				}
-			}
-		});//end of ajax
-	})
-	p.append(div);
-	p.find(":text").on('keydown',function(key){
-		if(key.keyCode==13 && !$('input:button').prop('disabled')){
-			$('input[name="viewUserId"]').val($(this).val());
-			$('input[name="userId"]').val($(this).val());
-			p.dialog("close");
-		}
-	})
-})
-</script>
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
+
+<jsp:include page="/layout/toolbar.jsp" />
 
 <form name="detailForm">
 
@@ -384,5 +229,159 @@ document.getElementById("btnCmfID").focus();
 </script>
 --%>
 
+<script type="text/javascript">
+function fncAddUser() {
+	// Form 유효성 검증
+	var id=$('input[name="userId"]').val();
+	var pw=$('input[name="password"]').val();
+	var pw_confirm=$('input[name="password2"]').val();
+	var name=$('input[name="userName"]').val();
+	
+	if(id == null || id.length <1){
+		alert("아이디는 반드시 입력하셔야 합니다.");
+		return;
+	}
+	if(pw == null || pw.length <1){
+		alert("패스워드는  반드시 입력하셔야 합니다.");
+		return;
+	}
+	if(pw_confirm == null || pw_confirm.length <1){
+		alert("패스워드 확인은  반드시 입력하셔야 합니다.");
+		return;
+	}
+	if(name == null || name.length <1){
+		alert("이름은  반드시 입력하셔야 합니다.");
+		return;
+	}
+	
+	if(pw != pw_confirm) {
+		alert("비밀번호 확인이 일치하지 않습니다.");
+		$('input[name="password2"]').focus();
+		return;
+	}
+		
+	if($('input[name="phone2"]').val() != "" && $('input[name="phone3"]').val() != "") {
+		$('input[name="phone"]').val($('input[name="phone1"]').val() + "-" + $('input[name="phone2"]').val() + "-" + $('input[name="phone3"]').val());
+	} else {
+		$('input[name="phone"]').val("");
+	}
+		
+	$('form[name="detailForm"]').attr('action','/user/addUser').attr('method','post').submit();
+}
+
+$(function(){
+	$('input[name="ssn"]').bind('click',function(){
+		var ssn1, ssn2; 
+		var nByear, nTyear; 
+		var today; 
+
+		ssn = $('input[name="ssn"]').val();
+		// 유효한 주민번호 형식인 경우만 나이 계산 진행, PortalJuminCheck 함수는 CommonScript.js 의 공통 주민번호 체크 함수임 
+		if(!PortalJuminCheck(ssn)) {
+			alert("잘못된 주민번호입니다.");
+			return false;
+		}
+	})
+})
+
+function PortalJuminCheck(fieldValue){
+    var pattern = /^([0-9]{6})-?([0-9]{7})$/; 
+	var num = fieldValue;
+    if (!pattern.test(num)) return false; 
+    num = RegExp.$1 + RegExp.$2;
+
+	var sum = 0;
+	var last = num.charCodeAt(12) - 0x30;
+	var bases = "234567892345";
+	for (var i=0; i<12; i++) {
+		if (isNaN(num.substring(i,i+1))) return false;
+		sum += (num.charCodeAt(i) - 0x30) * (bases.charCodeAt(i) - 0x30);
+	}
+	var mod = sum % 11;
+	return ((11 - mod) % 10 == last) ? true : false;
+}
+
+$(function(){
+	$('input[name="email"]').bind('focusout',function(){
+		var email=$(this).val();
+	    if(email != "" && (email.indexOf('@') < 1 || email.indexOf('.') == -1)){
+	    	alert("이메일 형식이 아닙니다.");
+			$(this).val("");
+			$(this).focus();
+	    }
+	})
+	$('select').bind('change',function(){
+		$('input[name="phone2"]').focus();
+	})
+	$('td.ct_btn').bind('click',function(){
+		//popWin = window.open("/user/checkDuplication.jsp","popWin", "left=300,top=200,width=300,height=200,marginwidth=0,marginheight=0,scrollbars=no,scrolling=no,menubar=no,resizable=no");
+	})
+	$('td.ct_btn01').eq(0).bind('click',function(){
+		fncAddUser();
+	})
+	$('td.ct_btn01').eq(1).bind('click',function(){
+		$('form[name="detailForm"]')[0].reset();
+	})
+	$('input[name="password2"]').bind('keyup',function(){
+		if($(this).val()!=$('input[name="password"]').val()){
+			$('span').html(' 비밀번호가 일치하지 않습니다.');
+		}else{
+			$('span').html('');
+		}
+	})
+	var p = $('<p title="아이디 중복 확인"><input type="text" width="50"> <input type="button" id="idCheck" value="사용" disabled="disabled"></p>');
+	var div = $('<div style="font-size: 13;"></div>');
+    p.dialog({
+        autoOpen: false,
+        position: {of: $('td.ct_btn'), my:"left+40.5", at:"top+71"},
+        appendTo: $('form[name="detailForm"]'),
+        close: function(){p.find(':text').val('');},
+        open: function(){div.html('아이디는 4자이상 입력하십시오');}
+      });
+   
+	$( "td.ct_btn" ).on( "click", function() {
+	  p.dialog( "open" );
+	})
+	$('input[value="사용"]').on('click',function(){
+		$('input[name="viewUserId"]').val($(this).siblings(':text').val());
+		$('input[name="userId"]').val($(this).siblings(':text').val());
+		p.dialog("close");
+	})
+	p.find(":text").on('keyup',function(){
+		var id = $(this).val();
+		if(id.length<4){
+			div.html('아이디는 4자이상 입력하십시오');
+			return;
+		}
+		$.ajax({
+			url : "/user/json/checkDuplication",
+			method : "POST" ,
+			data: JSON.stringify({userId:id}),
+			headers : {
+				"Accept" : "application/json",
+				"Content-Type" : "application/json"
+			},
+			dataType:"json",
+			success:function(map){
+				if(map.result){
+					div.html('사용가능한 아이디입니다.');
+					$('input:button').prop('disabled',false);
+				}else{
+					div.html('이미 사용중인 아이디입니다.');
+					$('input:button').prop('disabled',true);
+				}
+			}
+		});//end of ajax
+	})
+	p.append(div);
+	p.find(":text").on('keydown',function(key){
+		if(key.keyCode==13 && !$('input:button').prop('disabled')){
+			$('input[name="viewUserId"]').val($(this).val());
+			$('input[name="userId"]').val($(this).val());
+			p.dialog("close");
+		}
+	})
+})
+</script>
 </body>
 </html>

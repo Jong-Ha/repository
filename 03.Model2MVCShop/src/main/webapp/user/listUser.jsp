@@ -29,7 +29,7 @@ var check = true;
 			//console.log($(window).scrollTop());
 			//console.log($(document).height());
 			//console.log($(window).height());
-			if($(this).scrollTop() >= $(this).height()-1000){
+			if($(this).scrollTop() >= $(this).height()-1100){
 				//console.log('go!');
 				if(check){
 					$('#currentPage').val(parseInt($('#currentPage').val())+1);
