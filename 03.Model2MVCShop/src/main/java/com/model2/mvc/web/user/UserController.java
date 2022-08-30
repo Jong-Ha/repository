@@ -2,6 +2,8 @@ package com.model2.mvc.web.user;
 
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,9 +40,24 @@ public class UserController {
 		System.out.println(this.getClass());
 	}
 
+	@RequestMapping(value = "index", method = RequestMethod.GET)
+	public String index(@CookieValue(value = "keepId", required = false) String userId, @CookieValue(value = "keepLogin", required = false) String password, HttpSession session) {
+		User user = new User();
+		user.setUserId(userId);
+		user.setPassword(password);
+		try {
+			User dbVO=service.loginUser(user);
+			
+			session.setAttribute("user", dbVO);
+		}catch (Exception e) {
+			System.out.println("로그인 실패");
+		}
+		return "forward:/index.jsp";
+	}
+
 	@RequestMapping(value = "login", method = RequestMethod.GET)
 	public String login() {
-		return "redirect:/user/loginView.jsp";
+		return "forward:/user/loginView.jsp";
 	}
 	
 	@RequestMapping(value = "login", method = RequestMethod.POST)
@@ -92,11 +110,15 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "logout", method = RequestMethod.GET)
-	public String logout(HttpSession session) {
+	public String logout(HttpSession session, HttpServletResponse response) {
 		
 		session.removeAttribute("user");
+		Cookie cookie = new Cookie("keepLogin", null);
+		cookie.setMaxAge(0);
+		cookie.setPath("/");
+		response.addCookie(cookie);
 		
-		return "redirect:/index.jsp";
+		return "redirect:/";
 	}
 
 	@RequestMapping(value = "updateUser", method = RequestMethod.GET)

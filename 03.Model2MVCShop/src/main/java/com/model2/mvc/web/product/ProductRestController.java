@@ -87,6 +87,7 @@ public class ProductRestController {
 	@RequestMapping("/json/listProduct")
 	public Map<String, Object> listProduct(@RequestBody(required = false) Search search) throws Exception{
 
+		System.out.println(search);
 		if(search==null) {
 			search = new Search();
 		}
@@ -94,8 +95,12 @@ public class ProductRestController {
 			search.setCurrentPage(1);
 			search.setSearchKeyword("");
 		}
-		search.setPageSize(pageSize);
-		search.setPageUnit(pageUnit);
+		if(search.getPageSize()==0) {
+			search.setPageSize(pageSize);
+		}
+		if(search.getPageUnit()==0) {
+			search.setPageUnit(pageUnit);
+		}
 
 		Map<String, Object> map = service.getProductList(search);
 		

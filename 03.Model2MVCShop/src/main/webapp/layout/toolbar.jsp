@@ -14,7 +14,7 @@
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 <style type="text/css">
 body {
-	padding-top: 50px;
+	padding-top: 70px;
 }
 .navbar a {
 	cursor: pointer;

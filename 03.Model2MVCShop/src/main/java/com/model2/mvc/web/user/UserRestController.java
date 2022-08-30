@@ -1,19 +1,21 @@
 package com.model2.mvc.web.user;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.model2.mvc.common.Page;
@@ -40,7 +42,8 @@ public class UserRestController {
 	}
 
 	@RequestMapping(value = "/json/login", method = RequestMethod.POST)
-	public User login(@RequestBody User user, HttpSession session) {
+	public User login(HttpSession session, @RequestBody User user) {
+		
 		try {
 			User dbVO=service.loginUser(user);
 			
