@@ -11,7 +11,7 @@ $(function(){
 	$('span').each(function(){
 		$(this).bind('click',function(){
 			if(opener) {
-				$(opener.parent.frames["rightFrame"].document.location).attr("href","/product/getProduct?prodNo="+$(this).text().trim()+"&menu=search");
+				$(opener.document.location).attr("href","/product/getProduct?prodNo="+$(this).text().trim()+"&menu=search");
 			}
 			window.close();
 		})

@@ -117,8 +117,12 @@ public class UserRestController {
 		if(search.getCurrentPage()==0) {
 			search.setCurrentPage(1);
 		}
-		search.setPageSize(pageSize);
-		search.setPageUnit(pageUnit);
+		if(search.getPageSize()==0) {
+			search.setPageSize(pageSize);
+		}
+		if(search.getPageUnit()==0) {
+			search.setPageUnit(pageUnit);
+		}
 
 		Map<String,Object> map=service.getUserList(search);
 		

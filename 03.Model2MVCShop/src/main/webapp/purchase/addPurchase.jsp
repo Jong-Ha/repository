@@ -8,8 +8,8 @@
 </head>
 
 <body>
+<jsp:include page="/layout/toolbar.jsp" />
 
-<form name="updatePurchase">
 
 다음과 같이 구매가 되었습니다.
 
@@ -62,7 +62,6 @@
 		<td></td>
 	</tr>
 </table>
-</form>
 
 </body>
 </html>

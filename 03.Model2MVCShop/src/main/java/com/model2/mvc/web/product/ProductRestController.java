@@ -93,7 +93,6 @@ public class ProductRestController {
 		}
 		if(search.getCurrentPage()==0) {
 			search.setCurrentPage(1);
-			search.setSearchKeyword("");
 		}
 		if(search.getPageSize()==0) {
 			search.setPageSize(pageSize);

@@ -87,6 +87,9 @@
   			cell_phone = #{phone:VARCHAR},
   			addr = #{addr:VARCHAR},
   			email = #{email:VARCHAR},
+  			<if test="password!=''">
+  			password = #{password}
+  			</if>
   		</set>
   		<where>
   			user_id = #{userId}

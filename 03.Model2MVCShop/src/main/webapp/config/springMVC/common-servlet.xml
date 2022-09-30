@@ -30,7 +30,7 @@
 			<mvc:mapping path="/purchase/**"/>
 			<mvc:mapping path="/cart/**"/>
 			<mvc:mapping path="/review/**"/>
-			<bean class="com.model2.mvc.common.web.ControllerLog"/>
+			<bean class="com.model2.mvc.common.web.LoginCheckInterceptor"/>
 		</mvc:interceptor>
 	</mvc:interceptors> -->
 	

@@ -1,286 +1,376 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-    
+<%@ page language="java" contentType="text/html; charset=EUC-KR" pageEncoding="EUC-KR"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
 <html>
 <head>
 <title>상품 목록조회</title>
 
-<link rel="stylesheet" href="/css/admin.css" type="text/css">
-
-<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-<script type="text/javascript">
-function fncCheck(){
-	$('form').attr('method','post').attr('action','/product/listProduct');
-	$('#minPrice').val($('#minPriceInput').val()==''?0:$('#minPriceInput').val());
-	$('#maxPrice').val($('#maxPriceInput').val()==''?0:$('#maxPriceInput').val());
-}
-$(function(){
-	$('#soldOut').bind('click',function(){
-		$('#checkSoldOut').val($('#checkSoldOut').val()==''?'soldOut':'');
-		fncCheck();
-		$('form').submit();
-	})
-	$('.ct_list_pop td:nth-child(3)').bind('click',function(){
-		self.location = '/product/getProduct?prodNo='+$(this).parent().attr('id');
-	})
-	$('.ct_list_pop span').bind('click',function(){
-		self.location = "/review/listReview?prodNo="+$(this).parent().parent().attr('id');
-	})
-    $( 'input[name="searchKeyword"]' ).autocomplete({});
-    $( 'input[name="searchKeyword"]' ).on('keydown',function(key){
-    	if(key.keyCode==13){
-			fncPageNavigator('1');
-    	}
-    })
-    $( 'input[name="searchKeyword"]' ).on('keyup',function(){
-    	var box = $(this);
-    	console.log("json/getProductNames/"+box.val());
-    	if(box.val().length==0){
-    		return;
-    	}
-    	$.ajax({
-    		dataType : 'json',
-    		headers : {
-    			"Accept":"application/json",
-    			"Content-Type":"application/json"
-    		},
-    		success : function(serverData){
-    			box.autocomplete({
-    				source : serverData
-    			})
-    		}
-    	})
-    });
-	
-})
-</script>
-<style type="text/css">
-.tdleft{
-	margin-right: 0px; 
-	float: right;"
-}
-.autoCompleteList{
-z-index:300;
-}
-</style>
 </head>
 
-<body bgcolor="#ffffff" text="#000000">
+<body>
 
-<div style="width:98%; margin-left:10px;">
+  <jsp:include page="/layout/toolbar.jsp" />
 
-<form name="detailForm">
-<input type="hidden" id="prodNo" name="prodNo" value="">
-<input type="hidden" id="minPrice" name="minPrice" value="">
-<input type="hidden" id="maxPrice" name="maxPrice" value="">
-
-<table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
-	<tr>
-		<td width="15" height="37">
-			<img src="/images/ct_ttl_img01.gif" width="15" height="37"/>
-		</td>
-		<td background="/images/ct_ttl_img02.gif" width="100%" style="padding-left:10px;">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="93%" class="ct_ttl01">
-						상품 ${ user.role=='admin' ?'관리':'검색' }
-					</td>
-				</tr>
-			</table>
-		</td>
-		<td width="12" height="37">
-			<img src="/images/ct_ttl_img03.gif" width="12" height="37"/>
-		</td>
-	</tr>
-</table>
+  <div class="container">
+    <div class="page-header">
+      <h1 class="text-info">상품 ${ user.role=='admin' ?'관리':'검색' }</h1>
+    </div>
 
 
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
-	<tr>
-		<td align="right">
-			<c:if test="${ user.role == 'admin' }">
-				<select name="searchCondition" class="ct_input_g" style="width:80px">
-					<option value="0" ${ search.searchCondition == '0'? 'selected' : '' }>상품명</option>
-					<option value="1" ${ search.searchCondition == '1'? 'selected' : '' }>상품번호</option>
-				</select>
-			</c:if>
-			
-			<input type="text" name="searchKeyword"  class="ct_input_g" 
-				style="width:${ user.role=='admin'? '200' : '300'}px; height:19px" value="${ search.searchKeyword }"/>
-		</td>
-		
-		<td align="right" width="70">
-			<table border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="17" height="23">
-						<img src="/images/ct_btnbg01.gif" width="17" height="23">
-					</td>
-					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
-						검색
-					</td>
-					<td width="14" height="23">
-						<img src="/images/ct_btnbg03.gif" width="14" height="23">
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-<%--   	<!-- 배송상태 조회 -->
-	<c:if test="${ menu=='manage' }">
-		<tr>
-			<td colspan="11" height="5"></td>
-		</tr>
-		<tr>
-			<td align="right">
-				<select name="tranCondition" class="ct_input_g">
-					<option value="0" ${ search.tranCondition=='0'?'selected':'' } align="center">배송상태조회</option>
-					<option value="1" ${ search.tranCondition=='1'?'selected':'' } align="center">구매완료</option>
-					<option value="2" ${ search.tranCondition=='2'?'selected':'' } align="center">배송중</option>
-					<option value="3" ${ search.tranCondition=='3'?'selected':'' } align="center">배송완료</option>
-				</select>
-			</td>
-		</tr>
-	</c:if>
-	<!-- 배송상태 조회 끝 --> --%>
-	
-	<!-- 정렬순서 변경 -->
-	<tr>
-		<td colspan="11" height="5" style="margin-right: 15px; float: left;"></td>
-	</tr>
-	<tr>
-		<td class="tdleft" >
-			<select name="prodListCondition" class="ct_input_g">
-				<option value="0" ${ search.prodListCondition=='0'?'selected':'' } align="center">신규 상품 순</option>
-				<option value="1" ${ search.prodListCondition=='1'?'selected':'' } align="center">높은 가격 순</option>
-				<option value="2" ${ search.prodListCondition=='2'?'selected':'' } align="center">낮은 가격 순</option>
-				<option value="3" ${ search.prodListCondition=='3'?'selected':'' } align="center">별점 높은 순</option>
-				<option value="4" ${ search.prodListCondition=='4'?'selected':'' } align="center">별점 낮은 순</option>
-			</select>
-		</td>
-		<td class="tdleft">&nbsp;</td>
-		<td align="right" class="tdleft">
-			가격 검색 
-			<input id="minPriceInput" name="minPriceInput" value="${ search.minPrice==0 ?'':search.minPrice }" size="4">~<input id="maxPriceInput" name="maxPriceInput" value="${ search.maxPrice==0 ?'':search.maxPrice }" size="4">
-		</td>
-	</tr>
-	<!-- 정렬순서 변경 끝 -->
-	
-</table>
 
 
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
-	<tr>
-		<td colspan="12" >전체 ${ resultPage.totalCount } 건수, 현재 ${ search.currentPage } 페이지</td>
-		<td colspan="1" align="right" >
-			<input type="hidden" id="checkSoldOut" name="checkSoldOut" value="${ search.checkSoldOut }"/>
-			<c:if test="${ user.role != 'admin' }">
-			<span id="soldOut">
-				<c:choose>
-					<c:when test="${ search.checkSoldOut == 'soldOut' }">
-						품절상품 보기
-					</c:when>
-					<c:otherwise>
-						품절상품 숨기기
-					</c:otherwise>
-				</c:choose>
-			</span>
-			</c:if>
-		</td>
-	</tr>
-	<tr>
-		<td class="ct_list_b" width="100">No</td>
-		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="300">이미지</td>
-		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="300">상품명</td>
-		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="200">가격</td>
-		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="300">등록일</td>	
-		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="200">${ user.role=='admin'?'수량':'판매 유무' }</td>	
-		<td class="ct_line02"></td>
-		<td class="ct_list_b">별점</td>	
-	</tr>
-	<tr>
-		<td colspan="13" bgcolor="808285" height="1"></td>
-	</tr>
-	<c:forEach var="i" items="${ list }">
-	<tr class="ct_list_pop" height="300" id="${ i.prodNo }">
-		<td align="center">${ i.rowNum }</td>
-		<td></td>
-		<td align="center">
-			<c:if test="${ !empty i.mainFile.fileName }"><img src = "/images/${ i.mainFile.path }/${ i.mainFile.fileName }" style="max-width: 200px; max-height: 200px;"/></c:if>
-			<c:if test="${ empty i.mainFile.fileName }"><img src = "/images/empty.GIF" style="max-width: 200px; max-height: 200px;"/></c:if>
-		</td>
-		<td></td>
-		<td align="left">
-			${ i.prodName }
-		</td>
-		<td></td>
-		<td align="left">${ i.price }</td>
-		<td></td>
-		<td align="center">${ i.regDate }</td>
-		<td></td>
-		<td align="center">
-			<c:choose>
-				<c:when test="${ user.role == 'admin' }">
-					${ i.amount }
-				</c:when>
-				<c:otherwise>
-					${ i.amount==0?'품절':'판매중' }
-				</c:otherwise>
-			</c:choose>
-		</td>	
-		<td></td>
-		<c:if test="${ i.prodGrade != 0 }">
-			<td>
-			<c:choose>
-				<c:when test="${ i.prodGrade >= 0.0 and i.prodGrade < 0.5 }">☆☆☆☆☆</c:when>
-				<c:when test="${ i.prodGrade >= 0.5 and i.prodGrade < 1.5 }">★☆☆☆☆</c:when>
-				<c:when test="${ i.prodGrade >= 1.5 and i.prodGrade < 2.5 }">★★☆☆☆</c:when>
-				<c:when test="${ i.prodGrade >= 2.5 and i.prodGrade < 3.5 }">★★★☆☆</c:when>
-				<c:when test="${ i.prodGrade >= 3.5 and i.prodGrade < 4.5 }">★★★★☆</c:when>
-				<c:when test="${ i.prodGrade >= 4.5 and i.prodGrade <= 5.0 }">★★★★★</c:when>
-			</c:choose>
-			${ i.prodGrade }
-			 - <span>리뷰보기</span>
-			 </td>	
-		</c:if>
-		<c:if test="${ i.prodGrade == 0 }">
-			<td>등록된 리뷰가 없습니다.</td>	
-		</c:if>
-	</tr>
-	<tr>
-		<td colspan="13" bgcolor="D6D7D6" height="1"></td>
-	</tr>
-		</c:forEach>
-</table>
 
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
-	<tr>
-		<td align="center">
+    <form class="form-inline text-right" id="detailForm">
 
-			<jsp:include page="../common/pageNavigator.jsp"/>
-			
-    	</td>
-	</tr>
-</table>
-<!--  페이지 Navigator 끝 -->
+      <input type="hidden" id="prodNo" name="prodNo" value=""> <input type="hidden" id="minPrice" name="minPrice" value=""> <input type="hidden" id="maxPrice" name="maxPrice" value="">
 
-</form>
 
-</div>
+      <div class="form-group">
+        <label for="searchKeyword"> <select name="searchCondition" class="form-control">
+            <option value="0" ${ search.searchCondition == '0'? 'selected' : '' }>상품명</option>
+      <c:if test="${ user.role=='admin' }">
+            <option value="1" ${ search.searchCondition == '1'? 'selected' : '' }>상품번호</option>
+        </c:if>
+        </select>
+        </label>
+         <input type="text" class="form-control" style="width: 300px;" name="searchKeyword" id="searchKeyword" value="${ search.searchKeyword }" placeholder="검색어 입력">
+        <button type="button" class="btn btn-default">검색</button>
+      </div>
+
+      <br />
+      <div class="form-group" style="padding-right: 58px;">
+        가격 검색 <input id="minPriceInput" class="form-control" name="minPriceInput" placeholder="0" value="${ search.minPrice==0 ?'':search.minPrice }" size="4">~<input id="maxPriceInput" name="maxPriceInput" placeholder="∞" class="form-control" value="${ search.maxPrice==0 ?'':search.maxPrice }" size="4"> <select name="prodListCondition" class="form-control">
+          <option value="0" ${ search.prodListCondition=='0'?'selected':'' } align="center">신규 상품 순</option>
+          <option value="1" ${ search.prodListCondition=='1'?'selected':'' } align="center">높은 가격 순</option>
+          <option value="2" ${ search.prodListCondition=='2'?'selected':'' } align="center">낮은 가격 순</option>
+          <option value="3" ${ search.prodListCondition=='3'?'selected':'' } align="center">별점 높은 순</option>
+          <option value="4" ${ search.prodListCondition=='4'?'selected':'' } align="center">별점 낮은 순</option>
+        </select>
+        <!-- 정렬순서 변경 끝 -->
+      </div>
+
+
+      <p class="text-right">
+        <input type="hidden" id="checkSoldOut" name="checkSoldOut" value="${ search.checkSoldOut }" />
+        <c:if test="${ user.role != 'admin' }">
+          <span id="soldOut"> <c:choose>
+              <c:when test="${ search.checkSoldOut == 'soldOut' }">품절상품 보기</c:when>
+              <c:otherwise>품절상품 숨기기</c:otherwise>
+            </c:choose>
+          </span>
+        </c:if>
+      </p>
+
+      <jsp:include page="../common/pageNavigator.jsp" />
+
+    </form>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <c:forEach var="i" items="${ list }">
+        <div class="col-sm-6 col-md-4">
+          <div class="thumbnail" id="${ i.prodNo }">
+
+            <div class="thumbnail-top">
+              <c:if test="${ !empty i.mainFile.fileName }">
+                <img src="/images/${ i.mainFile.path }/${ i.mainFile.fileName }" />
+              </c:if>
+              <c:if test="${ empty i.mainFile.fileName }">
+                <img src="/images/empty.GIF" />
+              </c:if>
+            </div>
+
+            <div class="caption">
+              <h3>${ i.prodName }</h3>
+              <p>${ i.prodDetail }</p>
+              <p align="right">${ i.price }원</p>
+              <p align="right">
+                <c:if test="${ i.prodGrade != 0 }">
+                  <c:choose>
+                    <c:when test="${ i.prodGrade >= 0.0 and i.prodGrade < 0.5 }">☆☆☆☆☆</c:when>
+                    <c:when test="${ i.prodGrade >= 0.5 and i.prodGrade < 1.5 }">★☆☆☆☆</c:when>
+                    <c:when test="${ i.prodGrade >= 1.5 and i.prodGrade < 2.5 }">★★☆☆☆</c:when>
+                    <c:when test="${ i.prodGrade >= 2.5 and i.prodGrade < 3.5 }">★★★☆☆</c:when>
+                    <c:when test="${ i.prodGrade >= 3.5 and i.prodGrade < 4.5 }">★★★★☆</c:when>
+                    <c:when test="${ i.prodGrade >= 4.5 and i.prodGrade <= 5.0 }">★★★★★</c:when>
+                  </c:choose>${ i.prodGrade } - <span id="goReview">리뷰보기</span>
+                </c:if>
+                <c:if test="${ i.prodGrade == 0 }">등록된 리뷰가 없습니다.</c:if>
+              </p>
+              <p align="right">
+                <c:if test="${ user.role!='admin' }">
+                <a class="btn btn-primary" role="button" ${ i.amount==0? 'disabled' :'' }>장바구니</a>
+                </c:if>
+                <a class="btn btn-primary" role="button">상세정보</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </c:forEach>
+    </div>
+  </div>
+
 <script type="text/javascript">
-$(function(){
-	$('select[name="prodListCondition"]').bind('change',function(){
-		fncPageNavigator('1');
-	})
-})
+  $(function() {
+	  //장바구니 담기
+    $('.btn:contains("장바구니")').on(
+        'click',
+        function() {
+          if ($(this).attr('disabled') == 'disabled') {
+            alert('품절된 상품입니다.')
+            return;
+          }
+          var button = $(this);
+          $.ajax({
+            url : "/cart/json/addCart/"
+                + button.parents('.thumbnail').attr('id'),
+            headers : {
+              "Accept" : "application/json",
+              "Content-Type" : "application/json"
+            },
+            success : function() {
+              //console.log('ajax success!!')
+              alert('장바구니 담기 성공');
+            }
+          })
+        })
+        
+    $('.btn:contains("상세정보"), .thumbnail-top>img').on(
+        'click',
+        function() {
+          self.location = '/product/getProduct?prodNo='
+              + $(this).parents('.thumbnail').attr('id');
+        })
+        
+    $('#goReview').on(
+        'click',
+        function() {
+          self.location = "/review/listReview?prodNo="
+              + $(this).parents('.thumbnail').attr('id');
+        })
+        
+    $('select[name="prodListCondition"]').on('change', function() {
+      fncPageNavigator('1');
+    })
+  })
+  
+  //페이지 이동시 사용
+  function fncCheck() {
+    $('#detailForm').attr('method', 'post').attr('action',
+        '/product/listProduct');
+    
+    $('#minPrice')
+        .val(
+            $('#minPriceInput').val() == '' ? 0 : $(
+                '#minPriceInput').val());
+    $('#maxPrice')
+        .val(
+            $('#maxPriceInput').val() == '' ? 0 : $(
+                '#maxPriceInput').val());
+  }
+  
+  $(function() {
+        
+    $('#soldOut').on(
+        'click',
+        function() {
+          $('#checkSoldOut').val(
+              $('#checkSoldOut').val() == '' ? 'soldOut' : '');
+          fncCheck();
+          $('#detailForm').submit();
+        })
+
+    //검색창 관련
+    $('input[name="searchKeyword"]').autocomplete({});
+    $('input[name="searchKeyword"]').on('keydown', function(key) {
+      if (key.keyCode == 13) {
+        fncPageNavigator('1');
+      }
+    })
+    $('input[name="searchKeyword"]').on('keyup', function() {
+      var box = $(this);
+      if ($('select[name="searchCondition"]').val() == '1') {
+        //console.log("상품번호");
+        box.autocomplete({
+          disabled : true
+        })
+        return;
+      }
+      console.log("json/getProductNames/" + box.val());
+      if (box.val().length == 0) {
+        return;
+      }
+      $.ajax({
+        url : "json/getProductNames/" + box.val(),
+        dataType : 'json',
+        headers : {
+          "Accept" : "application/json",
+          "Content-Type" : "application/json"
+        },
+        success : function(serverData) {
+          //console.log('ajax success!!')
+          box.autocomplete({
+            disabled : false,
+            source : serverData
+          })
+        }
+      })
+    });
+
+  })
+  
+  //무한스크롤
+  var check = true;
+  $(function(){
+		var nowPage = 1;
+		$(window).on('scroll',function(){
+// 			console.log($(window).scrollTop());
+// 			console.log($(document).height());
+// 			console.log($(window).height());
+			if($(this).scrollTop() >= $(document).height()-$(window).height()-300){
+// 				console.log('go!');
+				if(check){
+// 	 				console.log('go!');
+// 	 				console.log($('#currentPage').val());
+					$('#currentPage').val(parseInt($('#currentPage').val())+1);
+					loadPage($('#currentPage').val());
+				}
+			}
+		})
+  })
+	function loadPage(page){
+		$.ajax({
+			url:"/product/json/listProduct",
+			method:"POST",
+			headers:{
+				"Accept":"application/json",
+				"Content-Type":"application/json"
+			},
+			data:JSON.stringify({
+				searchCondition:${!empty search.searchCondition?search.searchCondition:0},
+				searchKeyword:'${!empty search.searchKeyword?search.searchKeyword:""}',
+				currentPage:page
+			}),
+			dataType:"json",
+			success:function(serverData){
+				//console.log("ajax 성공");
+				if(serverData.list[0]==undefined){
+					check = false;
+				}
+				$.each(serverData.list,function(index,i){
+					var review;
+					if(i.prodGrade!=0){
+						if(i.prodGrade >= 0.0 && i.prodGrade < 0.5){review='☆☆☆☆☆'}
+						else if(i.prodGrade >= 0.5 && i.prodGrade < 1.5){review='★☆☆☆☆'}
+						else if(i.prodGrade >= 1.5 && i.prodGrade < 2.5){review='★★☆☆☆'}
+						else if(i.prodGrade >= 2.5 && i.prodGrade < 3.5){review='★★★☆☆'}
+						else if(i.prodGrade >= 3.5 && i.prodGrade < 4.5){review='★★★★☆'}
+						else if(i.prodGrade >= 4.5 && i.prodGrade <= 5.0){review='★★★★★'}
+						review = review+i.prodGrade+' - <span id="goReview">리뷰보기</span>'
+					}else if(i.prodGrade==0){
+						review = '등록된 리뷰가 없습니다.';
+					}
+					var imgsrc;
+					if(i.mainFile==null){
+						imgsrc='empty.GIF';
+					}else{
+						imgsrc=i.mainFile.path+'/'+i.mainFile.fileName;
+					}
+					var disabled='';
+					if(i.amount==0){
+						disabled='disabled';
+					}
+					var cart='';
+					if(${user.role!='admin'}){
+						cart = '<a class="btn btn-primary" role="button"'+disabled+'>장바구니</a>'
+					}
+					var newRecord = $('<div class="col-sm-6 col-md-4">'+
+					          '<div class="thumbnail" id="'+
+					          i.prodNo+
+					          '">'+
+					            '<div class="thumbnail-top">'+
+					                '<img src="/images/'+
+					                imgsrc+
+					                '" />'+
+					            '</div>'+
+					            '<div class="caption">'+
+					              '<h3>'+
+					              i.prodName+
+					              '</h3>'+
+					              '<p>'+
+					              i.prodDetail+
+					              '</p>'+
+					              '<p align="right">'+
+					              i.price+
+					              '원</p>'+
+					              '<p align="right">'+
+					                review+
+					              '</p>'+
+					              '<p align="right">'+
+					                cart+
+					                ' <a class="btn btn-primary" role="button">상세정보</a>'+
+					              '</p>'+
+					            '</div>'+
+					          '</div>'+
+					        '</div>');
+					$('.thumbnail').parents('.row').append(newRecord);
+				})
+				$('.btn:contains("상세정보"), .thumbnail-top>img').off('click');
+				$('.btn:contains("상세정보"), .thumbnail-top>img').on('click', function(){
+			          self.location = '/product/getProduct?prodNo='
+			              + $(this).parents('.thumbnail').attr('id');
+				})
+				$('#goReview').off('click');
+				$('#goReview').on('click', function(){
+			          self.location = "/review/listReview?prodNo="
+			              + $(this).parents('.thumbnail').attr('id');
+				})
+				$('.btn:contains("장바구니")').off('click');
+				$('.btn:contains("장바구니")').on('click', function(){
+			          if ($(this).attr('disabled') == 'disabled') {
+			              alert('품절된 상품입니다.')
+			              return;
+			            }
+			            var button = $(this);
+			            $.ajax({
+			              url : "/cart/json/addCart/"
+			                  + button.parents('.thumbnail').attr('id'),
+			              headers : {
+			                "Accept" : "application/json",
+			                "Content-Type" : "application/json"
+			              },
+			              success : function() {
+			                //console.log('ajax success!!')
+			                alert('장바구니 담기 성공');
+			              }
+			            })
+				})
+			}
+		})
+	}
 </script>
 </body>
+<style type="text/css">
+.autoCompleteList {
+	z-index: 300;
+}
+
+.thumbnail-top {
+	text-align: center;
+	width: 100%;
+	height: 200px;
+}
+
+.thumbnail-top>img {
+	object-fit: contain;
+	width: 100%;
+	height: 100%;
+}
+
+#goReview {
+	cursor: pointer;
+}
+</style>
 </html>

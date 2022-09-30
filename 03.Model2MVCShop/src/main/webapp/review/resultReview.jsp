@@ -15,9 +15,9 @@
 <script type="text/javascript">
 $(function(){
 	$('.ct_btn01').eq(0).bind('click',function(){
-		$('form').attr('method','post');
 		if(opener) {
-			$(opener.document.detailForm).attr('action','/review/myReview').submit();
+			$(opener.document.location).attr("href","/review/myReview");
+			//$(opener.document.getElementById('detailForm')).attr('action','/review/myReview').submit();
 			//opener.document.detailForm.action='/review/myReview';
 			//opener.document.detailForm.submit();
 		}
@@ -32,7 +32,6 @@ $(function(){
 
 <body bgcolor="#ffffff" text="#000000">
 
-<form name="detailForm">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -99,6 +98,5 @@ $(function(){
 	</tr>
 </table>
 
-</form>
 </body>
 </html>

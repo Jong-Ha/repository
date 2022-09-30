@@ -10,165 +10,105 @@
 <body>
 
   <jsp:include page="/layout/toolbar.jsp" />
-
-  <form name="detailForm">
-
-    <table width="100%" height="37" border="0" cellpadding="0" cellspacing="0">
-      <tr>
-        <td width="15" height="37"><img src="/images/ct_ttl_img01.gif" width="15" height="37" /></td>
-        <td background="/images/ct_ttl_img02.gif" width="100%" style="padding-left: 10px;">
-          <table width="100%" border="0" cellspacing="0" cellpadding="0">
-            <tr>
-              <td width="93%" class="ct_ttl01">회원가입</td>
-              <td width="20%" align="right">&nbsp;</td>
-            </tr>
-          </table>
-        </td>
-        <td width="12" height="37"><img src="/images/ct_ttl_img03.gif" width="12" height="37" /></td>
-      </tr>
-    </table>
-
-    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top: 13px;">
-      <tr>
-        <td height="1" colspan="3" bgcolor="D6D6D6"></td>
-      </tr>
-
-      <tr>
-        <td width="104" class="ct_write">아이디 <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle" />
-        </td>
-        <td bgcolor="D6D6D6" width="1"></td>
-        <td class="ct_write01">
-          <table width="100%" border="0" cellspacing="0" cellpadding="0">
-            <tr>
-              <td width="105"><input type="text" name="userId" class="ct_input_bg" style="width: 100px; height: 19px" maxLength="20" readonly="readonly"></td>
-              <td>
-                <table border="0" cellspacing="0" cellpadding="0">
-                  <tr>
-                    <td width="4" height="21"><img src="/images/ct_btng01.gif" width="4" height="21" /></td>
-                    <td align="center" background="/images/ct_btng02.gif" class="ct_btn" style="padding-top: 3px;">ID중복확인</td>
-                    <td width="4" height="21"><img src="/images/ct_btng03.gif" width="4" height="21"></td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-
-      <tr>
-        <td height="1" colspan="3" bgcolor="D6D6D6"></td>
-      </tr>
-
-      <tr>
-        <td width="104" class="ct_write">비밀번호 <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle" />
-        </td>
-        <td bgcolor="D6D6D6" width="1"></td>
-        <td class="ct_write01"><input type="password" name="password" class="ct_input_g" style="width: 100px; height: 19px" maxLength="10" minLength="6" /></td>
-      </tr>
-
-      <tr>
-        <td height="1" colspan="3" bgcolor="D6D6D6"></td>
-      </tr>
-
-      <tr>
-        <td width="104" class="ct_write">비밀번호 확인 <img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle" />
-        </td>
-        <td bgcolor="D6D6D6" width="1"></td>
-        <td class="ct_write01"><input type="password" name="password2" class="ct_input_g" style="width: 100px; height: 19px" maxLength="10" minLength="6" /> <span></span></td>
-      </tr>
-
-      <tr>
-        <td height="1" colspan="3" bgcolor="D6D6D6"></td>
-      </tr>
-
-      <tr>
-        <td width="104" class="ct_write">이름<img src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle" />
-        </td>
-        <td bgcolor="D6D6D6" width="1"></td>
-        <td class="ct_write01"><input type="text" name="userName" class="ct_input_g" style="width: 100px; height: 19px" maxLength="50"></td>
-      </tr>
-
-      <tr>
-        <td height="1" colspan="3" bgcolor="D6D6D6"></td>
-      </tr>
-
-      <tr>
-        <td width="104" class="ct_write">주민번호</td>
-        <td bgcolor="D6D6D6" width="1"></td>
-        <td class="ct_write01"><input type="text" name="ssn" class="ct_input_g" style="width: 100px; height: 19px" maxLength="13"> -제외, 13자리 입력</td>
-      </tr>
-
-      <tr>
-        <td height="1" colspan="3" bgcolor="D6D6D6"></td>
-      </tr>
-
-      <tr>
-        <td width="104" class="ct_write">주소</td>
-        <td bgcolor="D6D6D6" width="1"></td>
-        <td class="ct_write01"><input type="text" name="addr" class="ct_input_g" style="width: 370px; height: 19px" maxLength="100" /></td>
-      </tr>
-
-      <tr>
-        <td height="1" colspan="3" bgcolor="D6D6D6"></td>
-      </tr>
-
-      <tr>
-        <td width="104" class="ct_write">휴대전화번호</td>
-        <td bgcolor="D6D6D6" width="1"></td>
-        <td class="ct_write01"><select name="phone1" class="ct_input_g" style="width: 50px">
-            <option value="010">010</option>
-            <option value="011">011</option>
-            <option value="016">016</option>
-            <option value="018">018</option>
-            <option value="019">019</option>
-        </select> <input type="text" name="phone2" class="ct_input_g" style="width: 100px; height: 19px" maxLength="9" /> - <input type="text" name="phone3" class="ct_input_g" style="width: 100px; height: 19px" maxLength="9" /> <input type="hidden" name="phone" class="ct_input_g"></td>
-      </tr>
-
-      <tr>
-        <td height="1" colspan="3" bgcolor="D6D6D6"></td>
-      </tr>
-
-      <tr>
-        <td width="104" class="ct_write">이메일</td>
-        <td bgcolor="D6D6D6" width="1"></td>
-        <td class="ct_write01">
-          <table border="0" cellspacing="0" cellpadding="0">
-            <tr>
-              <td height="26"><input type="text" name="email" class="ct_input_g" style="width: 100px; height: 19px"></td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-      <tr>
-        <td height="1" colspan="3" bgcolor="D6D6D6"></td>
-      </tr>
-    </table>
-
-    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top: 10px;">
-      <tr>
-        <td width="53%"></td>
-        <td align="right">
-          <table border="0" cellspacing="0" cellpadding="0">
-            <tr>
-              <td width="17" height="23"><img src="/images/ct_btnbg01.gif" width="17" height="23" /></td>
-              <td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">가입</td>
-              <td width="14" height="23"><img src="/images/ct_btnbg03.gif" width="14" height="23" /></td>
-              <td width="30"></td>
-              <td width="17" height="23"><img src="/images/ct_btnbg01.gif" width="17" height="23" /></td>
-              <td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">취소</td>
-              <td width="14" height="23"><img src="/images/ct_btnbg03.gif" width="14" height="23"></td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
-
-  </form>
-
-  <%-- <script type="text/javascript">
-document.getElementById("btnCmfID").focus();
-</script>
---%>
+<!--  화면구성 div Start /////////////////////////////////////-->
+	<div class="container">
+	
+		
+    <div class="page-header">
+      <h1 class="text-info col-sm-offset-3">회원가입</h1>
+    </div>
+		<!-- form Start /////////////////////////////////////-->
+		<form class="form-horizontal" name='detailForm'>
+		
+		  <div class="form-group">
+		    <label for="userId" class="col-sm-offset-1 col-sm-3 control-label">아 이 디</label>
+		    <div class="col-sm-4">
+		      <input type="text" class="form-control" id="userId" name="userId" readonly>
+		    </div>
+		    <div class="col-sm-3">
+		      <button type="button" class="btn btn-info">ID중복확인</button>
+		    </div>
+		  </div>
+		  
+		  <div class="form-group">
+		    <label for="password" class="col-sm-offset-1 col-sm-3 control-label">비밀번호</label>
+		    <div class="col-sm-4">
+		      <input type="password" class="form-control" id="password" name="password" placeholder="비밀번호">
+		    </div>
+		  </div>
+		  
+		  <div class="form-group">
+		    <label for="password2" class="col-sm-offset-1 col-sm-3 control-label">비밀번호 확인</label>
+		    <div class="col-sm-4">
+		      <input type="password" class="form-control" id="password2" name="password2" placeholder="비밀번호 확인">
+          <span id="checkPassword" class="help-block" style="display: none;">
+             <strong class="text-danger">비밀번호가 일치하지 않습니다.</strong>
+          </span>
+		    </div>
+		  </div>
+		  
+		  <div class="form-group">
+		    <label for="userName" class="col-sm-offset-1 col-sm-3 control-label">이름</label>
+		    <div class="col-sm-4">
+		      <input type="text" class="form-control" id="userName" name="userName" placeholder="회원이름">
+		    </div>
+		  </div>
+		  
+		  <div class="form-group">
+		    <label for="ssn" class="col-sm-offset-1 col-sm-3 control-label">주민번호</label>
+		    <div class="col-sm-4">
+		      <input type="text" class="form-control" id="ssn" name="ssn" placeholder="주민번호">
+		      <span id="helpBlock" class="help-block">
+		      	 <strong class="text-danger">" -  " 제외 13자리입력하세요</strong>
+		      </span>
+		    </div>
+		  </div>
+		  
+		  <div class="form-group">
+		    <label for="ssn" class="col-sm-offset-1 col-sm-3 control-label">주소</label>
+		    <div class="col-sm-4">
+		      <input type="text" class="form-control" id="addr" name="addr" placeholder="주소">
+		    </div>
+		  </div>
+		  
+		  <div class="form-group">
+		    <label for="ssn" class="col-sm-offset-1 col-sm-3 control-label">휴대전화번호</label>
+		     <div class="col-sm-2">
+		      <select class="form-control" name="phone1" id="phone1">
+				  	<option value="010" >010</option>
+					<option value="011" >011</option>
+					<option value="016" >016</option>
+					<option value="018" >018</option>
+					<option value="019" >019</option>
+				</select>
+		    </div>
+		    <div class="col-sm-2">
+		      <input type="text" class="form-control" id="phone2" name="phone2" placeholder="번호">
+		    </div>
+		    <div class="col-sm-2">
+		      <input type="text" class="form-control" id="phone3" name="phone3" placeholder="번호">
+		    </div>
+		    <input type="hidden" name="phone"  />
+		  </div>
+		  
+		   <div class="form-group">
+		    <label for="ssn" class="col-sm-offset-1 col-sm-3 control-label">이메일</label>
+		    <div class="col-sm-4">
+		      <input type="text" class="form-control" id="email" name="email" placeholder="이메일">
+		    </div>
+		  </div>
+		  
+		  <div class="form-group">
+		    <div class="col-sm-offset-4  col-sm-4 text-center">
+		      <button type="button" class="btn btn-primary"  >가 &nbsp;입</button>
+			  <a class="btn btn-primary btn" href="#" role="button">취&nbsp;소</a>
+		    </div>
+		  </div>
+		</form>
+		<!-- form Start /////////////////////////////////////-->
+		
+ 	</div>
+	<!--  화면구성 div end /////////////////////////////////////-->
 
 </body>
 </html>
@@ -207,7 +147,7 @@ document.getElementById("btnCmfID").focus();
 		if ($('input[name="phone2"]').val() != ""
 				&& $('input[name="phone3"]').val() != "") {
 			$('input[name="phone"]').val(
-					$('input[name="phone1"]').val() + "-"
+					$('select[name="phone1"]').val() + "-"
 							+ $('input[name="phone2"]').val() + "-"
 							+ $('input[name="phone3"]').val());
 		} else {
@@ -266,20 +206,24 @@ document.getElementById("btnCmfID").focus();
 		$('select').bind('change', function() {
 			$('input[name="phone2"]').focus();
 		})
-		$('td.ct_btn').bind('click', function() {
-			//popWin = window.open("/user/checkDuplication.jsp","popWin", "left=300,top=200,width=300,height=200,marginwidth=0,marginheight=0,scrollbars=no,scrolling=no,menubar=no,resizable=no");
-		})
-		$('td.ct_btn01').eq(0).bind('click', function() {
+		$('.btn.btn-primary').eq(0).bind('click', function() {
 			fncAddUser();
 		})
-		$('td.ct_btn01').eq(1).bind('click', function() {
+		$('.btn.btn-primary').eq(1).bind('click', function() {
 			$('form[name="detailForm"]')[0].reset();
+		})
+		$('#password').on('change',function(){
+			if ($(this).val() != $('input[name="password2"]').val()) {
+				$('#checkPassword').css('display','');
+			} else {
+				$('#checkPassword').css('display','none');
+			}
 		})
 		$('input[name="password2"]').bind('keyup', function() {
 			if ($(this).val() != $('input[name="password"]').val()) {
-				$('form[name="detailForm"] span').html(' 비밀번호가 일치하지 않습니다.');
+				$('#checkPassword').css('display','');
 			} else {
-				$('form[name="detailForm"] span').html('');
+				$('#checkPassword').css('display','none');
 			}
 		})
 		var p = $('<p title="아이디 중복 확인"><input type="text" width="50"> <input type="button" id="idCheck" value="사용" disabled="disabled"></p>');
@@ -287,9 +231,9 @@ document.getElementById("btnCmfID").focus();
 		p.dialog({
 			autoOpen : false,
 			position : {
-				of : $('td.ct_btn'),
-				my : "left+40.5",
-				at : "top+71"
+				of : $('.btn.btn-info'),
+				my : "left-400px",
+				at : "center"
 			},
 			appendTo : $('form[name="detailForm"]'),
 			close : function() {
@@ -300,17 +244,20 @@ document.getElementById("btnCmfID").focus();
 			}
 		});
 
-		$('td.ct_btn, input[name="userId"]').on("click", function() {
+		$('.btn.btn-info, input[name="userId"]').on("click", function() {
+			$('input[name="userId"]').focus();
 			p.dialog("open");
 		})
 		$('input[value="사용"]').on('click', function() {
 			$('input[name="userId"]').val($(this).siblings(':text').val());
 			p.dialog("close");
+			$('#password').focus();
 		})
 		p.find(":text").on('keyup', function() {
 			var id = $(this).val();
 			if (id.length < 4) {
 				div.html('아이디는 4자이상 입력하십시오');
+				$('input:button').prop('disabled', true);
 				return;
 			}
 			$.ajax({
@@ -340,7 +287,14 @@ document.getElementById("btnCmfID").focus();
 			if (key.keyCode == 13 && !$('input:button').prop('disabled')) {
 				$('input[name="userId"]').val($(this).val());
 				p.dialog("close");
+				$('#password').focus();
 			}
 		})
 	})
 </script>
+  <style>
+       body > div.container{
+          border: 3px solid #D6CDB7;
+            margin-top: 10px;
+        }
+    </style>

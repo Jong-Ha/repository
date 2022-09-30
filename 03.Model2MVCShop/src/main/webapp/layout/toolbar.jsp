@@ -10,6 +10,11 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap-theme.min.css" integrity="sha384-6pzBo3FDv/PJ8r2KRkGHifhEocL+1X2rVCTTkUfGk7/0pbek5mMa1upzvWbrUbOZ" crossorigin="anonymous">
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+<!-- Bootstrap Dropdown Hover CSS -->
+<link href="/css/animate.min.css" rel="stylesheet">
+<link href="/css/bootstrap-dropdownhover.min.css" rel="stylesheet">
+<!-- Bootstrap Dropdown Hover JS -->
+<script src="/javascript/bootstrap-dropdownhover.min.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 <style type="text/css">
@@ -21,6 +26,9 @@ body {
 }
 .ui-front {
     z-index: 1030;
+}
+.dropdown-menu {
+    min-width: 160px;
 }
 </style>
 <script type="text/javascript">
@@ -82,12 +90,13 @@ function searchProd(){
 			</div>
 
 			<!-- Collect the nav links, forms, and other content for toggling -->
-			<div class="collapse navbar-collapse" id="toolbar">
+			<div class="collapse navbar-collapse" id="toolbar"
+              data-hover="dropdown" data-animations="fadeInDownNew fadeInRightNew fadeInUpNew fadeInLeftNew">
 
 				<ul class="nav navbar-nav">
 
 					<c:if test="${ !empty user }">
-						<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">개인정보<span class="caret"></span></a>
+						<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">개인정보<span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<li><a>개인정보조회</a></li>
 								<c:if test="${ user.role=='admin' }">
@@ -110,7 +119,7 @@ function searchProd(){
 						</ul></li>
 
 					<c:if test="${ !empty user }">
-						<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">구매한 상품<span class="caret"></span></a>
+						<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">구매한 상품<span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<c:if test="${ user.role=='admin' }">
 									<li><a>배 송 관 리</a></li>
@@ -168,6 +177,7 @@ $(function(){
     			"Content-Type":"application/json"
     		},
     		success : function(serverData){
+    			console.log(serverData)
     			box.autocomplete({
     				source : serverData
     			})

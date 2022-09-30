@@ -80,10 +80,14 @@ $.ajax({
 			}
 			//console.log(no);
 			//console.log($($('.item')[index]).html());
+			var img;
+			if(prod.mainFile!=null){
+				img = '-slide center-block" src="/images/'+prod.mainFile.path+'/'+prod.mainFile.fileName+'" alt="'
+			}else{
+				img = '-slide center-block" src="/images/empty.GIF" alt="'
+			}
 			var item = $('<img class="'+
-							no+
-							'-slide center-block" src="/images/'+prod.mainFile.path+'/'+prod.mainFile.fileName+'" alt="'+
-							no+
+							no + img + no+
 							' slide">'+
 							'<div class="container">'+
 							'<div class="carousel-caption">'+
@@ -91,6 +95,9 @@ $.ajax({
 							'<p>'+prod.prodDetail+'</p>'+
 							'</div>')
 			$($('.item')[index]).html(item);
+			$($('.item')[index]).on('click',function(){
+				self.location = '/product/getProduct?prodNo='+prod.prodNo;
+			});
 			$('.carousel-inner>.item>img').css('height','300px');
 		})
 	}

@@ -6,128 +6,98 @@
 <html>
 <head>
 <title>상품 목록조회</title>
-
-<link rel="stylesheet" href="/css/admin.css" type="text/css">
-<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script type="text/javascript">
-function fncCheck(){
-	$('form').attr('method','post').attr('action','/review/listReview?prodNo=${ product.prodNo }');
-}
-$(function(){
-	$('span').bind('click',function(){
-		self.location = '/product/getProduct?prodNo=${ product.prodNo }';
-	})
-})
-</script>
 </head>
 
-<body bgcolor="#ffffff" text="#000000">
+<body>
 
-<div style="width:98%; margin-left:10px;">
+  <jsp:include page="/layout/toolbar.jsp" />
 
-<form name="detailForm">
+  <div class="container">
 
-<table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
-	<tr>
-		<td width="15" height="37">
-			<img src="/images/ct_ttl_img01.gif" width="15" height="37"/>
-		</td>
-		<td background="/images/ct_ttl_img02.gif" width="100%" style="padding-left:10px;">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="93%" class="ct_ttl01">
-						<span>${ product.prodName }</span> 리뷰
-					</td>
-				</tr>
-			</table>
-		</td>
-		<td width="12" height="37">
-			<img src="/images/ct_ttl_img03.gif" width="12" height="37"/>
-		</td>
-	</tr>
-</table>
+    <div class="page-header">
+      <h1 class="text-info"><span id="prod">${ product.prodName }</span> 리뷰</h1>
+    </div>
 
 
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
-	<!-- 정렬순서 변경 -->
-	<tr>
-		<td colspan="11" height="5" style="margin-right: 15px; float: left;"></td>
-	</tr>
-	<tr>
-		<td align="right" >
-			<select name="searchCondition" class="ct_input_g">
+
+    <form class="form-inline" id="detailForm">
+
+
+      <div class="row">
+        <div class="col-md-6 text-right col-md-offset-6">
+
+          <div class="form-group">
+            <select name="searchCondition" class="form-control" style="margin-right: 58px;margin-top: 5px;">
 				<option value="0" ${ search.searchCondition=='0'?'selected':'' } align="center">최신 리뷰 순</option>
 				<option value="1" ${ search.searchCondition=='1'?'selected':'' } align="center">평점 높은 순</option>
 				<option value="2" ${ search.searchCondition=='2'?'selected':'' } align="center">평점 낮은 순</option>
-			</select>
-		</td>
-	</tr>
-	<!-- 정렬순서 변경 끝 -->
-	
-</table>
+            </select>
+          </div>
+
+        </div>
+
+      </div>
 
 
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
-	<tr>
-		<td colspan="3" >전체 ${ resultPage.totalCount } 건수, 현재 ${ search.currentPage } 페이지</td>
-	</tr>
-	<tr>
-		<td bgcolor="D6D7D6" width="300" height="2"></td>
-		<td bgcolor="D6D7D6" height="2"></td>
-		<td bgcolor="D6D7D6" height="2"></td>
-	</tr>
-	<c:forEach var="i" items="${ list }">
-		<tr class="ct_list_pop">
-			<td align="center" rowspan="5"><img src = "/images/reviewImg/${ i.fileList[0].fileName }" style="width: 70%; max-height: 100px;"/></td>
-			<td></td>
-			<td align="left" height="30">
+      <div class="row">전체 ${ resultPage.totalCount } 건수, 현재 ${ search.currentPage } 페이지</div>
+
+
+
+      <table class="table table-hover table-striped">
+
+
+        <tbody>
+
+          <c:forEach var="i" items="${ list }">
+            <tr id="${ i.tranNo }">
+              <td align="center" rowspan="3" style="width: 200px; height: 200px; text-align: center;"><c:if test="${ !empty i.fileList[0].fileName }">
+                  <img src="/images/reviewImg/${ i.fileList[0].fileName }" style="object-fit: contain; width: 100%; height: 100%;" />
+                </c:if> <c:if test="${ empty i.fileList[0].fileName }">
+                  <img src="/images/empty.GIF" style="object-fit: contain; width: 100%; height: 100%;" />
+                </c:if></td>
+              <td align="left">
 				<c:if test="${ i.grade == 1 }">★☆☆☆☆</c:if>
 				<c:if test="${ i.grade == 2 }">★★☆☆☆</c:if>
 				<c:if test="${ i.grade == 3 }">★★★☆☆</c:if>
 				<c:if test="${ i.grade == 4 }">★★★★☆</c:if>
 				<c:if test="${ i.grade == 5 }">★★★★★</c:if>
-				(작성일 : ${ i.reviewDate })
-			</td>
-		</tr>
-		<tr>
-			<td colspan="2" bgcolor="D6D7D6" height="1"></td>
-		</tr>
-		<tr class="ct_list_pop">
-			<td></td>
-			<td align="left" height="30">작성자 : ${ i.userId }</td>
-		</tr>
-		<tr>
-			<td colspan="2" bgcolor="D6D7D6" height="1"></td>
-		</tr>
-		<tr class="ct_list_pop">
-			<td></td>
-			<td align="left">${ i.detail }</td>
-		</tr>
-		<tr>
-			<td colspan="3" bgcolor="D6D7D6" height="2"></td>
-		</tr>
-	</c:forEach>
-</table>
+				(작성일 : ${ i.reviewDate })</td>
+            </tr>
+            <tr>
+              <td align="left">작성자 : ${ i.userId }
+              </td>
+            </tr>
+            <tr>
+              <td align="left">${ i.detail }</td>
+            </tr>
+            <tr>
+            </tr>
 
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
-	<tr>
-		<td align="center">
+          </c:forEach>
 
-			<jsp:include page="../common/pageNavigator.jsp"/>
-			
-    	</td>
-	</tr>
-</table>
-<!--  페이지 Navigator 끝 -->
+        </tbody>
 
-</form>
+      </table>
 
-</div>
+      <c:import var="pageNavigator" url="../common/pageNavigator_new.jsp" />
+      ${ pageNavigator }
+    </form>
+  </div>
 <script type="text/javascript">
 $(function(){
 	$('select[name="searchCondition"]').bind('change',function(){
 		fncPageNavigator('1');
 	})
+})
+</script>
+<script type="text/javascript">
+function fncCheck(){
+  $('#detailForm').attr('method','post').attr('action','/review/listReview?prodNo=${ product.prodNo }');
+}
+$(function(){
+  $('#prod').bind('click',function(){
+    self.location = '/product/getProduct?prodNo=${ product.prodNo }';
+  })
 })
 </script>
 </body>

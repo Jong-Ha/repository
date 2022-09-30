@@ -6,29 +6,11 @@
 <head>
 <title>구매상세조회</title>
 
-<link rel="stylesheet" href="/css/admin.css" type="text/css">
-
-<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script type="text/javascript">
-$(function(){
-	$('td.ct_btn01:contains("상품 보러가기")').bind('click',function(){
-		self.location = '/product/getProduct?prodNo=${ purchase.purchaseProd.prodNo }';
-	})
-	$('td.ct_btn01:contains("수정")').bind('click',function(){
-		self.location = '/purchase/updatePurchase?tranNo=${ purchase.tranNo }';
-	})
-	$('td.ct_btn01:contains("구매취소")').bind('click',function(){
-		self.location = '/purchase/canclePurchase?tranNo=${ purchase.tranNo }';
-	})
-	$('td.ct_btn01:contains("확인")').bind('click',function(){
-		history.go(-1);
-	})
-})
-</script>
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
 
+<jsp:include page="/layout/toolbar.jsp" />
 <table width="100%" height="37" border="0" cellpadding="0" cellspacing="0">
 	<tr>
 		<td width="15" height="37">
@@ -215,5 +197,21 @@ $(function(){
 	</tr>
 </table>
 
+<script type="text/javascript">
+$(function(){
+  $('td.ct_btn01:contains("상품 보러가기")').bind('click',function(){
+    self.location = '/product/getProduct?prodNo=${ purchase.purchaseProd.prodNo }';
+  })
+  $('td.ct_btn01:contains("수정")').bind('click',function(){
+    self.location = '/purchase/updatePurchase?tranNo=${ purchase.tranNo }';
+  })
+  $('td.ct_btn01:contains("구매취소")').bind('click',function(){
+    self.location = '/purchase/canclePurchase?tranNo=${ purchase.tranNo }';
+  })
+  $('td.ct_btn01:contains("확인")').bind('click',function(){
+    history.go(-1);
+  })
+})
+</script>
 </body>
 </html>

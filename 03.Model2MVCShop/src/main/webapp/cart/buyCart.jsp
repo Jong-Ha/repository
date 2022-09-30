@@ -5,23 +5,12 @@
 <html>
 <head>
 
-<link rel="stylesheet" href="/css/admin.css" type="text/css">
-
 <title>Insert title here</title>
 
-<script type="text/javascript" src="../javascript/calendar.js">
-</script>
-
-<script type="text/javascript">
-<!--
-function fncAddPurchase() {
-	document.cartPurchase.submit();
-}
--->
-</script>
 </head>
 
 <body>
+<jsp:include page="/layout/toolbar.jsp" />
 구매 완료<br/>
 성공 
 <c:forEach items="${ success }" var="i">: ${ i }</c:forEach>

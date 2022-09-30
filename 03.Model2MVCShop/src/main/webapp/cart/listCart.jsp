@@ -6,109 +6,14 @@
 <head>
 <title>구매 목록조회</title>
 
-<link rel="stylesheet" href="/css/admin.css" type="text/css">
-
-<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script type="text/javascript">
-function fncAction(action){
-	var boxList = document.getElementsByName("cartBox");
-	if($('input[name="cartBox"]:checked').size()!=0){
-		$('form').attr('method','post').attr('action','/cart/buyCartView');
-		if(action=="삭제"){
-			$('form').attr('action',"/cart/deleteCart");
-		}else if($('#userId').val()==""){
-			alert("로그인이 필요합니다.");
-			$('form').attr('action',"/user/login");
-		}
-		document.detailForm.submit();
-	}else{
-		alert("선택된 상품이 없습니다.")
-	}
-}
-function fncAmount(type,cartNo){
-	var amountObj = $('#'+cartNo+'amount');
-	var amount = parseInt(amountObj.val());
-	var productAmount = parseInt($('#'+cartNo+'productAmount').val());
-	if(type=='+'){
-		if(amount<productAmount){
-			amountObj.val(amount + 1);
-		}else{
-			alert('더이상 구매하실 수 없습니다.');
-		}
-	}else if(type=='-'){
-		if(amount>1){
-			amountObj.val(amount - 1);
-		}else{
-			alert('최소 구매 수량입니다.');
-		}
-	}
-	var amount = parseInt(amountObj.val());
-	var price = parseInt($('#'+cartNo+'price').val());
-	$('#'+cartNo+'cartAmount').html(amount);
-	$('#'+cartNo+'cartPriceView').html(price+" X "+amount+" = "+(price*amount));
-	$('#'+cartNo+'cartPrice').val(price*amount);
-	fncTotalPrice();
-}
-function fncTotalBox(){
-	$('input[name="cartBox"]').prop('checked',$('#totalBox').prop('checked'));
-	fncTotalPrice();
-}
-function fncToggleBox(){
-	if($('input:checkbox[name="cartBox"]').size()==$('input:checkbox[name="cartBox"]:checked').size()){
-		$('#totalBox').prop('checked',true);
-	}else{
-		$('#totalBox').prop('checked',false);
-	}
-	fncTotalPrice();
-}
-function fncTotalPrice(){
-	var totalPrice = 0;
-	var boxList = $('input[name="cartBox"]').get();
-	var cartPriceList = $('input[name="cartPrice"]').get();
-	for(i=0; i<boxList.length ;i++){
-		if(boxList[i].checked){
-			totalPrice += parseInt(cartPriceList[i].value);
-		}
-	}
-	$('#totalPriceView').html("총 가격 : "+totalPrice+"원");
-}
-function fncDeleteSoldOut(){
-	$('input[name="cartBox"]').prop('checked',true);
-	$('#flag').val("check");
-	$('form').attr('method','post').attr('action',"/cart/deleteCart").submit();
-}
-$(function(){
-	$('input:checkbox').prop('checked',true);
-	$('.ct_list_pop td:nth-child(5)').bind('click',function(){
-		self.location = '/product/getProduct?prodNo='+$('#'+$(this).parent().attr('id')+'prodNo').val();
-	})
-	$('input[value="상품보러가기"]').bind('click',function(){
-		self.location = '/product/listProduct';
-	})
-	$('span:contains("품절상품 삭제")').bind('click',function(){
-		fncDeleteSoldOut();
-	})
-	$('input[name="cartBox"]').bind('click',function(){
-		fncToggleBox();
-	})
-	$('#totalBox').bind('click',function(){
-		fncTotalBox();
-	})
-	$('.ct_list_pop input:button').bind('click',function(){
-		fncAmount($(this).val(),$(this).parents('.ct_list_pop').attr('id'));
-	})
-	$('table:last input:button').bind('click',function(){
-		fncAction($(this).val());
-	})
-})
-</script>
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
 
+<jsp:include page="/layout/toolbar.jsp" />
 <div style="width: 98%; margin-left: 10px;">
 
-<form name="detailForm">
+<form id="detailForm">
 <input type="hidden" id="userId" name="userId" value="${ user.userId }"/>
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
@@ -211,5 +116,100 @@ $(function(){
 
 </div>
 
+<script type="text/javascript">
+function fncAction(action){
+  var boxList = document.getElementsByName("cartBox");
+  if($('input[name="cartBox"]:checked').size()!=0){
+    $('#detailForm').attr('method','post').attr('action','/cart/buyCartView');
+    if(action=="삭제"){
+      $('#detailForm').attr('action',"/cart/deleteCart");
+    }else if($('#userId').val()==""){
+      alert("로그인이 필요합니다.");
+      //$('#detailForm').attr('action',"/user/login");
+      self.location = '/user/login'
+      return;
+    }
+    $('#detailForm').submit();
+  }else{
+    alert("선택된 상품이 없습니다.")
+  }
+}
+function fncAmount(type,cartNo){
+  var amountObj = $('#'+cartNo+'amount');
+  var amount = parseInt(amountObj.val());
+  var productAmount = parseInt($('#'+cartNo+'productAmount').val());
+  if(type=='+'){
+    if(amount<productAmount){
+      amountObj.val(amount + 1);
+    }else{
+      alert('더이상 구매하실 수 없습니다.');
+    }
+  }else if(type=='-'){
+    if(amount>1){
+      amountObj.val(amount - 1);
+    }else{
+      alert('최소 구매 수량입니다.');
+    }
+  }
+  var amount = parseInt(amountObj.val());
+  var price = parseInt($('#'+cartNo+'price').val());
+  $('#'+cartNo+'cartAmount').html(amount);
+  $('#'+cartNo+'cartPriceView').html(price+" X "+amount+" = "+(price*amount));
+  $('#'+cartNo+'cartPrice').val(price*amount);
+  fncTotalPrice();
+}
+function fncTotalBox(){
+  $('input[name="cartBox"]').prop('checked',$('#totalBox').prop('checked'));
+  fncTotalPrice();
+}
+function fncToggleBox(){
+  if($('input:checkbox[name="cartBox"]').size()==$('input:checkbox[name="cartBox"]:checked').size()){
+    $('#totalBox').prop('checked',true);
+  }else{
+    $('#totalBox').prop('checked',false);
+  }
+  fncTotalPrice();
+}
+function fncTotalPrice(){
+  var totalPrice = 0;
+  var boxList = $('input[name="cartBox"]').get();
+  var cartPriceList = $('input[name="cartPrice"]').get();
+  for(i=0; i<boxList.length ;i++){
+    if(boxList[i].checked){
+      totalPrice += parseInt(cartPriceList[i].value);
+    }
+  }
+  $('#totalPriceView').html("총 가격 : "+totalPrice+"원");
+}
+function fncDeleteSoldOut(){
+  $('input[name="cartBox"]').prop('checked',true);
+  $('#flag').val("check");
+  $('#detailForm').attr('method','post').attr('action',"/cart/deleteCart").submit();
+}
+$(function(){
+  $('input:checkbox').prop('checked',true);
+  $('.ct_list_pop td:nth-child(5)').bind('click',function(){
+    self.location = '/product/getProduct?prodNo='+$('#'+$(this).parent().attr('id')+'prodNo').val();
+  })
+  $('input[value="상품보러가기"]').bind('click',function(){
+    self.location = '/product/listProduct';
+  })
+  $('span:contains("품절상품 삭제")').bind('click',function(){
+    fncDeleteSoldOut();
+  })
+  $('input[name="cartBox"]').bind('click',function(){
+    fncToggleBox();
+  })
+  $('#totalBox').bind('click',function(){
+    fncTotalBox();
+  })
+  $('.ct_list_pop input:button').bind('click',function(){
+    fncAmount($(this).val(),$(this).parents('.ct_list_pop').attr('id'));
+  })
+  $('#totalPriceView').parents('table').find('input:button').bind('click',function(){
+    fncAction($(this).val());
+  })
+})
+</script>
 </body>
 </html>

@@ -96,12 +96,12 @@ public class CartController {
 	}
 	
 	@RequestMapping(value = "buyCart", method = RequestMethod.POST)
-	public String buyCart(HttpServletRequest request, @ModelAttribute("purchase") Purchase purchase, @ModelAttribute("user") User user
+	public String buyCart(HttpSession session, @ModelAttribute("purchase") Purchase purchase
 			, @RequestParam("cartNo") int[] cartNoArr, @RequestParam("amount") int[] amountArr, @RequestParam("prodNo") int[] prodNoArr, Model model) throws Exception {
 
 		int arrLength = cartNoArr.length;
 		
-		purchase.setBuyer(user);
+		purchase.setBuyer((User)session.getAttribute("user"));
 		Product product = new Product();
 
 		List<Integer> successies = new ArrayList<Integer>();

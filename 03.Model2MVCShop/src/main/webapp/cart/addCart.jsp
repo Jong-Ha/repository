@@ -7,6 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-${ !empty cart.userId? cart.userId : 'visitor' }
+<jsp:include page="/layout/toolbar.jsp" />
+${ !empty cart.userId? cart.userId : 'visitor' } 장바구니 등록 완료
 </body>
 </html>
